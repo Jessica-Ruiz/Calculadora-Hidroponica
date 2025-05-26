@@ -1,0 +1,244 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    word-break: break-word; 
+}
+html,body{
+    height: 100%;
+    width: 100%;
+}
+
+body {
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100%;
+    height: 100vh;
+    background: url(hidroponia\ de\ tomate.png)no-repeat center center;
+    background-size: cover;
+    background-position: center;
+    padding-top: 80px;
+    flex-direction: column;
+    
+
+}
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px 5vw;
+    background: #03A64A;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 99;
+}
+
+.HIDROSOFT {
+    font-size: 2em;
+    color: white;
+    user-select: none;
+}
+
+.navigation a {
+    position: relative;
+    font-size: 1.1em;
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    margin-left: 40px;
+}
+
+.navigation a::after{
+    content:'';
+    position:absolute;
+    left: 0;
+    bottom: -6px;
+    width: 100%;
+    height: 3px;
+    background: white;
+    border-radius: 5px;
+    transform-origin: right;
+    transform: scaleX(0);
+    transition: transform .5s;
+}
+.navigation a:hover::after{
+    transform-origin: left;
+    transform: scaleX(1);
+
+}
+
+.navigation .btnLogin-poput{
+    width: 130px;
+    height: 50px;
+    background: transparent;
+    border: 2px solid white;
+    outline: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.1em;
+    color: white;
+    font-weight: 500;
+    margin-left: 40px;
+    transition: .5s;
+}
+.navigation .btnLogin-poput:hover{
+    background: white;
+    color: #03A64A;
+    
+}
+.wrapper{
+    width: 90%;
+    max-width: 400px;
+    height: 440px;
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 0 30px rgba(0, 0, 0, .5);
+    padding: 40px 20px;
+    margin: 20px auto;
+    color: white;
+    overflow: hidden;
+
+}
+
+
+
+.form-box h2{
+    font-size: 2em;
+    color: white;
+    text-align: center;
+}
+
+
+.wrapper .icon-close{
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 45px;
+    height: 45;
+    background: transparent;
+    font-size: 2em;
+    color:white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom-left-radius: 20px;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.input-box{
+    position: relative;
+    width: 100%;
+    height: 50px;
+    margin: 30px 0;
+    border-bottom: 2px solid white;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.input-box label{
+    position: absolute;
+    top: 50%;
+    left: 5px;
+    transform: translateY(-50%);
+    font-size: 1em;
+    color: white;
+    font-weight: 500;
+    pointer-events:none ;
+    transition: .5s;
+}
+.input-box input:focus~label,
+.input-box input:valid~label{
+    top: -5px;
+
+}
+.input-box input{
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: white;
+    font-size: 1em;
+    margin-bottom: 20px;
+    color: white ;
+    font-weight: 600;
+    padding: 0 35px 0 5px;
+}
+.recordar-contraseña {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9em;
+    margin-bottom: 20px;
+}
+
+.input-box .icon{
+    position: absolute;
+    right: 8px;
+    font-size: 1.2em;
+    color: white;
+    line-height:57px ;
+}
+.recordar-contraseña{
+    font-size: .9em;
+    color: white;
+    font-weight:500;
+    margin: -15px 0 15px;
+    display: flex;
+    justify-content: space-between;
+}
+.recordar-contraseña label input{
+    accent-color: white;
+    margin-right: 3px;
+
+}
+.recordar-contraseña a{
+    color: white;
+    text-decoration: none;
+}
+.recordar-contraseña a:hover{
+    text-decoration: underline;
+}
+.btn{
+    width: 100%;
+    height: 45px;
+    background:#03A64A ;
+    border: none;
+    outline: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+    color: white;
+    font-weight: 500;
+}
+.olvidar{
+    font-size: .9em;
+    color: white;
+    text-align: center;
+    font-weight: 500;
+    margin:25px 0 10px;
+}
+.olvidar p a{
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+}
+.olvidar p a:hover{
+    text-decoration: underline;
+
+}
