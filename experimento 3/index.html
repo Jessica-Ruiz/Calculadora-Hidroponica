@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Calculadora de Nutrientes</title>
-    <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Calculadora de Nutrientes</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header>
@@ -21,28 +21,128 @@
   <div class="horizontal-scroll">
     <section id="calculadora">
       <h1>Calculadora de Nutrientes</h1>
-      <div class="container">
-        <form id="nutrientForm">
-          <label for="option">Selecciona un compuesto:</label>
-          <select id="option">
-            <option value="1">Nitrato de calcio</option>
-            <option value="2">Nitrato de potasio</option>
-            <option value="3">Fosfato de monoamoniaco</option>
-            <option value="4">Sulfato de magnesio</option>
-            <option value="5">Sulfato ferroso</option>
-            <option value="6">Sulfato de cobre</option>
-            <option value="7">Sulfato de manganeso</option>
-            <option value="8">Sulfato de zinc</option>
-            <option value="9">Ácido bórico</option>
-          </select>
-          <label for="liters">Litros:</label>
-          <input type="number" id="liters" step="any" required />
-          <button type="submit">Calcular</button>
-        </form>
-        <div id="result" class="result-container"></div>
+
+      <!-- Flex Container -->
+      <div class="container-flex">
+        <!-- Formulario -->
+        <div class="form-container">
+          <div class="container">
+            <form id="nutrientForm">
+              <label for="option">Selecciona un compuesto:</label>
+              <select id="option">
+                <option value="1">Nitrato de calcio</option>
+                <option value="2">Nitrato de potasio</option>
+                <option value="3">Fosfato de monoamoniaco</option>
+                <option value="4">Sulfato de magnesio</option>
+                <option value="5">Sulfato ferroso</option>
+                <option value="6">Sulfato de cobre</option>
+                <option value="7">Sulfato de manganeso</option>
+                <option value="8">Sulfato de zinc</option>
+                <option value="9">Ácido bórico</option>
+              </select>
+              <label for="liters">Litros:</label>
+              <input type="number" id="liters" step="any" required />
+              <button type="submit">Calcular</button>
+            </form>
+            <div id="result" class="result-container"></div>
+          </div>
+        </div>
+
+        <!-- Tabla -->
+<div class="tablas-container">
+  <table class="tabla-nutrientes">
+    <thead>
+      <tr>
+        <th>Microelementos</th>
+        <th>Símbolo</th>
+        <th>Peso atómico</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Molibdeno</td><td>Mo</td><td>95.94</td></tr>
+      <tr><td>Boro</td><td>B</td><td>10.81</td></tr>
+      <tr><td>Hierro</td><td>Fe</td><td>55.845</td></tr>
+      <tr><td>Cobre</td><td>Cu</td><td>63.54</td></tr>
+      <tr><td>Zinc</td><td>Zn</td><td>65.37</td></tr>
+      <tr><td>Manganeso</td><td>Mn</td><td>35.45</td></tr>
+    </tbody>
+  </table>
+</div>
+        <div class="tablas-container">
+          <table class="tabla-nutrientes">
+            <thead>
+              <tr>
+                <th>Macroelementos</th>
+                <th>Símbolo</th>
+                <th>Peso atómico</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Calcio</td><td>Ca</td><td>40.08000</td></tr>
+              <tr><td>Potasio</td><td>K</td><td>39.09830</td></tr>
+              <tr><td>Fósforo</td><td>P</td><td>30.97376</td></tr>
+              <tr><td>Nitrógeno</td><td>N</td><td>14.00670</td></tr>
+              <tr><td>Magnesio</td><td>Mg</td><td>24.30500</td></tr>
+              <tr><td>Azufre</td><td>S</td><td>32.06500</td></tr>
+              <tr><td>Oxígeno</td><td>O</td><td>15.99940</td></tr>
+              <tr><td>Carbono</td><td>C</td><td>12.00000</td></tr>
+              <tr><td>Hidrógeno</td><td>H</td><td>1.00784</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+<div class="tablas-container">
+  <table class="tabla-nutrientes">
+    <thead>
+      <tr>
+        <th>Nutriente</th>
+        <th>Concentración en PPM</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Azufre</td><td>80</td></tr>
+      <tr><td>Boro</td><td>0,8</td></tr>
+      <tr><td>Calcio</td><td>140</td></tr>
+      <tr><td>Cobre</td><td>0,4</td></tr>
+      <tr><td>Fósforo</td><td>50</td></tr>
+      <tr><td>Hierro</td><td>3</td></tr>
+      <tr><td>Magnesio</td><td>55</td></tr>
+      <tr><td>Manganeso</td><td>0,8</td></tr>
+      <tr><td>Molibdeno</td><td>0,006</td></tr>
+      <tr><td>Nitrógeno</td><td>150</td></tr>
+      <tr><td>Potasio</td><td>150</td></tr>
+      <tr><td>Zinc</td><td>0,4</td></tr>
+    </tbody>
+  </table>
+</div>
+<div class="tablas-container">
+  <table class="tabla-nutrientes">
+    <thead>
+      <tr>
+        <th>Compuesto</th>
+        <th>Fórmula</th>
+        <th>Peso molecular</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Nitrato de calcio</td><td>Ca(NO3)2</td><td>164.088 g/mol</td></tr>
+      <tr><td>Nitrato de potasio</td><td>KNO3</td><td>101.1032 g/mol</td></tr>
+      <tr><td>Fosfato monoamónico</td><td>(NH4)H2PO4</td><td>115.025 g/mol</td></tr>
+      <tr><td>Sulfato de magnesio</td><td>MgSO4-7(H2O)</td><td>246.4746 g/mol</td></tr>
+      <tr><td>Microelemento</td><td>Fórmula</td><td>Peso molecular</td></tr>
+      <tr><td>Sulfato ferroso</td><td>FeSO4-7(H2O)</td><td>151.91 g/mol</td></tr>
+      <tr><td>Sulfato de cobre</td><td>CuSO4-7(H2O)</td><td>223.15 g/mol</td></tr>
+      <tr><td>Sulfato de manganeso</td><td>MnSO4-4(H2O)</td><td>151 g/mol</td></tr>
+      <tr><td>Sulfato de zinc</td><td>ZnSO4-7(H2O)</td><td>161.44 g/mol</td></tr>
+      <tr><td>Ácido bórico</td><td>H3BO3</td><td>61.83 g/mol</td></tr>
+    </tbody>
+  </table>
+</div>
+
       </div>
     </section>
 
+    <!-- Otras secciones sin cambios -->
     <section id="calendario">
       <h1>Calendario de Etapas del Cultivo</h1>
       <div class="container">
@@ -71,9 +171,9 @@
         <ul>
           <li><strong>pH:</strong> Mantén el pH entre 5.5 y 6.5.</li>
           <li><strong>Conductividad Eléctrica (EC):</strong> Debe estar entre 1.5 y 2.5 mS/cm.</li>
-          <li>Los tomates requieren al menos 12-16 horas de luz al día. Si cultivas en interiores, considera luces LED o fluorescentes.</li>
+          <li>Los tomates requieren al menos 12-16 horas de luz al día.</li>
           <li><strong>Temperatura:</strong> Entre 20-25 °C durante el día y 15-18 °C por la noche.</li>
-          <li><strong>Humedad:</strong> Mantén la humedad entre 60-70% para evitar enfermedades.</li>
+          <li><strong>Humedad:</strong> Mantén la humedad entre 60-70%.</li>
         </ul>
       </div>
     </section>
@@ -82,7 +182,29 @@
       <h1>Tips de cultivo</h1>
       <div class="container">
         Aquí puedes poner consejos adicionales sobre el cultivo, riego, fertilización y más.
+        <div class="tablas-container">
+  <table class="tabla-nutrientes">
+    <thead>
+      <tr>
+        <th>Plaga/Enfermedad</th>
+        <th>Nombre científico</th>
+        <th>Características</th>
+        <th>Tratamiento casero</th>
+        <th>Tratamiento químico</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Araña roja</td><td>Tetranychus sp., Petrobia sp., Aculops sp., Phyllocopte sp.</td><td>Arañas pequeñas de colores variados; se desarrollan en altas temperaturas y baja humedad.</td><td>Modificación de condiciones ambientales: aumentar humedad y bajar temperatura con riego tipo nebulización.</td><td>Contracar (tricarboxilos vegetales), dosis de 2 ml con 1 ml de bioadherente por litro de agua, aplicado semanalmente.</td></tr>
+      <tr><td>Pulgones</td><td>Aphis sp., Myzus persicae, Macrosiphum sp.</td><td>Insectos chupadores de diversos colores, atacan partes tiernas de las plantas.</td><td>-</td><td>Contracar (tricarboxilos vegetales), dosis de 2 ml con 1 ml de bioadherente por litro de agua, aplicado semanalmente.</td></tr>
+      <tr><td>Conchuela o cochinilla café</td><td>Saissetia coffeae</td><td>Adultos sésiles, estadios jóvenes poseen patas y se desplazan.</td><td>Aceite mineral, dosis de 2 ml por litro, semanalmente durante 3-4 semanas.</td><td>-</td></tr>
+      <tr><td>Damping-off</td><td>Phytium, Rhizoctonia, Phytophthora, Fusarium, Botrytis, Sclerotium</td><td>Secadera o ahogamiento causado por hongos en plantas con riego excesivo. Pudrición de la base del tallo.</td><td>Uso de sustrato con buen drenaje y reducción de riegos.</td><td>Tricon, dosis de 2 ml con 1 ml de bioadherente por litro de agua.</td></tr>
+      <tr><td>Manchas en foliolos y frutos</td><td>Alternaria dauci f. solani, Botrytis cinerea, Phytophthora infestans</td><td>Manchas causadas por hongos, relacionadas con exceso de riego o herramientas contaminadas.</td><td>Control de riegos y poda para mejorar la ventilación.</td><td>Tricon, dosis de 2 ml con 1 ml de bioadherente por litro de agua y aceite mineral Acemin E, dosis de 5 ml por litro de agua.</td></tr>
+    </tbody>
+  </table>
+</div>
+
       </div>
+      
     </section>
   </div>
 

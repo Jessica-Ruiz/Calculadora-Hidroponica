@@ -3,7 +3,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
+  font-family: Georgia, 'Times New Roman', Times, serif;
   word-break: break-word;
 }
 
@@ -106,89 +106,16 @@ header {
   overflow-y: auto; /* scroll interno si hay mucho contenido */
 }
 
-/* Contenedor general */
 .container {
-  max-width: 600px;   /* reduce el ancho máximo */
-  width: 90%;         /* menos ancho relativo */
-  margin: 20px auto;  /* agrega un poco de margen vertical para separarlo */
-  margin-left: auto;
+  margin: 20px auto; 
   margin-left: 0;
-  padding: 15px;      /* reduce el padding interno */
+  padding: 15px;     
   border: 1px solid #ccc;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
   background-color: white;
   text-align: center;
-}
-
-
-/* Resultados */
-.result-container {
-  margin-top: 20px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: #f9f9f9;
-  text-align: left;
-  white-space: pre-wrap;
-}
-
-/* Scrollable container para tablas */
-.scrollable-container {
-  max-height: 250px;
-  overflow-y: auto;
-  padding: 10px;
-  border: 1px solid #ccc;
-  background-color: #f9f9f9;
-}
-
-/* Conductividad */
-.conductividad-container {
-  max-width: 1000px;
-  margin: 40px auto;
-  padding: 20px;
-  border-radius: 12px;
-  background-color: #e6f2ff;
-}
-
-.conductividad-container h2 {
-  color: #009945;
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.conductividad-container ul {
-  list-style-type: decimal;
-  padding-left: 20px;
-  margin-bottom: 20px;
-}
-
-.conductividad-container li {
-  margin-bottom: 10px;
-  font-size: 16px;
-  line-height: 1.4;
-}
-
-/* Formularios y botones */
-form {
-  margin-bottom: 20px;
-}
-
-input[type="date"],
-input[type="number"],
-select {
-  padding: 8px;
-  width: 100%;
-  margin-top: 6px;
-  margin-bottom: 12px;
-  box-sizing: border-box;
-}
-
-button {
-  margin-top: 10px;
-  padding: 10px 15px;
-  font-size: 16px;
-  cursor: pointer;
+  display: inline-block;
 }
 
 /* Tablas */
@@ -199,14 +126,67 @@ table {
 }
 
 table, th, td {
-  border: 1px solid #ddd;
+  border: 2px solid #ddd;
 }
 
 th, td {
-  padding: 8px;
+  padding: 12px; /* Se amplía el espacio interno */
   text-align: center;
+  width: 200px; /* Se aumenta el ancho de las celdas */
+  min-width: 150px; /* Se evita que se reduzcan demasiado */
+  white-space: nowrap; /* Evita que el texto se rompa en varias líneas */
 }
 
 th {
   background-color: #f2f2f2;
+}
+
+h1 {
+  background-color: #009945;
+  color:white; 
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.container-flex {
+  display: flex;
+  gap: 2rem;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 15px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  max-width: 1000px;
+  margin: 20px auto;
+  flex-wrap: wrap;
+}
+
+.form-container {
+  flex: 1;
+  min-width: 280px;
+}
+
+.tablas-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tabla-nutrientes {
+  border-collapse: collapse;
+  width: 300px;
+  background-color: #f9f9f9;
+}
+
+.tabla-nutrientes th,
+.tabla-nutrientes td {
+  border: 1px solid #ccc;
+  padding: 12px; /* Se amplía el espacio interno */
+  text-align: center;
+  width: 200px; /* Se aumenta el ancho de las celdas */
+  min-width: 150px; /* Se evita que sean demasiado pequeñas */
 }

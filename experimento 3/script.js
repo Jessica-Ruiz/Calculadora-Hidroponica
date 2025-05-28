@@ -56,7 +56,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 let porcentajeNitratoCalcio = ((2 * 14.0067 * 100)/ nitratoCalcio) ;
                 let porcentajeNitratoCalcioo = (40.078  * 100/ nitratoCalcio);
                 let gramosNitratoCalcio = ( ((140 /porcentajeNitratoCalcioo)/10)*liters);
-                 
                 result = `Peso molecular Ca(NO3)2: ${nitratoCalcio.toFixed(2)} g/mol\n`;
                 result += `Porcentaje de Nitrogeno por masa: ${porcentajeNitratoCalcio.toFixed(2)}%\n`;
                 result += `Porcentaje de Calcio por masa: ${porcentajeNitratoCalcioo.toFixed(2)}%\n`;
