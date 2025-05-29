@@ -149,3 +149,79 @@ document.addEventListener('DOMContentLoaded', function() {
     
 });
 
+
+const rangos = {
+  germinacion: {
+    ph: [5.5, 6.0],
+    ce: [1.0, 1.4],
+    temperatura: [22, 26],
+    humedad: [70, 80]
+  },
+  plantula: {
+    ph: [5.5, 6.0],
+    ce: [1.2, 1.8],
+    temperatura: [20, 25],
+    humedad: [65, 75]
+  },
+  vegetativo: {
+    ph: [5.5, 6.5],
+    ce: [1.5, 2.3],
+    temperatura: [22, 28],
+    humedad: [60, 70]
+  },
+  floracion: {
+    ph: [5.5, 6.5],
+    ce: [2.0, 2.8],
+    temperatura: [22, 27],
+    humedad: [55, 65]
+  },
+  fructificacion: {
+    ph: [5.8, 6.5],
+    ce: [2.2, 3.0],
+    temperatura: [20, 26],
+    humedad: [55, 65]
+  },
+  cosecha: {
+    ph: [5.5, 6.5],
+    ce: [1.0, 2.0],
+    temperatura: [18, 24],
+    humedad: [50, 60]
+  }
+};
+
+function verificarParametros() {
+  const etapa = document.getElementById('etapa').value;
+  const ph = parseFloat(document.getElementById('ph').value);
+  const ce = parseFloat(document.getElementById('ce').value);
+  const temperatura = parseFloat(document.getElementById('temperatura').value);
+  const humedad = parseFloat(document.getElementById('humedad').value);
+  const resultado = document.getElementById('resultado');
+
+  if (isNaN(ph) || isNaN(ce) || isNaN(temperatura) || isNaN(humedad)) {
+    resultado.textContent = "⚠️ Por favor, ingresa todos los valores correctamente.";
+    resultado.style.color = "red";
+    return;
+  }
+
+  const rango = rangos[etapa];
+  let mensaje = "";
+
+  const dentroPH = ph >= rango.ph[0] && ph <= rango.ph[1];
+  const dentroCE = ce >= rango.ce[0] && ce <= rango.ce[1];
+  const dentroTemp = temperatura >= rango.temperatura[0] && temperatura <= rango.temperatura[1];
+  const dentroHumedad = humedad >= rango.humedad[0] && humedad <= rango.humedad[1];
+
+  if (dentroPH && dentroCE && dentroTemp && dentroHumedad) {
+    mensaje = "Todos los parámetros están dentro del rango recomendado.";
+    resultado.style.color = "green";
+  } else {
+    mensaje = " Parámetros fuera del rango recomendado:\n";
+    if (!dentroPH) mensaje += `- pH: entre ${rango.ph[0]} y ${rango.ph[1]}\n`;
+    if (!dentroCE) mensaje += `- CE: entre ${rango.ce[0]} y ${rango.ce[1]} mS/cm\n`;
+    if (!dentroTemp) mensaje += `- Temperatura: entre ${rango.temperatura[0]} y ${rango.temperatura[1]} °C\n`;
+    if (!dentroHumedad) mensaje += `- Humedad: entre ${rango.humedad[0]}% y ${rango.humedad[1]}%\n`;
+    resultado.style.color = "red";
+  }
+
+  resultado.textContent = mensaje;
+}

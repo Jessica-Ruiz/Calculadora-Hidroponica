@@ -107,20 +107,23 @@ header {
 }
 
 .container {
-  margin: 20px auto; 
-  margin-left: 0;
-  padding: 15px;     
+  margin: 20px auto; /* Centrado horizontal */
+  padding: 30px;     /* Aumenta el espacio interno */
+  max-width: 1200px; /* Amplía el tamaño máximo */
+  width: 100%;       /* Usa todo el ancho posible dentro del max */
   border: 1px solid #ccc;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
   background-color: white;
   text-align: center;
-  display: inline-block;
+  display: block;    /* Asegura que el centrado funcione bien */
+  overflow-x: hidden; /* Evita scroll horizontal */
 }
 
 /* Tablas */
 table {
-  width: 100%;
+  width: 100%;            /* Ocupa todo el ancho disponible */
+  table-layout: auto;     /* Ajusta columnas según contenido */
   border-collapse: collapse;
   margin-top: 20px;
 }
@@ -130,11 +133,11 @@ table, th, td {
 }
 
 th, td {
-  padding: 12px; /* Se amplía el espacio interno */
+  padding: 12px;            /* Espacio interno */
   text-align: center;
-  width: 200px; /* Se aumenta el ancho de las celdas */
-  min-width: 150px; /* Se evita que se reduzcan demasiado */
-  white-space: nowrap; /* Evita que el texto se rompa en varias líneas */
+  min-width: 100px;         /* Ancho mínimo */
+  white-space: normal;      /* Permite salto de línea */
+  word-break: break-word;   /* Rompe palabras largas para evitar overflow */
 }
 
 th {
@@ -152,9 +155,8 @@ h1 {
 
 .container-flex {
   display: flex;
+  flex-direction: column;  /* Apilar verticalmente */
   gap: 2rem;
-  justify-content: flex-start;
-  align-items: flex-start;
   padding: 15px;
   background-color: white;
   border: 1px solid #ccc;
@@ -162,24 +164,19 @@ h1 {
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
   max-width: 1000px;
   margin: 20px auto;
-  flex-wrap: wrap;
-}
-
-.form-container {
-  flex: 1;
-  min-width: 280px;
+  align-items: center;  /* Centrar horizontalmente */
 }
 
 .tablas-container {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  width: 100%;          /* Ocupa todo el ancho posible */
+  max-width: 900px;     /* Máximo ancho para que no se extienda demasiado */
+  margin: 0 auto;
+  box-sizing: border-box;
 }
 
 .tabla-nutrientes {
-  border-collapse: collapse;
-  width: 300px;
-  background-color: #f9f9f9;
+  width: 100%;          /* Que la tabla ocupe el 100% del contenedor */
+  table-layout: auto;   /* Para que las columnas se ajusten según contenido */
 }
 
 .tabla-nutrientes th,
@@ -187,6 +184,24 @@ h1 {
   border: 1px solid #ccc;
   padding: 12px; /* Se amplía el espacio interno */
   text-align: center;
-  width: 200px; /* Se aumenta el ancho de las celdas */
-  min-width: 150px; /* Se evita que sean demasiado pequeñas */
+  min-width: 100px; /* Ancho mínimo para adaptabilidad */
+  white-space: normal;
+  word-break: break-word;
+}
+
+.form-container {
+  flex: 1;
+  min-width: 280px;
+}
+
+#result {
+  background-color: #e8f5e9;
+  border-left: 5px solid #4caf50;
+  padding: 20px;
+  margin-top: 20px;
+  font-size: 1.1em;
+  color: #2e7d32;
+  white-space: pre-line; /* Mantiene saltos de línea si se usa textContent */
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
