@@ -1,33 +1,47 @@
 <!DOCTYPE html>
-<html lang="en">
+<!--IDIOMA-->
+<html lang="es">
 <head>
+<!--CARACTERES Y TILDES-->
   <meta charset="UTF-8" />
+<!--SE ADAPTA EL DISEÑO A CELULARES-->
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+<!--TITULO DE LAS PAGINAS-->
   <title>Calculadora de Nutrientes</title>
+<!--ENLAZA HTML CON CSS-->
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
   <header>
+<!--ENCABEZADO-->
     <h2 class="HIDROSOFT">HIDROSOFT</h2>
+<!--NAVEGAR DE UNA SECCION OTRA-->
     <nav class="navigation">
+<!--CADA ENLACE LLAMA A UNA FUNCION DE JS-->
       <a onclick="scrollToSection('calculadora')">CALCULADORA</a>
       <a onclick="scrollToSection('calendario')">CALENDARIO</a>
       <a onclick="scrollToSection('conductividad')">CONDUCTIVIDAD ELÉCTRICA</a>
       <a onclick="scrollToSection('tips')">TIPS</a>
+<!--BOTON PARA ABRIR UNA VENTANA PARA LOGEARSE TODAVIA NO ES FUNCIONAL-->
       <button class="btnLogin-poput">Login</button>
     </nav>
   </header>
-
+<!--CONTENEDOS PRINCIPAL QUE DETERMINA EL SCROLL ENTRE SECCIONES-->
   <div class="horizontal-scroll">
+<!--SECCION DE LA CALCULADORA DE NUTRIENTES-->
     <section id="calculadora">
       <h1>Calculadora de Nutrientes</h1>
 
-
+<!--CONTENEDOR QUE ALINEA LOS FORMULARIOS Y LAS TABLAS-->
       <div class="container-flex">
-
+<!--Define un contenedor que, posiblemente, contiene un formulario y tiene la clase "form-container", lo que permite aplicarle estilos específicos con CSS.-->
         <div class="form-container">
+<!--ORGANIZA EL CONTENIDO DENTRO DEL CONTENEDOR PRINCIPAL-->
           <div class="container">
+<!--RECOPILA DATOS DEL USUARIO-->
             <form id="nutrientForm">
+<!--MENU DESPLEGABLES-->
               <label for="option">Selecciona un compuesto:</label>
               <select id="option">
                 <option value="1">Nitrato de calcio</option>
@@ -278,7 +292,7 @@
 
 
     <section id="tips">
-      <h1>Tips de cultivo</h1>
+      <h1>Plagas y Enfermedad</h1>
       <div class="container">
         Aquí puedes poner consejos adicionales sobre el cultivo, riego, fertilización y más.
         <div class="tablas-container">
