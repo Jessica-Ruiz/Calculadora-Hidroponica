@@ -49,105 +49,395 @@ document.addEventListener('DOMContentLoaded', function() {
         const liters = parseFloat(document.getElementById('liters').value);
 
         let result = '';
-
-        switch (option) {
-            case 1:
+              //Nitrato de calcio
                 let nitratoCalcio = 40.078 +(2 * 14.0067)  + (6 * 15.9994);
                 let porcentajeNitratoCalcio = ((2 * 14.0067 * 100)/ nitratoCalcio) ;
                 let porcentajeNitratoCalcioo = (40.078  * 100/ nitratoCalcio);
-                let gramosNitratoCalcio = ( ((140 /porcentajeNitratoCalcioo)/10)*liters);
-                result = `Peso molecular Ca(NO3)2: ${nitratoCalcio.toFixed(2)} g/mol\n`;
-                result += `Porcentaje de Nitrogeno por masa: ${porcentajeNitratoCalcio.toFixed(2)}%\n`;
-                result += `Porcentaje de Calcio por masa: ${porcentajeNitratoCalcioo.toFixed(2)}%\n`;
-                result += `Cantidad en gramos del compuesto: ${gramosNitratoCalcio.toFixed(2)} gramos de nitrato de calcio.`;
-                break;
-            case 2:
+              //Nitrato de potasio
                 let nitratoPotasio = 39.0983 + 14.0067 + 3 * 15.9994;
                 let porcentajeNitratoPotasio = (14.0067 / nitratoPotasio) * 100;
                 let porcentajeNitratoPotasioo = (39.0983 / nitratoPotasio) * 100;
-                let gramosNitratoPotasio = (((150/porcentajeNitratoPotasioo)/10)*liters); // Fórmula ajustada para calcular gramos
-                result = `Peso molecular KNO3: ${nitratoPotasio.toFixed(2)} g/mol\n`;
-                result += `Porcentaje de Nitrogeno por masa: ${porcentajeNitratoPotasio.toFixed(2)}%\n`;
-                result += `Porcentaje de Potasio por masa: ${porcentajeNitratoPotasioo.toFixed(2)}%\n`;
-                result += `Cantidad en gramos del compuesto: ${gramosNitratoPotasio.toFixed(2)} gramos de nitrato de potasio.`;
-                break;
-            case 3:
+              //fosfato de monoamoniaco
                 let fosfatoMonoamoniaco = 14.0067 + 6 * 1.00784 + 30.973762 + 4 * 15.9994;
                 let porcentajeFosfatoMonoamoniaco = (14.0067 / fosfatoMonoamoniaco) * 100;
                 let porcentajeFosfatoMonoamoniaco2 = (30.973762 / fosfatoMonoamoniaco) * 100;
-                let gramosFosfatoMonoamoniaco = (((50 /porcentajeFosfatoMonoamoniaco2 )/10)*liters); // Fórmula ajustada para calcular gramos
-                result = `Peso molecular (NH4)H2PO4: ${fosfatoMonoamoniaco.toFixed(2)} g/mol\n`;
-                result += `Porcentaje de Nitrogeno por masa: ${porcentajeFosfatoMonoamoniaco.toFixed(2)}%\n`;
-                result += `Porcentaje de Fosforo por masa: ${porcentajeFosfatoMonoamoniaco2.toFixed(2)}%\n`;
-                result += `Cantidad en gramos del compuesto: ${gramosFosfatoMonoamoniaco.toFixed(2)} gramos de fosfato de monoamoniaco.`;
-                break;
-            case 4:
+              //Sulfato de magnesio
                 let sulfatoMagnesio = 24.305 + 32.065 + 4 * 15.9994 + 7 * 1.00784 * 2 + 7 * 15.9994;
                 let porcentajeSulfatoMagnesio = (24.305 / sulfatoMagnesio) * 100;
                 let porcentajeSulfatoMagnesioo = (32.065 / sulfatoMagnesio) * 100;
-                let gramosSulfatoMagnesio = ( ((55 /porcentajeSulfatoMagnesio )/10)*liters); // Fórmula ajustada para calcular gramos
-                result = `Peso molecular de MgSO4-7(H2O): ${sulfatoMagnesio.toFixed(2)} g/mol\n`;
-                result += `Porcentaje de Magnesio por masa: ${porcentajeSulfatoMagnesio.toFixed(2)}%\n`;
-                result += `Porcentaje de Azufre por masa: ${porcentajeSulfatoMagnesioo.toFixed(2)}%\n`;
-                result += `Cantidad en gramos del compuesto: ${gramosSulfatoMagnesio.toFixed(2)} gramos de sulfato de magnesio.`;
-                break;
-            case 5:
+
+              
+                //Sulfato ferroso
                 let sulfatoFerroso = 55.845 + 32.065 + (4 * 15.9994);
                 let porcentajeSulfatoFerroso = (55.845 / sulfatoFerroso) * 100;
                 let porcentajeSulfatoFerrosoo = (32.065 / sulfatoFerroso) * 100;
-                let gramosSulfatoFerroso = ( ((3/porcentajeSulfatoFerrosoo)/10)*liters); // Fórmula ajustada para calcular gramos
-                result = `Peso molecular FeSO4-7(H2O): ${sulfatoFerroso.toFixed(2)} g/mol\n`;
-                result += `Porcentaje de Hierro por masa: ${porcentajeSulfatoFerroso.toFixed(2)}%\n`;
-                result += `Porcentaje de Azufre por masa: ${porcentajeSulfatoFerrosoo.toFixed(2)}%\n`;
-                result += `Cantidad en gramos del compuesto: ${gramosSulfatoFerroso.toFixed(2)} gramos de sulfato ferroso.`;
-                break;
-            case 6:
+
+                //Sulfato de cobre
                 let sulfatoCobre = 63.54 + 32.065 + 4 * 15.9994;
                 let porcentajeSulfatoCobre = (63.54 / sulfatoCobre) * 100;
                 let porcentajeSulfatoCobree = (32.065 / sulfatoCobre) * 100;
-                let gramosSulfatoCobre = (((0.5 /porcentajeSulfatoCobre)/ 10)*liters); // Fórmula ajustada para calcular gramos
-                result = `Peso molecular CuSO4-7(H2O): ${sulfatoCobre.toFixed(2)} g/mol\n`;
-                result += `Porcentaje de Cobre por masa: ${porcentajeSulfatoCobre.toFixed(2)}%\n`;
-                result += `Porcentaje de Azufre por masa: ${porcentajeSulfatoCobree.toFixed(2)}%\n`;
-                result += `Cantidad en gramos del compuesto: ${gramosSulfatoCobre.toFixed(2)} gramos de sulfato de cobre.`;
-                break;
-            case 7:
+                //Sulfato de manganeso
                 let sulfatoManganeso = 54.938 + 32.065 + 4 * 15.9994;
                 let porcentajeSulfatoManganeso = (32.065 / sulfatoManganeso) * 100;
                 let porcentajeSulfatoManganesoo = (54.938 / sulfatoManganeso) * 100;
-                let gramosSulfatoManganeso = (((0.8/porcentajeSulfatoManganesoo/10)*liters)); // Fórmula ajustada para calcular gramos
-                result = `Peso molecular MnSO4-4(H2O): ${sulfatoManganeso.toFixed(2)} g/mol\n`;
-                result += `Porcentaje de Azufre por masa: ${porcentajeSulfatoManganeso.toFixed(2)}%\n`;
-                result += `Porcentaje de Manganeso por masa: ${porcentajeSulfatoManganesoo.toFixed(2)}%\n`;
-                result += `Cantidad en gramos del compuesto: ${gramosSulfatoManganeso.toFixed(2)} gramos de sulfato de manganeso.`;
-                break;
-            case 8:
+                //sulfato zinc
                 let sulfatoZinc =65.38+32.065+4*15.9994;
                 let porcentajeSulfatoZinc = (32.065/sulfatoZinc) * 100;
                 let porcentajeSulfatoZincc = (65.38/sulfatoZinc) * 100;
-                let gramosSulfatoZinc = (((0.4/porcentajeSulfatoZinc)/10)*liters); // Fórmula ajustada para calcular gramos
-                result = `Peso molecular ZnSO4-7(H2O): ${sulfatoZinc.toFixed(2)} g/mol\n`;
-                result += `Porcentaje de Azufre por masa: ${porcentajeSulfatoZinc.toFixed(2)}%\n`;
-                result += `Porcentaje de Zinc por masa: ${porcentajeSulfatoZincc.toFixed(2)}%\n`;
-                result += `Cantidad en gramos del compuesto: ${gramosSulfatoZinc.toFixed(2)} gramos de sulfato de zinc.`;
-                break;
-            case 9:
+                //acido borico
                 let acidoBorico = 3 * 1.00784 + 10.81 + 3 * 15.9994;
                 let porcentajeAcidoborico = (10.81 / acidoBorico) * 100;
+        switch (option) {
+            case 1:
+              //Nitrato de calcio
+                let gramosNitratoCalcio = ( ((140 /porcentajeNitratoCalcioo)/10)*liters);
+                result += `Cantidad en gramos del compuesto: ${gramosNitratoCalcio.toFixed(2)} gramos de nitrato de calcio.\n`;
+              //Nitrato de potasio
+                let gramosNitratoPotasio = (((150/porcentajeNitratoPotasioo)/10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosNitratoPotasio.toFixed(2)} gramos de nitrato de potasio.\n`;
+               //fosfato de monoamoniaco
+                let gramosFosfatoMonoamoniaco = (((50 /porcentajeFosfatoMonoamoniaco2 )/10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosFosfatoMonoamoniaco.toFixed(2)} gramos de fosfato de monoamoniaco.\n`;
+
+                //Sulfato de magnesio
+                let gramosSulfatoMagnesio = ( ((55 /porcentajeSulfatoMagnesio )/10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosSulfatoMagnesio.toFixed(2)} gramos de sulfato de magnesio.\n`;
+                //Sulfato ferroso
+                let gramosSulfatoFerroso = ( ((3/porcentajeSulfatoFerrosoo)/10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosSulfatoFerroso.toFixed(2)} gramos de sulfato ferroso.\n`;
+                //Sulfato de cobre
+
+                let gramosSulfatoCobre = (((0.5 /porcentajeSulfatoCobre)/ 10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosSulfatoCobre.toFixed(2)} gramos de sulfato de cobre.\n`;
+
+                //Sulfato de manganeso
+                let gramosSulfatoManganeso = (((0.8/porcentajeSulfatoManganesoo/10)*liters)); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosSulfatoManganeso.toFixed(2)} gramos de sulfato de manganeso.\n`;
+                
+                //Sulfato de zinc
+
+                let gramosSulfatoZinc = (((0.4/porcentajeSulfatoZinc)/10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosSulfatoZinc.toFixed(2)} gramos de sulfato de zinc.\n`;
+                //acido borico
+
                 let gramosAcidoBorico = (((0.8 /porcentajeAcidoborico)/10)*liters); // Fórmula ajustada para calcular gramos
-                result = `Peso molecular H3BO3: ${acidoBorico.toFixed(2)} g/mol\n`;
-                result += `Porcentaje de Boro por masa: ${porcentajeAcidoborico.toFixed(2)}%\n`;
-                result += `Cantidad en gramos del compuesto: ${gramosAcidoBorico.toFixed(2)} gramos de ácido bórico.`;
+                result += `Cantidad en gramos del compuesto: ${gramosAcidoBorico.toFixed(2)} gramos de ácido bórico.\n`;                
+
+                break;
+            case 2:
+              //Nitrato de calcio
+                let gramosNitratoCalciof = ( ((120 /porcentajeNitratoCalcioo)/10)*liters);
+
+                result += `Cantidad en gramos del compuesto: ${gramosNitratoCalciof.toFixed(2)} gramos de nitrato de calcio.\n`;
+              //Nitrato de potasio
+                let gramosNitratoPotasiof = (((200/porcentajeNitratoPotasioo)/10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosNitratoPotasiof.toFixed(2)} gramos de nitrato de potasio.\n`;
+               //fosfato de monoamoniaco
+                let gramosFosfatoMonoamoniacof = (((40/porcentajeFosfatoMonoamoniaco2 )/10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosFosfatoMonoamoniacof.toFixed(2)} gramos de fosfato de monoamoniaco.\n`;
+
+                //Sulfato de magnesio
+                let gramosSulfatoMagnesiof = ( ((50 /porcentajeSulfatoMagnesio )/10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosSulfatoMagnesiof.toFixed(2)} gramos de sulfato de magnesio.\n`;
+                //Sulfato ferroso
+                let gramosSulfatoFerrosof = ( ((2/porcentajeSulfatoFerrosoo)/10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosSulfatoFerrosof.toFixed(2)} gramos de sulfato ferroso.\n`;
+                //Sulfato de cobre
+
+                let gramosSulfatoCobref = (((0.05 /porcentajeSulfatoCobre)/ 10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosSulfatoCobref.toFixed(2)} gramos de sulfato de cobre.\n`;
+
+                //Sulfato de manganeso
+                let gramosSulfatoManganesof = (((0.5/porcentajeSulfatoManganesoo/10)*liters)); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosSulfatoManganesof.toFixed(2)} gramos de sulfato de manganeso.\n`;
+                
+                //Sulfato de zinc
+
+                let gramosSulfatoZincf = (((0.05/porcentajeSulfatoZinc)/10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosSulfatoZincf.toFixed(2)} gramos de sulfato de zinc.\n`;
+                //acido borico
+
+                let gramosAcidoBoricof = (((0.4 /porcentajeAcidoborico)/10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosAcidoBoricof.toFixed(2)} gramos de ácido bórico.\n`;                
+
+              
+                break;
+            case 3:
+              //Nitrato de calcio
+                let gramosNitratoCalciol = ( ((150 /porcentajeNitratoCalcioo)/10)*liters);      
+                result += `Cantidad en gramos del compuesto: ${gramosNitratoCalciol.toFixed(2)} gramos de nitrato de calcio.\n`;
+              //Nitrato de potasio
+                let gramosNitratoPotasiol = (((200/porcentajeNitratoPotasioo)/10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosNitratoPotasiol.toFixed(2)} gramos de nitrato de potasio.\n`;
+               //fosfato de monoamoniaco
+                let gramosFosfatoMonoamoniacol = (((40/porcentajeFosfatoMonoamoniaco2 )/10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosFosfatoMonoamoniacol.toFixed(2)} gramos de fosfato de monoamoniaco.\n`;
+
+                //Sulfato de magnesio
+                let gramosSulfatoMagnesiol = ( ((50 /porcentajeSulfatoMagnesio )/10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosSulfatoMagnesiol.toFixed(2)} gramos de sulfato de magnesio.\n`;
+                //Sulfato ferroso
+                let gramosSulfatoFerrosol = ( ((2.5/porcentajeSulfatoFerrosoo)/10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosSulfatoFerrosol.toFixed(2)} gramos de sulfato ferroso.\n`;
+                //Sulfato de cobre
+
+                let gramosSulfatoCobrel = (((0.05 /porcentajeSulfatoCobre)/ 10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosSulfatoCobrel.toFixed(2)} gramos de sulfato de cobre.\n`;
+
+                //Sulfato de manganeso
+                let gramosSulfatoManganesol = (((0.5/porcentajeSulfatoManganesoo/10)*liters)); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosSulfatoManganesol.toFixed(2)} gramos de sulfato de manganeso.\n`;
+                
+                //Sulfato de zinc
+
+                let gramosSulfatoZincl = (((0.05/porcentajeSulfatoZinc)/10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosSulfatoZincl.toFixed(2)} gramos de sulfato de zinc.\n`;
+                //acido borico
+
+                let gramosAcidoBoricol = (((0.3 /porcentajeAcidoborico)/10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosAcidoBoricol.toFixed(2)} gramos de ácido bórico.\n`;                
+
+              
+                break; 
+            case 4:
+                            //Nitrato de calcio
+                let gramosNitratoCalciog = ( ((120 /porcentajeNitratoCalcioo)/10)*liters);
+                
+                result += `Cantidad en gramos del compuesto: ${gramosNitratoCalciog.toFixed(2)} gramos de nitrato de calcio.\n`;
+              //Nitrato de potasio
+                let gramosNitratoPotasiog = (((250/porcentajeNitratoPotasioo)/10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosNitratoPotasiog.toFixed(2)} gramos de nitrato de potasio.\n`;
+               //fosfato de monoamoniaco
+                let gramosFosfatoMonoamoniacog = (((45/porcentajeFosfatoMonoamoniaco2 )/10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosFosfatoMonoamoniacog.toFixed(2)} gramos de fosfato de monoamoniaco.\n`;
+
+                //Sulfato de magnesio
+                let gramosSulfatoMagnesiog = ( ((45/porcentajeSulfatoMagnesio )/10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosSulfatoMagnesiog.toFixed(2)} gramos de sulfato de magnesio.\n`;
+                //Sulfato ferroso
+                let gramosSulfatoFerrosog = ( ((3.0/porcentajeSulfatoFerrosoo)/10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosSulfatoFerrosog.toFixed(2)} gramos de sulfato ferroso.\n`;
+                //Sulfato de cobre
+
+                let gramosSulfatoCobreg = (((0.05 /porcentajeSulfatoCobre)/ 10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosSulfatoCobreg.toFixed(2)} gramos de sulfato de cobre.\n`;
+
+                //Sulfato de manganeso
+                let gramosSulfatoManganesog = (((0.6/porcentajeSulfatoManganesoo/10)*liters)); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosSulfatoManganesog.toFixed(2)} gramos de sulfato de manganeso.\n`;
+                
+                //Sulfato de zinc
+
+                let gramosSulfatoZincg = (((0.06/porcentajeSulfatoZinc)/10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosSulfatoZincg.toFixed(2)} gramos de sulfato de zinc.\n`;
+                //acido borico
+
+                let gramosAcidoBoricog = (((0.4 /porcentajeAcidoborico)/10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosAcidoBoricog.toFixed(2)} gramos de ácido bórico.\n`;                
+
+              
+                break;
+            case 5:
+              //Nitrato de calcio
+                let gramosNitratoCalciom = ( ((150 /porcentajeNitratoCalcioo)/10)*liters);
+                
+                result += `Cantidad en gramos del compuesto: ${gramosNitratoCalciom.toFixed(2)} gramos de nitrato de calcio.\n`;
+              //Nitrato de potasio
+                let gramosNitratoPotasiom = (((300/porcentajeNitratoPotasioo)/10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosNitratoPotasiom.toFixed(2)} gramos de nitrato de potasio.\n`;
+               //fosfato de monoamoniaco
+                let gramosFosfatoMonoamoniacom = (((40/porcentajeFosfatoMonoamoniaco2 )/10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosFosfatoMonoamoniacom.toFixed(2)} gramos de fosfato de monoamoniaco.\n`;
+
+                //Sulfato de magnesio
+                let gramosSulfatoMagnesiom = ( ((55 /porcentajeSulfatoMagnesio )/10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosSulfatoMagnesiom.toFixed(2)} gramos de sulfato de magnesio.\n`;
+                //Sulfato ferroso
+                let gramosSulfatoFerrosom = ( ((3.0/porcentajeSulfatoFerrosoo)/10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosSulfatoFerrosom.toFixed(2)} gramos de sulfato ferroso.\n`;
+                //Sulfato de cobre
+
+                let gramosSulfatoCobrem = (((0.07/porcentajeSulfatoCobre)/ 10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosSulfatoCobrem.toFixed(2)} gramos de sulfato de cobre.\n`;
+
+                //Sulfato de manganeso
+                let gramosSulfatoManganesom = (((0.7/porcentajeSulfatoManganesoo/10)*liters)); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosSulfatoManganesom.toFixed(2)} gramos de sulfato de manganeso.\n`;
+                
+                //Sulfato de zinc
+
+                let gramosSulfatoZincm = (((0.07/porcentajeSulfatoZinc)/10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosSulfatoZincm.toFixed(2)} gramos de sulfato de zinc.\n`;
+                //acido borico
+
+                let gramosAcidoBoricom = (((0.5 /porcentajeAcidoborico)/10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosAcidoBoricom.toFixed(2)} gramos de ácido bórico.\n`;                
+
+              
+                break;
+            case 6:
+                              //Nitrato de calcio
+                let gramosNitratoCalcioe = ( ((130 /porcentajeNitratoCalcioo)/10)*liters);
+                
+                result += `Cantidad en gramos del compuesto: ${gramosNitratoCalcioe.toFixed(2)} gramos de nitrato de calcio.\n`;
+              //Nitrato de potasio
+                let gramosNitratoPotasioe = (((220/porcentajeNitratoPotasioo)/10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosNitratoPotasioe.toFixed(2)} gramos de nitrato de potasio.\n`;
+               //fosfato de monoamoniaco
+                let gramosFosfatoMonoamoniacoe= (((45/porcentajeFosfatoMonoamoniaco2 )/10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosFosfatoMonoamoniacoe.toFixed(2)} gramos de fosfato de monoamoniaco.\n`;
+
+                //Sulfato de magnesio
+                let gramosSulfatoMagnesioe = ( ((50 /porcentajeSulfatoMagnesio )/10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosSulfatoMagnesioe.toFixed(2)} gramos de sulfato de magnesio.\n`;
+                //Sulfato ferroso
+                let gramosSulfatoFerrosoe = ( ((2.5/porcentajeSulfatoFerrosoo)/10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosSulfatoFerrosoe.toFixed(2)} gramos de sulfato ferroso.\n`;
+                //Sulfato de cobre
+
+                let gramosSulfatoCobree = (((0.05 /porcentajeSulfatoCobre)/ 10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosSulfatoCobree.toFixed(2)} gramos de sulfato de cobre.\n`;
+
+                //Sulfato de manganeso
+                let gramosSulfatoManganesoe= (((0.6/porcentajeSulfatoManganesoo/10)*liters)); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosSulfatoManganesoe.toFixed(2)} gramos de sulfato de manganeso.\n`;
+                
+                //Sulfato de zinc
+
+                let gramosSulfatoZince = (((0.06/porcentajeSulfatoZinc)/10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosSulfatoZince.toFixed(2)} gramos de sulfato de zinc.\n`;
+                //acido borico
+
+                let gramosAcidoBoricoe = (((0.35/porcentajeAcidoborico)/10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosAcidoBoricoe.toFixed(2)} gramos de ácido bórico.\n`;                
+
+              
+                break;
+            case 7:
+              //Nitrato de calcio
+                let gramosNitratoCalcior = ( ((120 /porcentajeNitratoCalcioo)/10)*liters);
+                
+                result += `Cantidad en gramos del compuesto: ${gramosNitratoCalcior.toFixed(2)} gramos de nitrato de calcio.\n`;
+              //Nitrato de potasio
+                let gramosNitratoPotasior = (((220/porcentajeNitratoPotasioo)/10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosNitratoPotasior.toFixed(2)} gramos de nitrato de potasio.\n`;
+               //fosfato de monoamoniaco
+                let gramosFosfatoMonoamoniacor = (((35/porcentajeFosfatoMonoamoniaco2 )/10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosFosfatoMonoamoniacor.toFixed(2)} gramos de fosfato de monoamoniaco.\n`;
+
+                //Sulfato de magnesio
+                let gramosSulfatoMagnesior = ( ((40 /porcentajeSulfatoMagnesio )/10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosSulfatoMagnesior.toFixed(2)} gramos de sulfato de magnesio.\n`;
+                //Sulfato ferroso
+                let gramosSulfatoFerrosor = ( ((2.5/porcentajeSulfatoFerrosoo)/10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosSulfatoFerrosor.toFixed(2)} gramos de sulfato ferroso.\n`;
+                //Sulfato de cobre
+
+                let gramosSulfatoCobrer = (((0.05 /porcentajeSulfatoCobre)/ 10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosSulfatoCobrer.toFixed(2)} gramos de sulfato de cobre.\n`;
+
+                //Sulfato de manganeso
+                let gramosSulfatoManganesor = (((0.5/porcentajeSulfatoManganesoo/10)*liters)); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosSulfatoManganesor.toFixed(2)} gramos de sulfato de manganeso.\n`;
+                
+                //Sulfato de zinc
+
+                let gramosSulfatoZincr = (((0.05/porcentajeSulfatoZinc)/10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosSulfatoZincr.toFixed(2)} gramos de sulfato de zinc.\n`;
+                //acido borico
+
+                let gramosAcidoBoricor = (((0.3 /porcentajeAcidoborico)/10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosAcidoBoricor.toFixed(2)} gramos de ácido bórico.\n`;                
+
+              
+                break;
+            case 8:
+              //Nitrato de calcio
+                let gramosNitratoCalciop = ( ((120 /porcentajeNitratoCalcioo)/10)*liters);
+                
+                result += `Cantidad en gramos del compuesto: ${gramosNitratoCalciop.toFixed(2)} gramos de nitrato de calcio.\n`;
+              //Nitrato de potasio
+                let gramosNitratoPotasiop = (((200/porcentajeNitratoPotasioo)/10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosNitratoPotasiop.toFixed(2)} gramos de nitrato de potasio.\n`;
+               //fosfato de monoamoniaco
+                let gramosFosfatoMonoamoniacop = (((40/porcentajeFosfatoMonoamoniaco2 )/10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosFosfatoMonoamoniacop.toFixed(2)} gramos de fosfato de monoamoniaco.\n`;
+
+                //Sulfato de magnesio
+                let gramosSulfatoMagnesiop = ( ((45 /porcentajeSulfatoMagnesio )/10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosSulfatoMagnesiop.toFixed(2)} gramos de sulfato de magnesio.\n`;
+                //Sulfato ferroso
+                let gramosSulfatoFerrosop = ( ((2.5/porcentajeSulfatoFerrosoo)/10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosSulfatoFerrosop.toFixed(2)} gramos de sulfato ferroso.\n`;
+                //Sulfato de cobre
+
+                let gramosSulfatoCobrep = (((0.05 /porcentajeSulfatoCobre)/ 10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosSulfatoCobrep.toFixed(2)} gramos de sulfato de cobre.\n`;
+
+                //Sulfato de manganeso
+                let gramosSulfatoManganesop = (((0.6/porcentajeSulfatoManganesoo/10)*liters)); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosSulfatoManganesop.toFixed(2)} gramos de sulfato de manganeso.\n`;
+                
+                //Sulfato de zinc
+
+                let gramosSulfatoZincp = (((0.06/porcentajeSulfatoZinc)/10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosSulfatoZincp.toFixed(2)} gramos de sulfato de zinc.\n`;
+                //acido borico
+
+                let gramosAcidoBoricop = (((0.35 /porcentajeAcidoborico)/10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosAcidoBoricop.toFixed(2)} gramos de ácido bórico.\n`;                         
+                break;
+            case 9:
+              //Nitrato de calcio
+                let gramosNitratoCalcioc = ( ((130 /porcentajeNitratoCalcioo)/10)*liters);
+                
+                result += `Cantidad en gramos del compuesto: ${gramosNitratoCalcioc.toFixed(2)} gramos de nitrato de calcio.\n`;
+              //Nitrato de potasio
+                let gramosNitratoPotasioc = (((220/porcentajeNitratoPotasioo)/10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosNitratoPotasioc.toFixed(2)} gramos de nitrato de potasio.\n`;
+               //fosfato de monoamoniaco
+                let gramosFosfatoMonoamoniacoc = (((40/porcentajeFosfatoMonoamoniaco2 )/10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosFosfatoMonoamoniacoc.toFixed(2)} gramos de fosfato de monoamoniaco.\n`;
+
+                //Sulfato de magnesio
+                let gramosSulfatoMagnesioc = ( ((45 /porcentajeSulfatoMagnesio )/10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosSulfatoMagnesioc.toFixed(2)} gramos de sulfato de magnesio.\n`;
+                //Sulfato ferroso
+                let gramosSulfatoFerrosoc = ( ((2.5/porcentajeSulfatoFerrosoo)/10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosSulfatoFerrosoc.toFixed(2)} gramos de sulfato ferroso.\n`;
+                //Sulfato de cobre
+
+                let gramosSulfatoCobrec = (((0.05 /porcentajeSulfatoCobre)/ 10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosSulfatoCobrec.toFixed(2)} gramos de sulfato de cobre.\n`;
+
+                //Sulfato de manganeso
+                let gramosSulfatoManganesoc = (((0.6/porcentajeSulfatoManganesoo/10)*liters)); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosSulfatoManganesoc.toFixed(2)} gramos de sulfato de manganeso.\n`;
+                
+                //Sulfato de zinc
+
+                let gramosSulfatoZincc = (((0.06/porcentajeSulfatoZinc)/10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosSulfatoZincc.toFixed(2)} gramos de sulfato de zinc.\n`;
+                //acido borico
+
+                let gramosAcidoBoricoc = (((0.35/porcentajeAcidoborico)/10)*liters); // Fórmula ajustada para calcular gramos
+                result += `Cantidad en gramos del compuesto: ${gramosAcidoBoricoc.toFixed(2)} gramos de ácido bórico.\n`;                
+
+              
                 break;
             default:
                 result = 'La opción es incorrecta.';
                 break;
         }
 
+        
+
         resultContainer.textContent = result;
     });
     
 });
+
+
 
 
 const rangos = {
