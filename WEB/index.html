@@ -176,127 +176,40 @@
     <div class="form-container">
       <div class="container">
         <h2>Verificación de Parámetros por Etapa</h2>
+<label for="planta">Selecciona una planta:</label>
+<select id="planta">
+  <option value="fresa">Fresa</option>
+  <option value="guatila">Guatila</option>
+  <option value="mora">Mora</option>
+  <option value="lechuga">Lechuga</option>
+  <option value="espinaca">Espinaca</option>
+  <option value="romero">Romero</option>
+  <option value="perejil">Perejil</option>
+  <option value="cilantro">Cilantro</option>
+  <option value="tomate">Tomate</option>
+</select>
 
-        <form id="parametrosForm" onsubmit="event.preventDefault(); verificarParametros();">
-          <!-- Aquí va todo el contenido del formulario -->
-          <label for="etapa">Etapa de la planta:</label>
-          <select id="etapa" required>
-            <option value="germinacion">Germinación</option>
-            <option value="plantula">Plántula</option>
-            <option value="vegetativo">Desarrollo vegetativo</option>
-            <option value="floracion">Floración</option>
-            <option value="fructificacion">Formación del fruto</option>
-            <option value="cosecha">Cosecha</option>
-          </select>
+<label for="etapa">Selecciona la etapa:</label>
+<select id="etapa">
+  <option value="germinacion">Germinación</option>
+  <option value="plantula">Plántula</option>
+  <option value="vegetativo">Desarrollo vegetativo</option>
+  <option value="floracion">Floración</option>
+  <option value="fructificacion">Fructificación</option>
+  <option value="cosecha">Cosecha</option>
+</select>
 
-          <br><br>
+<br><br>
 
-          <label for="ph">pH actual:</label>
-          <input type="number" step="0.1" id="ph" required>
+<label>pH: <input type="number" id="ph" step="0.1"></label><br>
+<label>CE: <input type="number" id="ce" step="0.1"></label><br>
+<label>Temperatura (°C): <input type="number" id="temperatura"></label><br>
+<label>Humedad (%): <input type="number" id="humedad"></label><br><br>
 
-          <br><br>
+<button onclick="verificarParametros()">Verificar</button>
 
-          <label for="ce">Conductividad eléctrica (CE) actual (mS/cm):</label>
-          <input type="number" step="0.1" id="ce" required>
+<p id="resultado"></p>
 
-          <br><br>
-
-          <label for="temperatura">Temperatura actual (°C):</label>
-          <input type="number" step="0.1" id="temperatura" required>
-
-          <br><br>
-
-          <label for="humedad">Humedad relativa actual (%):</label>
-          <input type="number" step="1" id="humedad" required>
-
-          <br><br>
-
-          <button type="submit">Verificar parámetros</button>
-        </form>
-
-        <br>
-
-        <div id="resultado" style="white-space: pre-line; font-weight: bold;"></div>
-      </div>
-    </div>
-    <div class="tablas-container">
-  <table class="tabla-nutrientes">
-    <thead>
-      <tr>
-        <th>Etapa</th>
-        <th>pH</th>
-        <th>Conductividad Eléctrica (CE) mS/cm</th>
-        <th>Temperatura (°C)</th>
-        <th>Humedad Relativa (%)</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Germinación</td>
-        <td>5.5 - 6.0</td>
-        <td>1.0 - 1.4</td>
-        <td>22 - 26</td>
-        <td>70 - 80</td>
-      </tr>
-      <tr>
-        <td>Plántula</td>
-        <td>5.5 - 6.0</td>
-        <td>1.2 - 1.8</td>
-        <td>20 - 25</td>
-        <td>65 - 75</td>
-      </tr>
-      <tr>
-        <td>Desarrollo vegetativo</td>
-        <td>5.5 - 6.5</td>
-        <td>1.5 - 2.3</td>
-        <td>22 - 28</td>
-        <td>60 - 70</td>
-      </tr>
-      <tr>
-        <td>Floración</td>
-        <td>5.5 - 6.5</td>
-        <td>2.0 - 2.8</td>
-        <td>22 - 27</td>
-        <td>55 - 65</td>
-      </tr>
-      <tr>
-        <td>Fructificación</td>
-        <td>5.5 - 6.5</td>
-        <td>2.2 - 3.0</td>
-        <td>20 - 26</td>
-        <td>55 - 65</td>
-      </tr>
-      <tr>
-        <td>Cosecha</td>
-        <td>5.5 - 6.5</td>
-        <td>1.0 - 2.0</td>
-        <td>18 - 24</td>
-        <td>50 - 60</td>
-      </tr>
-    </tbody>
-  </table>
-        <h1>Plagas y Enfermedad</h1>
-      <div class="container">
-        Aquí puedes poner consejos adicionales sobre el cultivo, riego, fertilización y más.
-        <div class="tablas-container">
-  <table class="tabla-nutrientes">
-    <thead>
-      <tr>
-        <th>Plaga/Enfermedad</th>
-        <th>Nombre científico</th>
-        <th>Características</th>
-        <th>Tratamiento casero</th>
-        <th>Tratamiento químico</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>Araña roja</td><td>Tetranychus sp., Petrobia sp., Aculops sp., Phyllocopte sp.</td><td>Arañas pequeñas de colores variados; se desarrollan en altas temperaturas y baja humedad.</td><td>Modificación de condiciones ambientales: aumentar humedad y bajar temperatura con riego tipo nebulización.</td><td>Contracar (tricarboxilos vegetales), dosis de 2 ml con 1 ml de bioadherente por litro de agua, aplicado semanalmente.</td></tr>
-      <tr><td>Pulgones</td><td>Aphis sp., Myzus persicae, Macrosiphum sp.</td><td>Insectos chupadores de diversos colores, atacan partes tiernas de las plantas.</td><td>-</td><td>Contracar (tricarboxilos vegetales), dosis de 2 ml con 1 ml de bioadherente por litro de agua, aplicado semanalmente.</td></tr>
-      <tr><td>Conchuela o cochinilla café</td><td>Saissetia coffeae</td><td>Adultos sésiles, estadios jóvenes poseen patas y se desplazan.</td><td>Aceite mineral, dosis de 2 ml por litro, semanalmente durante 3-4 semanas.</td><td>-</td></tr>
-      <tr><td>Damping-off</td><td>Phytium, Rhizoctonia, Phytophthora, Fusarium, Botrytis, Sclerotium</td><td>Secadera o ahogamiento causado por hongos en plantas con riego excesivo. Pudrición de la base del tallo.</td><td>Uso de sustrato con buen drenaje y reducción de riegos.</td><td>Tricon, dosis de 2 ml con 1 ml de bioadherente por litro de agua.</td></tr>
-      <tr><td>Manchas en foliolos y frutos</td><td>Alternaria dauci f. solani, Botrytis cinerea, Phytophthora infestans</td><td>Manchas causadas por hongos, relacionadas con exceso de riego o herramientas contaminadas.</td><td>Control de riegos y poda para mejorar la ventilación.</td><td>Tricon, dosis de 2 ml con 1 ml de bioadherente por litro de agua y aceite mineral Acemin E, dosis de 5 ml por litro de agua.</td></tr>
-    </tbody>
-  </table>
 </div>
 
       </div>
