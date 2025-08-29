@@ -1,37 +1,109 @@
+  const etapas ={
+    1: [
+    { nombre: "Germinación", inicio: 0, fin: 10 },
+    { nombre: "Plántula", inicio: 11, fin: 30 },
+    { nombre: "Desarrollo vegetativo", inicio: 31, fin: 60 },
+    { nombre: "Floración", inicio: 61, fin: 100 },
+    { nombre: "Cosecha", inicio: 90, fin: 150 },
+  ],
+    2: [
+    { nombre: "Germinación", inicio: 0, fin: 21 },
+    { nombre: "Plántula", inicio: 22, fin: 42},
+    { nombre: "Desarrollo vegetativo", inicio: 43, fin: 84 },
+    { nombre: "Floración", inicio: 85, fin: 126 },
+    { nombre: "Cosecha", inicio: 127, fin: 168 },
+    ],
+    3: [
+    { nombre: "Germinación", inicio: 0, fin: 14 },
+    { nombre: "Plántula", inicio: 15, fin: 28 },
+    { nombre: "Desarrollo vegetativo", inicio: 29, fin: 56 },
+    { nombre: "Floración", inicio: 57, fin: 84 },
+    { nombre: "Cosecha", inicio: 85, fin: 112 },
+    ],
+    4: [
+    { nombre: "Germinación", inicio: 0, fin: 14 },
+    { nombre: "Plántula", inicio: 15, fin: 35 },
+    { nombre: "Desarrollo vegetativo", inicio: 36, fin: 70 },
+    { nombre: "Floración", inicio: 71, fin: 112 },
+    { nombre: "Cosecha", inicio: 113, fin: 140 },
+    ],
+    5: [
+    { nombre: "Germinación", inicio: 0, fin: 7 },
+    { nombre: "Plántula", inicio: 8, fin: 14},
+    { nombre: "Desarrollo vegetativo", inicio: 15, fin: 28 },
+    { nombre: "Floración",inicio:"No da futos",fin:"No da frutos"},
+    { nombre: "Cosecha", inicio: 29, fin: 42 },
+    ],
+    6: [
+    { nombre: "Germinación", inicio: 0, fin: 7 },
+    { nombre: "Plántula", inicio: 8, fin: 14 },
+    { nombre: "Desarrollo vegetativo", inicio: 15, fin: 28 },
+    { nombre: "Floración", inicio: "No da frutos", fin: "No da frutos" },
+    { nombre: "Cosecha", inicio: 29, fin: 35 },
+    ],
+    7: [
+    { nombre: "Germinación", inicio: 0, fin: 21 },
+    { nombre: "Plántula", inicio: 22, fin: 42 },
+    { nombre: "Desarrollo vegetativo", inicio: 43, fin: 70 },
+    { nombre: "Floración", inicio: 71, fin: 84 },
+    { nombre: "Cosecha", inicio: 71, fin: 84 },
+    ],
+    8: [
+    { nombre: "Germinación", inicio: 0, fin: 14 },
+    { nombre: "Plántula", inicio: 15, fin: 28 },
+    { nombre: "Desarrollo vegetativo", inicio: 29, fin: 49 },
+    { nombre: "Floración", inicio: "No da frutos", fin: "No da frutos" },
+    { nombre: "Cosecha", inicio: 42, fin: 56 },
+    ],
+    9: [
+    { nombre: "Germinación", inicio: 0, fin: 7 },
+    { nombre: "Plántula", inicio: 8, fin: 14 },
+    { nombre: "Desarrollo vegetativo", inicio: 15, fin: 28 },
+    { nombre: "Floración", inicio:"No da frutos", fin: "No da frut0s" },
+    { nombre: "Cosecha", inicio: 29, fin: 42 },
+    ]
+  }
 function calcularEtapas() {
-  const fechaSiembra = new Date(document.getElementById('fechaSiembra').value);
-  if (isNaN(fechaSiembra)) {
+  const fechaInput = document.getElementById('fechaSiembra').value;
+  if (!fechaInput) {
+    alert('Por favor selecciona una fecha de siembra.');
+    return;
+  }
+
+  const fechaSiembra = new Date(fechaInput);
+  if (isNaN(fechaSiembra.getTime())) {
     alert('Por favor selecciona una fecha válida.');
     return;
   }
 
-  const etapas = [
-    { nombre: "Germinación", inicio: 0, fin: 10 },
-    { nombre: "Plántula", inicio: 11, fin: 30 },
-    { nombre: "Desarrollo vegetativo", inicio: 31, fin: 50 },
-    { nombre: "Floración", inicio: 51, fin: 70 },
-    { nombre: "Formación del fruto", inicio: 71, fin: 90 },
-    { nombre: "Cosecha", inicio: 91, fin: 100 }
-  ];
+  const planta = parseInt(document.getElementById('options').value, 10);
+  const etapasPlanta = etapas[planta];
+
+  if (!Array.isArray(etapasPlanta)) {
+    // Si no tienes etapas definidas para esa planta muestra mensaje y no intentes iterar
+    alert('No hay información de etapas para la planta seleccionada.');
+    document.getElementById("tablaEtapas").style.display = "none";
+    return;
+  }
 
   const tablaBody = document.getElementById("tablaBody");
   tablaBody.innerHTML = "";
 
-  etapas.forEach(etapa => {
+  etapasPlanta.forEach(etapa => {
+    // crear nuevas fechas a partir de la fecha de siembra (no mutar la original)
     const fechaInicio = new Date(fechaSiembra);
-    fechaInicio.setDate(fechaInicio.getDate() + etapa.inicio);
+    fechaInicio.setDate(fechaInicio.getDate() + Number(etapa.inicio));
 
     const fechaFin = new Date(fechaSiembra);
-    fechaFin.setDate(fechaFin.getDate() + etapa.fin);
+    fechaFin.setDate(fechaFin.getDate() + Number(etapa.fin));
 
-    const fila = `
-      <tr>
-        <td>${etapa.nombre}</td>
-        <td>${fechaInicio.toLocaleDateString()}</td>
-        <td>${fechaFin.toLocaleDateString()}</td>
-      </tr>
+    const fila = document.createElement('tr');
+    fila.innerHTML = `
+      <td>${etapa.nombre}</td>
+      <td>${fechaInicio.toLocaleDateString()}</td>
+      <td>${fechaFin.toLocaleDateString()}</td>
     `;
-    tablaBody.innerHTML += fila;
+    tablaBody.appendChild(fila);
   });
 
   document.getElementById("tablaEtapas").style.display = "table";

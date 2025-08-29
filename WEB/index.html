@@ -131,25 +131,45 @@
 
 
 </div>
-      <h1>Calendario de Etapas del Cultivo</h1>
-      <div class="container">
-        <label for="fechaSiembra">Selecciona la fecha de siembra:</label>
-        <input type="date" id="fechaSiembra" />
-        <button onclick="calcularEtapas()">Calcular etapas</button>
 
-        <div class="scrollable-container">
-          <table id="tablaEtapas" style="display: none;">
-            <thead>
-              <tr>
-                <th>Etapa</th>
-                <th>Inicio</th>
-                <th>Fin</th>
-              </tr>
-            </thead>
-            <tbody id="tablaBody"></tbody>
-          </table>
-        </div>
-      </div>
+<h1>Calendario de Etapas del Cultivo</h1>
+
+<div class="container">
+  <label for="options">Selecciona una planta:</label>
+  <select id="options">
+    <option value="1">TOMATE</option>
+    <option value="2">FRESAS</option>
+    <option value="3">LECHUGA</option>
+    <option value="4">GUATILA</option>
+    <option value="5">MORA</option>
+    <option value="6">ESPINACAS</option>
+    <option value="7">ROMERO</option>
+    <option value="8">PEREJIL</option>
+    <option value="9">CILANTRO</option>
+  </select>
+
+  <br><br>
+
+  <label for="fechaSiembra">Selecciona la fecha de siembra:</label>
+  <input type="date" id="fechaSiembra" />
+
+  <button onclick="calcularEtapas()">Calcular etapas</button>
+
+  <br><br>
+
+
+  <table id="tablaEtapas" border="1" style="display:none;">
+    <thead>
+      <tr>
+        <th>Etapa</th>
+        <th>Fecha inicio</th>
+        <th>Fecha fin</th>
+      </tr>
+    </thead>
+    <tbody id="tablaBody"></tbody>
+  </table>
+</div>
+
         <h1>pH, Conductividad Eléctrica y Condiciones de Cultivo</h1>
   
   <div class="container-flex">
