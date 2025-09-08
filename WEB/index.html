@@ -2,6 +2,7 @@
 <!--IDIOMA-->
 <html lang="es">
 <head>
+
 <!--CARACTERES Y TILDES-->
   <meta charset="UTF-8" />
 <!--SE ADAPTA EL DISEÑO A CELULARES-->
@@ -13,6 +14,7 @@
 </head>
 
 <body>
+  <div id="estadoConexion" class="estado-conexion"></div>
   <header>
 <!--ENCABEZADO-->
     <h2 class="HIDROSOFT">HIDROSOFT</h2>
@@ -49,7 +51,7 @@
                 <option value="5">MORA</option>
                 <option value="6">ESPINACAS</option>
                 <option value="7">ROMERO</option>
-                <option value="8">PEREGIL</option>
+                <option value="8">PEREJIL</option>
                 <option value="9">CILANTRO</option>
               </select>
 <!--CAMPO PARA INGRESAR LA CANTIDAD DE LITROS-->
@@ -60,6 +62,9 @@
             </form>
 <!--ESPACIO DONDE SE MOSTRARA EL  CALCULO-->
             <div id="result" class="result-container"></div>
+            <!-- AGREGADO: Botón y div para guardar resultados Dexie.js -->
+            <button id="guardarResultadoBtn" style="display:none;" onclick="guardarResultadoDexie()">Guardar este resultado</button>
+            <div id="resultadosGuardados"></div>
           </div>
         </div>
 
@@ -128,7 +133,6 @@
             </tbody>
           </table>
         </div>
-
 
 </div>
 
@@ -216,6 +220,13 @@
 </div>
 
   </div>
+      <!-- AGREGADO: Bloque de notas offline Dexie.js -->
+      <div class="container" id="notasOfflineContainer">
+        <h2>Notas de mi cultivo (Offline)</h2>
+        <textarea id="nota" placeholder="Escribe aquí tu nota" rows="4" cols="50"></textarea>
+        <br>
+        <button onclick="guardarNotaDexie()">Guardar nota</button>
+        <div id="notasGuardadas"></div>
       </div>
     </section>
 
@@ -239,7 +250,7 @@
       
     </section>
   </div>
-
+<script src="https://cdn.jsdelivr.net/npm/dexie@4.0.4/dist/dexie.min.js"></script>
   <script src="script.js"></script>
   <script>
     function scrollToSection(id) {
