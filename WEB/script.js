@@ -596,14 +596,12 @@ function verificarParametros() {
   const humedad = parseFloat(document.getElementById('humedad').value);
   const resultado = document.getElementById('resultado');
 
-  // Validación básica de entrada
   if (isNaN(ph) || isNaN(ce) || isNaN(temperatura) || isNaN(humedad)) {
     resultado.textContent = "Por favor, ingresa todos los valores correctamente.";
     resultado.style.color = "red";
     return;
   }
 
-  // --- FIX: usar el nombre correcto del objeto y proteger con optional chaining ---
   const rango = rangosCultivos?.[planta]?.[etapa];
 
   if (!rango) {
@@ -612,7 +610,7 @@ function verificarParametros() {
     return;
   }
 
-  // Comprobaciones
+
   const dentroPH = ph >= rango.ph[0] && ph <= rango.ph[1];
   const dentroCE = ce >= rango.ce[0] && ce <= rango.ce[1];
   const dentroTemp = temperatura >= rango.temperatura[0] && temperatura <= rango.temperatura[1];
@@ -622,7 +620,7 @@ function verificarParametros() {
     resultado.innerHTML = "Todos los parámetros están dentro del rango recomendado.";
     resultado.style.color = "green";
   } else {
-    // Uso innerHTML para mostrar saltos de línea con <br>
+
     let mensaje = "Parámetros fuera del rango recomendado:<br>";
     if (!dentroPH) mensaje += `- pH: entre ${rango.ph[0]} y ${rango.ph[1]}<br>`;
     if (!dentroCE) mensaje += `- CE: entre ${rango.ce[0]} y ${rango.ce[1]} mS/cm<br>`;
@@ -631,4 +629,182 @@ function verificarParametros() {
     resultado.innerHTML = mensaje;
     resultado.style.color = "red";
   }
+}
+
+const db = new Dexie("hidrosoftDB");
+db.version(1).stores({
+  notas: "++id, texto, fecha",
+  resultados: "++id, texto, fecha"
+});
+
+async function guardarNotaDexie() {
+  const nota = document.getElementById("nota").value;
+  if (!nota.trim()) return;
+  await db.notas.add({ texto: nota, fecha: new Date().toLocaleString() });
+  document.getElementById("nota").value = "";
+  mostrarNotasDexie();
+}
+
+async function mostrarNotasDexie() {
+  let contenedor = document.getElementById("notasGuardadas");
+  if (!contenedor) return;
+  const notas = await db.notas.reverse().toArray();
+  contenedor.innerHTML = "<h3>Notas guardadas:</h3>";
+  if (notas.length === 0) contenedor.innerHTML += "<i>No hay notas guardadas.</i>";
+  notas.forEach(n => {
+    contenedor.innerHTML += `<div style="border:1px solid #999;padding:8px;margin:4px 0;">
+      <b>${n.fecha}</b>:<br>${n.texto}
+      <button onclick="borrarNotaDexie(${n.id})">Borrar</button>
+    </div>`;
+  });
+}
+
+async function borrarNotaDexie(id) {
+  await db.notas.delete(id);
+  mostrarNotasDexie();
+}
+
+document.addEventListener("DOMContentLoaded", mostrarNotasDexie);
+
+let ultimoResultadoCalculadora = "";
+
+document.addEventListener('DOMContentLoaded', function() {
+  const guardarBtn = document.getElementById('guardarResultadoBtn');
+  if (guardarBtn) guardarBtn.style.display = "none";
+  const form = document.getElementById('nutrientForm');
+  const resultContainer = document.getElementById('result');
+  if (form && resultContainer && guardarBtn) {
+    form.addEventListener('submit', function(event) {
+      setTimeout(() => {
+        ultimoResultadoCalculadora = resultContainer.textContent || resultContainer.innerText || "";
+        guardarBtn.style.display = "block";
+      }, 50); 
+    });
+  }
+});
+
+async function guardarResultadoDexie() {
+  if (!ultimoResultadoCalculadora.trim()) return;
+  await db.resultados.add({ texto: ultimoResultadoCalculadora, fecha: new Date().toLocaleString() });
+  mostrarResultadosDexie();
+}
+
+async function mostrarResultadosDexie() {
+  let contenedor = document.getElementById("resultadosGuardados");
+  if (!contenedor) return;
+  const resultados = await db.resultados.reverse().toArray();
+  contenedor.innerHTML = "<h3>Resultados guardados offline:</h3>";
+  if (resultados.length === 0) contenedor.innerHTML += "<i>No hay resultados guardados.</i>";
+  resultados.forEach(r => {
+    contenedor.innerHTML += `<div style="border:1px solid #999;padding:8px;margin:4px 0;">
+      <b>${r.fecha}</b>:<br><pre>${r.texto}</pre>
+      <button onclick="borrarResultadoDexie(${r.id})">Borrar</button>
+    </div>`;
+  });
+}
+
+async function borrarResultadoDexie(id) {
+  await db.resultados.delete(id);
+  mostrarResultadosDexie();
+}
+
+document.addEventListener("DOMContentLoaded", mostrarResultadosDexie);
+
+// ========== AVISO EN TIEMPO REAL DE CONEXIÓN ==========
+function mostrarEstadoConexion() {
+  const div = document.getElementById('estadoConexion');
+  if (!div) return;
+  if (navigator.onLine) {
+    div.textContent = "Estás en línea";
+    div.className = "estado-conexion";
+    div.style.display = "block";
+    setTimeout(() => div.style.display = "none", 3000);
+  } else {
+    div.textContent = "Estás en MODO OFFLINE";
+    div.className = "estado-conexion offline";
+    div.style.display = "block";
+  }
+}
+window.addEventListener('online', mostrarEstadoConexion);
+window.addEventListener('offline', mostrarEstadoConexion);
+document.addEventListener('DOMContentLoaded', mostrarEstadoConexion);
+
+// ========== MEJORAS VISUALES DE NOTAS Y RESULTADOS ==========
+async function mostrarNotasDexie() {
+  let contenedor = document.getElementById("notasGuardadas");
+  if (!contenedor) return;
+  const notas = await db.notas.reverse().toArray();
+  contenedor.innerHTML = "<h3>Notas guardadas:</h3>";
+  if (notas.length === 0) contenedor.innerHTML += "<i>No hay notas guardadas.</i>";
+  notas.forEach(n => {
+    contenedor.innerHTML += `
+      <div>
+        <div>
+          <b>${n.fecha}</b><br>
+          <span>${n.texto}</span>
+        </div>
+        <button onclick="borrarNotaDexie(${n.id})">Borrar</button>
+      </div>
+    `;
+  });
+}
+
+async function mostrarResultadosDexie() {
+  let contenedor = document.getElementById("resultadosGuardados");
+  if (!contenedor) return;
+  const resultados = await db.resultados.reverse().toArray();
+  contenedor.innerHTML = "<h3>Resultados guardados offline:</h3>";
+  if (resultados.length === 0) contenedor.innerHTML += "<i>No hay resultados guardados.</i>";
+  resultados.forEach(r => {
+    contenedor.innerHTML += `
+      <div>
+        <div>
+          <b>${r.fecha}</b><br>
+          <pre style="margin:6px 0 0 0; font-size:1em;">${r.texto}</pre>
+        </div>
+        <button onclick="borrarResultadoDexie(${r.id})">Borrar</button>
+      </div>
+    `;
+  });
+}
+// ... el resto de tu Dexie.js y lógica sigue igual ...
+
+async function mostrarNotasDexie() {
+  let contenedor = document.getElementById("notasGuardadas");
+  if (!contenedor) return;
+  const notas = await db.notas.reverse().toArray();
+  contenedor.innerHTML = "<h3>Notas guardadas:</h3>";
+  if (notas.length === 0) contenedor.innerHTML += "<i>No hay notas guardadas.</i>";
+  notas.forEach(n => {
+    contenedor.innerHTML += `
+      <div class="nota-tarjeta">
+        <span class="nota-icono" title="Nota">📝</span>
+        <div class="nota-contenido">
+          <div class="nota-fecha">${n.fecha}</div>
+          <div class="nota-texto">${n.texto}</div>
+        </div>
+        <button onclick="borrarNotaDexie(${n.id})" title="Borrar nota">Borrar</button>
+      </div>
+    `;
+  });
+}
+
+async function mostrarResultadosDexie() {
+  let contenedor = document.getElementById("resultadosGuardados");
+  if (!contenedor) return;
+  const resultados = await db.resultados.reverse().toArray();
+  contenedor.innerHTML = "<h3>Resultados guardados offline:</h3>";
+  if (resultados.length === 0) contenedor.innerHTML += "<i>No hay resultados guardados.</i>";
+  resultados.forEach(r => {
+    contenedor.innerHTML += `
+      <div class="resultado-tarjeta">
+        <span class="resultado-icono" title="Resultado">📊</span>
+        <div class="resultado-contenido">
+          <div class="resultado-fecha">${r.fecha}</div>
+          <div class="resultado-texto">${r.texto}</div>
+        </div>
+        <button onclick="borrarResultadoDexie(${r.id})" title="Borrar resultado">Borrar</button>
+      </div>
+    `;
+  });
 }
