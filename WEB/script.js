@@ -1,4 +1,5 @@
-  const etapas ={
+
+const etapas ={
     1: [
     { nombre: "Germinación", inicio: 0, fin: 10 },
     { nombre: "Plántula", inicio: 11, fin: 30 },
@@ -807,4 +808,109 @@ async function mostrarResultadosDexie() {
       </div>
     `;
   });
+}
+
+// CONFIGURACIÓN SUPABASE
+
+const supabaseUrl = "https://cerqtenlbhcigfmolavd.supabase.co";
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNlcnF0ZW5sYmhjaWdmbW9sYXZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcwNzY1NjUsImV4cCI6MjA3MjY1MjU2NX0.a4A-ua5xAKZx6ewc_t60ZHoD0AsoOA9CG6O4EzzcPWE";
+
+const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+
+
+// ELEMENTOS DEL DOM
+
+const overlay = document.getElementById("overlayLogin");
+const wrapper = overlay.querySelector(".wrapper");
+const btnPopup = document.querySelector(".btnLogin-popup");
+const iconClose = overlay.querySelector(".icon-close");
+const registerLink = document.querySelector(".register-link");
+const loginLink = document.querySelector(".login-link");
+
+
+// MOSTRAR LOGIN
+
+btnPopup.addEventListener("click", () => {
+  overlay.classList.add("active");
+  wrapper.classList.remove("active"); // muestra login
+});
+
+// MOSTRAR LOGIN AL CARGAR LA PÁGINA
+
+window.addEventListener("load", () => {
+  overlay.classList.add("active");       // Muestra el overlay
+  wrapper.classList.remove("active");    // Asegura que el login esté visible
+});
+
+// Cerrar overlay
+iconClose.addEventListener("click", () => {
+  overlay.classList.remove("active");
+});
+
+// Alternar login/registro
+registerLink.addEventListener("click", (e) => {
+  e.preventDefault();
+  wrapper.classList.add("active");
+});
+
+loginLink.addEventListener("click", (e) => {
+  e.preventDefault();
+  wrapper.classList.remove("active");
+});
+
+
+// REGISTRO DE USUARIOS
+
+document.querySelector(".form-box.register form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const nombre = e.target.nombre.value;
+  const email = e.target.email.value;
+  const password = e.target.password.value;
+  const confirmPassword = e.target.confirm_password.value;
+
+  if (password !== confirmPassword) {
+    alert("❌ Las contraseñas no coinciden");
+    return;
+  }
+
+  const { error } = await supabaseClient.auth.signUp({
+    email,
+    password,
+    options: { data: { nombre } },
+  });
+
+  if (error) {
+    alert("❌ Error al registrar: " + error.message);
+  } else {
+    alert("✅ Registro exitoso. Revisa tu correo para confirmar la cuenta.");
+    wrapper.classList.remove("active"); // vuelve a login
+  }
+});
+
+
+// INICIO DE SESIÓN
+
+document.querySelector(".form-box.login form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const email = e.target.email.value;
+  const password = e.target.password.value;
+
+  const { error, data } = await supabaseClient.auth.signInWithPassword({ email, password });
+
+  if (error) {
+    alert("❌ Error al iniciar sesión: " + error.message);
+  } else {
+    alert("👋 Bienvenido " + email);
+    overlay.classList.remove("active");
+    // Aquí puedes agregar redirección o mostrar contenido para usuarios logueados
+  }
+});
+
+
+// SCROLL SECCIONES
+
+function scrollToSection(id) {
+  document.getElementById(id).scrollIntoView({ behavior: "smooth" });
 }

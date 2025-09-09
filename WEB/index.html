@@ -1,49 +1,37 @@
 <!DOCTYPE html>
-<!--IDIOMA-->
 <html lang="es">
 <head>
-
-<!--CARACTERES Y TILDES-->
   <meta charset="UTF-8" />
-<!--SE ADAPTA EL DISEÑO A CELULARES-->
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-<!--TITULO DE LAS PAGINAS-->
-  <title>Calculadora de Nutrientes</title>
-<!--ENLAZA HTML CON CSS-->
+  <title>HIDROSOFT</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
   <div id="estadoConexion" class="estado-conexion"></div>
   <header>
-<!--ENCABEZADO-->
     <h2 class="HIDROSOFT">HIDROSOFT</h2>
-<!--NAVEGAR DE UNA SECCION OTRA-->
     <nav class="navigation">
-<!--CADA ENLACE LLAMA A UNA FUNCION DE JS-->
       <a onclick="scrollToSection('calculadora')">CALCULADORA</a>
       <a onclick="scrollToSection('calendario')">CALENDARIO</a>
       <a onclick="scrollToSection('parametros')">PARAMETROS</a>
       <a onclick="scrollToSection('notas')">NOTAS</a>
-<!--BOTON PARA ABRIR UNA VENTANA PARA LOGEARSE TODAVIA NO ES FUNCIONAL-->
-      <button class="btnLogin-poput">Login</button>
+      <!-- CORRECCIÓN: clase correcta btnLogin-popup -->
+      <button class="btnLogin-popup">Login</button>
     </nav>
   </header>
-<!--CONTENEDOS PRINCIPAL QUE DETERMINA EL SCROLL ENTRE SECCIONES-->
+
+  <!-- CONTENEDOR PRINCIPAL -->
   <div class="horizontal-scroll">
-<!--SECCION DE LA CALCULADORA DE NUTRIENTES-->
+    <!-- =============================
+         SECCION CALCULADORA
+    ============================== -->
     <section id="calculadora">
       <h1>Calculadora de Nutrientes</h1>
-
-<!--CONTENEDOR QUE ALINEA LOS FORMULARIOS Y LAS TABLAS-->
       <div class="container-flex">
-<!--Define un contenedor que, posiblemente, contiene un formulario y tiene la clase "form-container", lo que permite aplicarle estilos específicos con CSS.-->
         <div class="form-container">
-<!--ORGANIZA EL CONTENIDO DENTRO DEL CONTENEDOR PRINCIPAL-->
           <div class="container">
-<!--RECOPILA DATOS DEL USUARIO-->
             <form id="nutrientForm">
-<!--MENU DESPLEGABLES-->
               <label for="option">Selecciona un compuesto:</label>
               <select id="option">
                 <option value="1">TOMATE</option>
@@ -56,63 +44,62 @@
                 <option value="8">PEREJIL</option>
                 <option value="9">CILANTRO</option>
               </select>
-<!--CAMPO PARA INGRESAR LA CANTIDAD DE LITROS-->
               <label for="liters">Litros:</label>
               <input type="number" id="liters" step="any" required />
-<!--BOTON PARA CALULAR-->
               <button type="submit">Calcular</button>
             </form>
-<!--ESPACIO DONDE SE MOSTRARA EL  CALCULO-->
+
             <div id="result" class="result-container"></div>
-            <!-- AGREGADO: Botón y div para guardar resultados Dexie.js -->
             <button id="guardarResultadoBtn" style="display:none;" onclick="guardarResultadoDexie()">Guardar este resultado</button>
             <div id="resultadosGuardados"></div>
           </div>
         </div>
 
-<div class="tablas-container">
-  <table class="tabla-nutrientes">
-    <thead>
-      <tr>
-        <th>Compuesto</th>
-        <th>Fórmula</th>
-        <th>Peso molecular</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>Nitrato de calcio</td><td>Ca(NO3)2</td><td>164.088 g/mol</td></tr>
-      <tr><td>Nitrato de potasio</td><td>KNO3</td><td>101.1032 g/mol</td></tr>
-      <tr><td>Fosfato monoamónico</td><td>(NH4)H2PO4</td><td>115.025 g/mol</td></tr>
-      <tr><td>Sulfato de magnesio</td><td>MgSO4-7(H2O)</td><td>246.4746 g/mol</td></tr>
-      <tr><td>Microelemento</td><td>Fórmula</td><td>Peso molecular</td></tr>
-      <tr><td>Sulfato ferroso</td><td>FeSO4-7(H2O)</td><td>151.91 g/mol</td></tr>
-      <tr><td>Sulfato de cobre</td><td>CuSO4-7(H2O)</td><td>223.15 g/mol</td></tr>
-      <tr><td>Sulfato de manganeso</td><td>MnSO4-4(H2O)</td><td>151 g/mol</td></tr>
-      <tr><td>Sulfato de zinc</td><td>ZnSO4-7(H2O)</td><td>161.44 g/mol</td></tr>
-      <tr><td>Ácido bórico</td><td>H3BO3</td><td>61.83 g/mol</td></tr>
-    </tbody>
-  </table>
-</div>
+        <!-- Tablas de nutrientes -->
+        <div class="tablas-container">
+          <table class="tabla-nutrientes">
+            <thead>
+              <tr>
+                <th>Compuesto</th>
+                <th>Fórmula</th>
+                <th>Peso molecular</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Nitrato de calcio</td><td>Ca(NO3)2</td><td>164.088 g/mol</td></tr>
+              <tr><td>Nitrato de potasio</td><td>KNO3</td><td>101.1032 g/mol</td></tr>
+              <tr><td>Fosfato monoamónico</td><td>(NH4)H2PO4</td><td>115.025 g/mol</td></tr>
+              <tr><td>Sulfato de magnesio</td><td>MgSO4-7(H2O)</td><td>246.4746 g/mol</td></tr>
+              <tr><td>Microelemento</td><td>Fórmula</td><td>Peso molecular</td></tr>
+              <tr><td>Sulfato ferroso</td><td>FeSO4-7(H2O)</td><td>151.91 g/mol</td></tr>
+              <tr><td>Sulfato de cobre</td><td>CuSO4-7(H2O)</td><td>223.15 g/mol</td></tr>
+              <tr><td>Sulfato de manganeso</td><td>MnSO4-4(H2O)</td><td>151 g/mol</td></tr>
+              <tr><td>Sulfato de zinc</td><td>ZnSO4-7(H2O)</td><td>161.44 g/mol</td></tr>
+              <tr><td>Ácido bórico</td><td>H3BO3</td><td>61.83 g/mol</td></tr>
+            </tbody>
+          </table>
+        </div>
 
-<div class="tablas-container">
-  <table class="tabla-nutrientes">
-    <thead>
-      <tr>
-        <th>Microelementos</th>
-        <th>Símbolo</th>
-        <th>Peso atómico</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>Molibdeno</td><td>Mo</td><td>95.94</td></tr>
-      <tr><td>Boro</td><td>B</td><td>10.81</td></tr>
-      <tr><td>Hierro</td><td>Fe</td><td>55.845</td></tr>
-      <tr><td>Cobre</td><td>Cu</td><td>63.54</td></tr>
-      <tr><td>Zinc</td><td>Zn</td><td>65.37</td></tr>
-      <tr><td>Manganeso</td><td>Mn</td><td>35.45</td></tr>
-    </tbody>
-  </table>
-</div>
+        <div class="tablas-container">
+          <table class="tabla-nutrientes">
+            <thead>
+              <tr>
+                <th>Microelementos</th>
+                <th>Símbolo</th>
+                <th>Peso atómico</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Molibdeno</td><td>Mo</td><td>95.94</td></tr>
+              <tr><td>Boro</td><td>B</td><td>10.81</td></tr>
+              <tr><td>Hierro</td><td>Fe</td><td>55.845</td></tr>
+              <tr><td>Cobre</td><td>Cu</td><td>63.54</td></tr>
+              <tr><td>Zinc</td><td>Zn</td><td>65.37</td></tr>
+              <tr><td>Manganeso</td><td>Mn</td><td>35.45</td></tr>
+            </tbody>
+          </table>
+        </div>
+
         <div class="tablas-container">
           <table class="tabla-nutrientes">
             <thead>
@@ -135,97 +122,91 @@
             </tbody>
           </table>
         </div>
-
-</div>
-</section>
-    <section id="calendario">
-<h1>Calendario de Etapas del Cultivo</h1>
-
-<div class="container">
-  <label for="options">Selecciona una planta:</label>
-  <select id="options">
-    <option value="1">TOMATE</option>
-    <option value="2">FRESAS</option>
-    <option value="3">LECHUGA</option>
-    <option value="4">GUATILA</option>
-    <option value="5">MORA</option>
-    <option value="6">ESPINACAS</option>
-    <option value="7">ROMERO</option>
-    <option value="8">PEREJIL</option>
-    <option value="9">CILANTRO</option>
-  </select>
-
-  <br><br>
-
-  <label for="fechaSiembra">Selecciona la fecha de siembra:</label>
-  <input type="date" id="fechaSiembra" />
-
-  <button onclick="calcularEtapas()">Calcular etapas</button>
-
-  <br><br>
-
-
-  <table id="tablaEtapas" border="1" style="display:none;">
-    <thead>
-      <tr>
-        <th>Etapa</th>
-        <th>Fecha inicio</th>
-        <th>Fecha fin</th>
-      </tr>
-    </thead>
-    <tbody id="tablaBody"></tbody>
-  </table>
-</div>
-</section>
-    <section id="parametros">
-        <h1>pH, Conductividad Eléctrica y Condiciones de Cultivo</h1>
-  
-  <div class="container-flex">
-    <div class="form-container">
-      <div class="container">
-        <h2>Verificación de Parámetros por Etapa</h2>
-<label for="planta">Selecciona una planta:</label>
-<select id="planta">
-  <option value="fresa">Fresa</option>
-  <option value="guatila">Guatila</option>
-  <option value="mora">Mora</option>
-  <option value="lechuga">Lechuga</option>
-  <option value="espinaca">Espinaca</option>
-  <option value="romero">Romero</option>
-  <option value="perejil">Perejil</option>
-  <option value="cilantro">Cilantro</option>
-  <option value="tomate">Tomate</option>
-</select>
-
-<label for="etapa">Selecciona la etapa:</label>
-<select id="etapa">
-  <option value="germinacion">Germinación</option>
-  <option value="plantula">Plántula</option>
-  <option value="vegetativo">Desarrollo vegetativo</option>
-  <option value="floracion">Floración</option>
-  <option value="fructificacion">Fructificación</option>
-  <option value="cosecha">Cosecha</option>
-</select>
-
-<br><br>
-
-<label>pH: <input type="number" id="ph" step="0.1"></label><br>
-<label>CE: <input type="number" id="ce" step="0.1"></label><br>
-<label>Temperatura (°C): <input type="number" id="temperatura"></label><br>
-<label>Humedad (%): <input type="number" id="humedad"></label><br><br>
-
-<button onclick="verificarParametros()">Verificar</button>
-
-<p id="resultado"></p>
-
-</div>
-
       </div>
-</div>
-</section>
-  </div>
+    </section>
+
+    <!-- =============================
+         SECCION CALENDARIO
+    ============================== -->
+    <section id="calendario">
+      <h1>Calendario de Etapas del Cultivo</h1>
+      <div class="container">
+        <label for="options">Selecciona una planta:</label>
+        <select id="options">
+          <option value="1">TOMATE</option>
+          <option value="2">FRESAS</option>
+          <option value="3">LECHUGA</option>
+          <option value="4">GUATILA</option>
+          <option value="5">MORA</option>
+          <option value="6">ESPINACAS</option>
+          <option value="7">ROMERO</option>
+          <option value="8">PEREJIL</option>
+          <option value="9">CILANTRO</option>
+        </select>
+        <br><br>
+        <label for="fechaSiembra">Selecciona la fecha de siembra:</label>
+        <input type="date" id="fechaSiembra" />
+        <button onclick="calcularEtapas()">Calcular etapas</button>
+        <br><br>
+        <table id="tablaEtapas" border="1" style="display:none;">
+          <thead>
+            <tr>
+              <th>Etapa</th>
+              <th>Fecha inicio</th>
+              <th>Fecha fin</th>
+            </tr>
+          </thead>
+          <tbody id="tablaBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- =============================
+         SECCION PARAMETROS
+    ============================== -->
+    <section id="parametros">
+      <h1>pH, Conductividad Eléctrica y Condiciones de Cultivo</h1>
+      <div class="container-flex">
+        <div class="form-container">
+          <div class="container">
+            <h2>Verificación de Parámetros por Etapa</h2>
+            <label for="planta">Selecciona una planta:</label>
+            <select id="planta">
+              <option value="fresa">Fresa</option>
+              <option value="guatila">Guatila</option>
+              <option value="mora">Mora</option>
+              <option value="lechuga">Lechuga</option>
+              <option value="espinaca">Espinaca</option>
+              <option value="romero">Romero</option>
+              <option value="perejil">Perejil</option>
+              <option value="cilantro">Cilantro</option>
+              <option value="tomate">Tomate</option>
+            </select>
+            <label for="etapa">Selecciona la etapa:</label>
+            <select id="etapa">
+              <option value="germinacion">Germinación</option>
+              <option value="plantula">Plántula</option>
+              <option value="vegetativo">Desarrollo vegetativo</option>
+              <option value="floracion">Floración</option>
+              <option value="fructificacion">Fructificación</option>
+              <option value="cosecha">Cosecha</option>
+            </select>
+            <br><br>
+            <label>pH: <input type="number" id="ph" step="0.1"></label><br>
+            <label>CE: <input type="number" id="ce" step="0.1"></label><br>
+            <label>Temperatura (°C): <input type="number" id="temperatura"></label><br>
+            <label>Humedad (%): <input type="number" id="humedad"></label><br><br>
+            <button onclick="verificarParametros()">Verificar</button>
+            <p id="resultado"></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =============================
+         SECCION NOTAS
+    ============================== -->
     <section id="notas">
-      <!-- AGREGADO: Bloque de notas offline Dexie.js -->
       <div class="container" id="notasOfflineContainer">
         <h2>Notas de mi cultivo (Offline)</h2>
         <textarea id="nota" placeholder="Escribe aquí tu nota" rows="4" cols="50"></textarea>
@@ -234,34 +215,86 @@
         <div id="notasGuardadas"></div>
       </div>
     </section>
-
-  
-    <section id="fresas">
-
-    </section>
-
-    <section id="lechuga">
-
-</section>
-
-
-    <section id="rosas">
-
-      
-    </section>
-
-    <section id="plt5">
-
-      
-    </section>
   </div>
-  </section>
-<script src="https://cdn.jsdelivr.net/npm/dexie@4.0.4/dist/dexie.min.js"></script>
+
+  <!-- =============================
+       LOGIN MODAL
+  ============================== -->
+  <div class="overlay-login" id="overlayLogin">
+    <div class="wrapper">
+      <span class="icon-close">
+        <ion-icon name="close-circle-outline"></ion-icon>
+      </span>
+
+      <!-- LOGIN -->
+      <div class="form-box login">
+        <h2>Iniciar sesión</h2>
+        <form>
+          <div class="input-box">
+            <span class="icon"><ion-icon name="mail-outline"></ion-icon></span>
+            <input type="email" name="email" required>
+            <label>Email</label>
+          </div>
+          <div class="input-box">
+            <span class="icon"><ion-icon name="lock-closed-outline"></ion-icon></span>
+            <input type="password" name="password" required>
+            <label>Contraseña</label>
+          </div>
+          <div class="recordar-contraseña">
+            <label><input type="checkbox" name="remember"> Recordar</label>
+            <a href="#">¿Olvidaste tu contraseña?</a>
+          </div>
+          <button type="submit" class="btn">Ingresar</button>
+          <div class="olvidar">
+            <p>¿No tienes una cuenta? <a href="#" class="register-link">Registrar</a></p>
+          </div>
+        </form>
+      </div>
+
+      <!-- REGISTRO -->
+      <div class="form-box register">
+        <h2>Registrarse</h2>
+        <form>
+          <div class="input-box">
+            <span class="icon"><ion-icon name="person-outline"></ion-icon></span>
+            <input type="text" name="nombre" required>
+            <label>Nombre</label>
+          </div>
+          <div class="input-box">
+            <span class="icon"><ion-icon name="mail-outline"></ion-icon></span>
+            <input type="email" name="email" required>
+            <label>Email</label>
+          </div>
+          <div class="input-box">
+            <span class="icon"><ion-icon name="lock-closed-outline"></ion-icon></span>
+            <input type="password" name="password" required>
+            <label>Contraseña</label>
+          </div>
+          <div class="input-box">
+            <span class="icon"><ion-icon name="lock-closed-outline"></ion-icon></span>
+            <input type="password" name="confirm_password" required>
+            <label>Confirmar Contraseña</label>
+          </div>
+          <div class="recordar-contraseña">
+            <label><input type="checkbox" required> Acepto los términos y condiciones</label>
+          </div>
+          <button type="submit" class="btn">Registrar</button>
+          <div class="olvidar">
+            <p>¿Ya tienes una cuenta? <a href="#" class="login-link">Inicia sesión</a></p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIBRERÍAS -->
+  <script src="https://cdn.jsdelivr.net/npm/dexie@4.0.4/dist/dexie.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase.js"></script>
   <script src="script.js"></script>
-  <script>
-    function scrollToSection(id) {
-      document.getElementById(id).scrollIntoView({ behavior: "smooth" });
-    }
-  </script>
+
+  <!-- Ionicons -->
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </body>
 </html>
