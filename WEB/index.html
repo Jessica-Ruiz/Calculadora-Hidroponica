@@ -21,8 +21,10 @@
 <!--NAVEGAR DE UNA SECCION OTRA-->
     <nav class="navigation">
 <!--CADA ENLACE LLAMA A UNA FUNCION DE JS-->
-      <a onclick="scrollToSection('tomate')">CALCULADORA</a>
-
+      <a onclick="scrollToSection('calculadora')">CALCULADORA</a>
+      <a onclick="scrollToSection('calendario')">CALENDARIO</a>
+      <a onclick="scrollToSection('parametros')">PARAMETROS</a>
+      <a onclick="scrollToSection('notas')">NOTAS</a>
 <!--BOTON PARA ABRIR UNA VENTANA PARA LOGEARSE TODAVIA NO ES FUNCIONAL-->
       <button class="btnLogin-poput">Login</button>
     </nav>
@@ -30,7 +32,7 @@
 <!--CONTENEDOS PRINCIPAL QUE DETERMINA EL SCROLL ENTRE SECCIONES-->
   <div class="horizontal-scroll">
 <!--SECCION DE LA CALCULADORA DE NUTRIENTES-->
-    <section id="tomate">
+    <section id="calculadora">
       <h1>Calculadora de Nutrientes</h1>
 
 <!--CONTENEDOR QUE ALINEA LOS FORMULARIOS Y LAS TABLAS-->
@@ -135,7 +137,8 @@
         </div>
 
 </div>
-
+</section>
+    <section id="calendario">
 <h1>Calendario de Etapas del Cultivo</h1>
 
 <div class="container">
@@ -173,7 +176,8 @@
     <tbody id="tablaBody"></tbody>
   </table>
 </div>
-
+</section>
+    <section id="parametros">
         <h1>pH, Conductividad Eléctrica y Condiciones de Cultivo</h1>
   
   <div class="container-flex">
@@ -218,8 +222,9 @@
 
       </div>
 </div>
-
+</section>
   </div>
+    <section id="notas">
       <!-- AGREGADO: Bloque de notas offline Dexie.js -->
       <div class="container" id="notasOfflineContainer">
         <h2>Notas de mi cultivo (Offline)</h2>
@@ -250,6 +255,7 @@
       
     </section>
   </div>
+  </section>
 <script src="https://cdn.jsdelivr.net/npm/dexie@4.0.4/dist/dexie.min.js"></script>
   <script src="script.js"></script>
   <script>
