@@ -16,6 +16,7 @@
       <a onclick="scrollToSection('calendario')">CALENDARIO</a>
       <a onclick="scrollToSection('parametros')">PARAMETROS</a>
       <a onclick="scrollToSection('notas')">NOTAS</a>
+  
       <!-- CORRECCIÓN: clase correcta btnLogin-popup -->
       <button class="btnLogin-popup">Login</button>
     </nav>
@@ -24,13 +25,13 @@
   <!-- CONTENEDOR PRINCIPAL -->
   <div class="horizontal-scroll">
     <!-- =============================
-         SECCION CALCULADORA
+      SECCION CALCULADORA
     ============================== -->
     <section id="calculadora">
-      <h1>Calculadora de Nutrientes</h1>
       <div class="container-flex">
         <div class="form-container">
           <div class="container">
+                  <h1>Calculadora de Nutrientes</h1>
             <form id="nutrientForm">
               <label for="option">Selecciona un compuesto:</label>
               <select id="option">
@@ -55,73 +56,7 @@
           </div>
         </div>
 
-        <!-- Tablas de nutrientes -->
-        <div class="tablas-container">
-          <table class="tabla-nutrientes">
-            <thead>
-              <tr>
-                <th>Compuesto</th>
-                <th>Fórmula</th>
-                <th>Peso molecular</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td>Nitrato de calcio</td><td>Ca(NO3)2</td><td>164.088 g/mol</td></tr>
-              <tr><td>Nitrato de potasio</td><td>KNO3</td><td>101.1032 g/mol</td></tr>
-              <tr><td>Fosfato monoamónico</td><td>(NH4)H2PO4</td><td>115.025 g/mol</td></tr>
-              <tr><td>Sulfato de magnesio</td><td>MgSO4-7(H2O)</td><td>246.4746 g/mol</td></tr>
-              <tr><td>Microelemento</td><td>Fórmula</td><td>Peso molecular</td></tr>
-              <tr><td>Sulfato ferroso</td><td>FeSO4-7(H2O)</td><td>151.91 g/mol</td></tr>
-              <tr><td>Sulfato de cobre</td><td>CuSO4-7(H2O)</td><td>223.15 g/mol</td></tr>
-              <tr><td>Sulfato de manganeso</td><td>MnSO4-4(H2O)</td><td>151 g/mol</td></tr>
-              <tr><td>Sulfato de zinc</td><td>ZnSO4-7(H2O)</td><td>161.44 g/mol</td></tr>
-              <tr><td>Ácido bórico</td><td>H3BO3</td><td>61.83 g/mol</td></tr>
-            </tbody>
-          </table>
-        </div>
 
-        <div class="tablas-container">
-          <table class="tabla-nutrientes">
-            <thead>
-              <tr>
-                <th>Microelementos</th>
-                <th>Símbolo</th>
-                <th>Peso atómico</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td>Molibdeno</td><td>Mo</td><td>95.94</td></tr>
-              <tr><td>Boro</td><td>B</td><td>10.81</td></tr>
-              <tr><td>Hierro</td><td>Fe</td><td>55.845</td></tr>
-              <tr><td>Cobre</td><td>Cu</td><td>63.54</td></tr>
-              <tr><td>Zinc</td><td>Zn</td><td>65.37</td></tr>
-              <tr><td>Manganeso</td><td>Mn</td><td>35.45</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="tablas-container">
-          <table class="tabla-nutrientes">
-            <thead>
-              <tr>
-                <th>Macroelementos</th>
-                <th>Símbolo</th>
-                <th>Peso atómico</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td>Calcio</td><td>Ca</td><td>40.08000</td></tr>
-              <tr><td>Potasio</td><td>K</td><td>39.09830</td></tr>
-              <tr><td>Fósforo</td><td>P</td><td>30.97376</td></tr>
-              <tr><td>Nitrógeno</td><td>N</td><td>14.00670</td></tr>
-              <tr><td>Magnesio</td><td>Mg</td><td>24.30500</td></tr>
-              <tr><td>Azufre</td><td>S</td><td>32.06500</td></tr>
-              <tr><td>Oxígeno</td><td>O</td><td>15.99940</td></tr>
-              <tr><td>Carbono</td><td>C</td><td>12.00000</td></tr>
-              <tr><td>Hidrógeno</td><td>H</td><td>1.00784</td></tr>
-            </tbody>
-          </table>
-        </div>
       </div>
     </section>
 
@@ -129,8 +64,9 @@
          SECCION CALENDARIO
     ============================== -->
     <section id="calendario">
-      <h1>Calendario de Etapas del Cultivo</h1>
+
       <div class="container">
+        <h1>Calendario de Etapas del Cultivo</h1>
         <label for="options">Selecciona una planta:</label>
         <select id="options">
           <option value="1">TOMATE</option>
@@ -165,10 +101,11 @@
          SECCION PARAMETROS
     ============================== -->
     <section id="parametros">
-      <h1>pH, Conductividad Eléctrica y Condiciones de Cultivo</h1>
+
       <div class="container-flex">
         <div class="form-container">
           <div class="container">
+            <h1>pH, Conductividad Eléctrica y Condiciones de Cultivo</h1>
             <h2>Verificación de Parámetros por Etapa</h2>
             <label for="planta">Selecciona una planta:</label>
             <select id="planta">

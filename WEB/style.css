@@ -106,6 +106,7 @@ header {
   overflow-y: auto; 
 }
 
+
 .container {
   margin: 20px auto;
   padding: 30px;    
@@ -114,7 +115,8 @@ header {
   border: 1px solid rgba(255, 255, 255, 0.4);
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-  background-color: white;
+background-color: rgba(255, 255, 255, 0.8); /* Blanco con transparencia */
+
   text-align: center;
   display: block;    
   overflow-x: hidden; 
