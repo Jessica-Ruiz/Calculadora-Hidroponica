@@ -978,24 +978,52 @@ function scrollToSection(id) {
   document.getElementById(id).scrollIntoView({ behavior: "smooth" });
 }
 
+//Mejora en parametros
 function verificarParametros() {
   const planta = document.getElementById('planta').value;
   const etapa = document.getElementById('etapa').value;
 
-  // Validación de campos vacíos, negativos o no numéricos
-  const ph = parseFloat(document.getElementById('ph').value);
-  const ce = parseFloat(document.getElementById('ce').value);
-  const temperatura = parseFloat(document.getElementById('temperatura').value);
-  const humedad = parseFloat(document.getElementById('humedad').value);
+  // Tomar los valores en string para validar texto
+  const phValor = document.getElementById('ph').value.trim();
+  const ceValor = document.getElementById('ce').value.trim();
+  const tempValor = document.getElementById('temperatura').value.trim();
+  const humedadValor = document.getElementById('humedad').value.trim();
+
   const resultado = document.getElementById('resultado');
 
+  // Validación: campos vacíos
+  if (!phValor || !ceValor || !tempValor || !humedadValor) {
+    resultado.innerHTML = `<span style="color:red;">Por favor, completa todos los campos antes de verificar.</span>`;
+    return;
+  }
+
+  // Validación: caracteres no numéricos
   if (
-    isNaN(ph) || isNaN(ce) || isNaN(temperatura) || isNaN(humedad) ||
-    ph <= 0 || ce < 0 || temperatura < -20 || humedad < 0 || humedad > 100
+    isNaN(phValor) || isNaN(ceValor) || isNaN(tempValor) || isNaN(humedadValor)
   ) {
-    resultado.innerHTML = `<span style="color:red;">Por favor, ingresa valores válidos y positivos para todos los parámetros.<br>
-    pH y CE deben ser mayores a 0. Temperatura mayor a -20°C. Humedad entre 0% y 100%.</span>`;
-    resultado.style.color = "red";
+    resultado.innerHTML = `<span style="color:red;">Solo se permiten números en los campos. No ingreses letras ni símbolos.</span>`;
+    return;
+  }
+
+  // Convertir a número para validaciones siguientes
+  const ph = parseFloat(phValor);
+  const ce = parseFloat(ceValor);
+  const temperatura = parseFloat(tempValor);
+  const humedad = parseFloat(humedadValor);
+
+  // Validación: valores negativos
+  if (ph < 0 || ce < 0 || temperatura < 0 || humedad < 0) {
+    resultado.innerHTML = `<span style="color:red;">No se permiten valores negativos en ningún parámetro.</span>`;
+    return;
+  }
+
+  // Validación: decimales en humedad (si quieres solo enteros)
+  if (!/^\d+(\.\d+)?$/.test(humedadValor) || parseFloat(humedadValor) !== parseInt(humedadValor)) {
+    resultado.innerHTML = `<span style="color:red;">La humedad debe ser un número entero entre 0 y 100.</span>`;
+    return;
+  }
+  if (humedad > 100) {
+    resultado.innerHTML = `<span style="color:red;">La humedad no puede ser mayor a 100%.</span>`;
     return;
   }
 
@@ -1004,17 +1032,15 @@ function verificarParametros() {
 
   if (!rango) {
     resultado.innerHTML = `<span style="color:red;">La etapa <b>${etapa}</b> no existe para la planta <b>${planta.charAt(0).toUpperCase() + planta.slice(1)}</b>.<br>Por favor, selecciona una etapa válida.</span>`;
-    resultado.style.color = "red";
     return;
   }
 
-  // Verificación individual por parámetro
+  // Verificación por parámetro
   const dentroPH = ph >= rango.ph[0] && ph <= rango.ph[1];
   const dentroCE = ce >= rango.ce[0] && ce <= rango.ce[1];
   const dentroTemp = temperatura >= rango.temperatura[0] && temperatura <= rango.temperatura[1];
   const dentroHumedad = humedad >= rango.humedad[0] && humedad <= rango.humedad[1];
 
-  // Mensajes específicos
   let mensaje = "";
   if (dentroPH && dentroCE && dentroTemp && dentroHumedad) {
     mensaje = `<span style="color:green;">✅ Todos los parámetros están dentro del rango recomendado para la etapa seleccionada.</span>`;
@@ -1030,3 +1056,4 @@ function verificarParametros() {
   }
   resultado.innerHTML = mensaje;
 }
+
