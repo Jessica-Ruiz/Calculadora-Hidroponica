@@ -110,16 +110,42 @@ function calcularEtapas() {
   document.getElementById("tablaEtapas").style.display = "table";
 }
 
-
 document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('nutrientForm');
-    const resultContainer = document.getElementById('result');
-    
-    form.addEventListener('submit', function(event) {
-        event.preventDefault();
+  const form = document.getElementById('nutrientForm');
+  const resultContainer = document.getElementById('result');
 
-        const option = parseInt(document.getElementById('option').value);
-        const liters = parseFloat(document.getElementById('liters').value);
+  form.addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const option = parseInt(document.getElementById('option').value);
+    const litersInput = document.getElementById('liters').value.trim();
+
+    // Validación 1: Campo vacío
+    if (litersInput === '') {
+      alert('⚠️ Por favor ingrese un valor antes de continuar.');
+      return;
+    }
+
+    // Validación 2: Comas en lugar de puntos
+    if (litersInput.includes(',')) {
+      alert('⚠️ Use punto (.) en lugar de coma (,) para los decimales.');
+      return;
+    }
+
+    // Validación 3: Solo números positivos (enteros o decimales)
+    const regexNumero = /^[0-9]*\.?[0-9]+$/;
+    if (!regexNumero.test(litersInput)) {
+      alert('⚠️ Solo se permiten números positivos. No use letras ni símbolos.');
+      return;
+    }
+
+    const liters = parseFloat(litersInput);
+
+    // Validación 4: No permitir valores negativos o cero
+    if (liters <= 0) {
+      alert('⚠️ El valor debe ser mayor que cero.');
+      return;
+    }
 
         let result = '';
               //Nitrato de calcio
@@ -506,6 +532,43 @@ document.addEventListener('DOMContentLoaded', function() {
         
 
         resultContainer.textContent = result;
+        // Convertir el texto 'result' en una tabla
+const filas = result.trim().split('\n'); // Divide las líneas de resultados
+let tablaHTML = `
+  <table border="1" style="border-collapse: collapse; width: 100%; margin-top: 10px;">
+    <thead>
+      <tr style="background-color: #e0e0e0;">
+        <th>Compuesto</th>
+        <th>Cantidad (g)</th>
+      </tr>
+    </thead>
+    <tbody>
+`;
+
+filas.forEach(linea => {
+
+  const regex = /([\d.]+)\s+gramos\s+de\s+(.+)\./i;
+  const match = linea.match(regex);
+  if (match) {
+    const cantidad = match[1];
+    const compuesto = match[2];
+    tablaHTML += `
+      <tr>
+        <td>${compuesto}</td>
+        <td style="text-align: right;">${cantidad}</td>
+      </tr>
+    `;
+  }
+});
+
+tablaHTML += `
+    </tbody>
+  </table>
+`;
+
+// Muestra la tabla en el contenedor de resultados
+resultContainer.innerHTML = tablaHTML;
+
     });
     
 });
