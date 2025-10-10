@@ -977,3 +977,56 @@ document.querySelector(".form-box.login form").addEventListener("submit", async 
 function scrollToSection(id) {
   document.getElementById(id).scrollIntoView({ behavior: "smooth" });
 }
+
+function verificarParametros() {
+  const planta = document.getElementById('planta').value;
+  const etapa = document.getElementById('etapa').value;
+
+  // Validación de campos vacíos, negativos o no numéricos
+  const ph = parseFloat(document.getElementById('ph').value);
+  const ce = parseFloat(document.getElementById('ce').value);
+  const temperatura = parseFloat(document.getElementById('temperatura').value);
+  const humedad = parseFloat(document.getElementById('humedad').value);
+  const resultado = document.getElementById('resultado');
+
+  if (
+    isNaN(ph) || isNaN(ce) || isNaN(temperatura) || isNaN(humedad) ||
+    ph <= 0 || ce < 0 || temperatura < -20 || humedad < 0 || humedad > 100
+  ) {
+    resultado.innerHTML = `<span style="color:red;">Por favor, ingresa valores válidos y positivos para todos los parámetros.<br>
+    pH y CE deben ser mayores a 0. Temperatura mayor a -20°C. Humedad entre 0% y 100%.</span>`;
+    resultado.style.color = "red";
+    return;
+  }
+
+  // Verifica si la etapa existe para la planta seleccionada
+  const rango = rangosCultivos?.[planta]?.[etapa];
+
+  if (!rango) {
+    resultado.innerHTML = `<span style="color:red;">La etapa <b>${etapa}</b> no existe para la planta <b>${planta.charAt(0).toUpperCase() + planta.slice(1)}</b>.<br>Por favor, selecciona una etapa válida.</span>`;
+    resultado.style.color = "red";
+    return;
+  }
+
+  // Verificación individual por parámetro
+  const dentroPH = ph >= rango.ph[0] && ph <= rango.ph[1];
+  const dentroCE = ce >= rango.ce[0] && ce <= rango.ce[1];
+  const dentroTemp = temperatura >= rango.temperatura[0] && temperatura <= rango.temperatura[1];
+  const dentroHumedad = humedad >= rango.humedad[0] && humedad <= rango.humedad[1];
+
+  // Mensajes específicos
+  let mensaje = "";
+  if (dentroPH && dentroCE && dentroTemp && dentroHumedad) {
+    mensaje = `<span style="color:green;">✅ Todos los parámetros están dentro del rango recomendado para la etapa seleccionada.</span>`;
+    resultado.style.color = "green";
+  } else {
+    mensaje = `<span style="color:red;">❌ Algunos parámetros están fuera del rango recomendado:</span><ul style="color:red;">`;
+    if (!dentroPH) mensaje += `<li>pH: ingresaste <b>${ph}</b> (recomendado: <b>${rango.ph[0]} - ${rango.ph[1]}</b>)</li>`;
+    if (!dentroCE) mensaje += `<li>CE: ingresaste <b>${ce}</b> (recomendado: <b>${rango.ce[0]} - ${rango.ce[1]} mS/cm</b>)</li>`;
+    if (!dentroTemp) mensaje += `<li>Temperatura: ingresaste <b>${temperatura}°C</b> (recomendado: <b>${rango.temperatura[0]} - ${rango.temperatura[1]}°C</b>)</li>`;
+    if (!dentroHumedad) mensaje += `<li>Humedad: ingresaste <b>${humedad}%</b> (recomendado: <b>${rango.humedad[0]}% - ${rango.humedad[1]}%</b>)</li>`;
+    mensaje += "</ul>";
+    resultado.style.color = "red";
+  }
+  resultado.innerHTML = mensaje;
+}
