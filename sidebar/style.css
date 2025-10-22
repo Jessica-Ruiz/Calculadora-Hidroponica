@@ -785,25 +785,43 @@ h1 {
 }
 
 /* === BLOQUE DE NOTAS OFFLINE Y RESULTADOS GUARDADOS === */
+
+/* Contenedor principal de notas adaptativo */
+#notas {
+  display: none;           /* se muestra con JS */
+  margin: 20px auto;       /* centrado horizontal */
+  width: 95%;              /* ocupa casi todo el ancho de la pantalla */
+  max-width: none;         /* sin límite de ancho */
+  max-height: 80vh;        /* altura máxima relativa a la ventana */
+  overflow-y: auto;        /* scroll vertical si hay mucho contenido */
+  box-sizing: border-box;
+}
+
+/* Contenedor interno de notas y resultados */
 #notasOfflineContainer,
 #resultadosGuardados {
-  margin: 30px auto 20px auto;
-  max-width: 600px;
+  width: 100%;             /* ocupa todo el ancho del padre */
+  max-width: 100%;         /* sin límite */
+  margin: 0 auto;          /* centrado */
+  max-height: 75vh;        /* altura máxima relativa a la ventana */
+  overflow-y: auto;        /* scroll si el contenido es alto */
   background: #f9f9f9;
   border: 2px solid #0D89B6;
   border-radius: 12px;
   box-shadow: 0 2px 10px rgba(13,137,182,0.07);
   padding: 25px 20px;
+  box-sizing: border-box;
 }
 
 #notasOfflineContainer h2,
 #resultadosGuardados h3 {
   color: #0D89B6;
   margin-bottom: 10px;
+  text-align: center;
 }
 
 #notasOfflineContainer textarea {
-  width: 90%;
+  width: 100%;             /* ocupa todo el ancho disponible */
   min-height: 80px;
   border: 1.5px solid #0D89B6;
   border-radius: 7px;
@@ -811,6 +829,7 @@ h1 {
   resize: vertical;
   margin-bottom: 10px;
   font-size: 1em;
+  box-sizing: border-box;
 }
 
 #notasOfflineContainer button,
@@ -824,91 +843,7 @@ h1 {
   cursor: pointer;
   transition: background 0.2s;
 }
-#notasOfflineContainer button:hover,
-#resultadosGuardados button:hover {
-  background: #085672;
-}
 
-#notasGuardadas > div,
-#resultadosGuardados > div {
-  background: #fff;
-  border: 1px solid #d8eefd;
-  border-radius: 6px;
-  margin: 8px 0;
-  padding: 10px;
-  text-align: left;
-  box-shadow: 0 1px 2px rgba(13,137,182,0.04);
-}
-
-#notasGuardadas i,
-#resultadosGuardados i {
-  color: #888;
-}
-/* Estado de conexión (arriba fijo) */
-.estado-conexion {
-  position: fixed;
-  top: 85px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 120;
-  padding: 10px 32px;
-  border-radius: 20px;
-  font-weight: bold;
-  font-size: 1.1em;
-  box-shadow: 0 2px 24px rgba(0,0,0,0.09);
-  background: #e3f6e3;
-  color: #115c11;
-  border: 2px solid #16d116;
-  display: none;
-  transition: all 0.25s;
-}
-.estado-conexion.offline {
-  background: #ffeaea;
-  color: #950000;
-  border-color: #ff3b3b;
-  display: block;
-}
-
-/* Contenedores de notas y resultados guardados */
-#notasOfflineContainer,
-#resultadosGuardados {
-  margin: 30px auto 20px auto;
-  max-width: 600px;
-  background: #f9f9f9;
-  border: 2px solid #0D89B6;
-  border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(13,137,182,0.07);
-  padding: 25px 20px;
-}
-
-#notasOfflineContainer h2,
-#resultadosGuardados h3 {
-  color: #0D89B6;
-  margin-bottom: 10px;
-}
-
-#notasOfflineContainer textarea {
-  width: 90%;
-  min-height: 80px;
-  border: 1.5px solid #0D89B6;
-  border-radius: 7px;
-  padding: 10px;
-  resize: vertical;
-  margin-bottom: 10px;
-  font-size: 1em;
-}
-
-#notasOfflineContainer button,
-#resultadosGuardados button {
-  margin-top: 10px;
-  background: #0D89B6;
-  color: white;
-  border: none;
-  padding: 7px 18px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.2s;
-}
 #notasOfflineContainer button:hover,
 #resultadosGuardados button:hover {
   background: #085672;
@@ -949,7 +884,11 @@ h1 {
 #notasGuardadas i,
 #resultadosGuardados i {
   color: #888;
+  font-size: 1.08em;
+  display: block;
+  margin: 10px 0 0 5px;
 }
+
 /* Tarjetas decorativas para notas y resultados guardados */
 .nota-tarjeta, .resultado-tarjeta {
   display: flex;
@@ -1021,14 +960,33 @@ h1 {
   transition: background 0.2s;
   align-self: flex-start;
 }
+
 .nota-tarjeta button:hover, .resultado-tarjeta button:hover {
   background: #0277bd;
 }
 
-/* Para que los mensajes "No hay notas guardadas" etc. sean más visibles */
-#notasGuardadas i, #resultadosGuardados i {
-  color: #888;
-  font-size: 1.08em;
+/* Estado de conexión (arriba fijo) */
+.estado-conexion {
+  position: fixed;
+  top: 85px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 120;
+  padding: 10px 32px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 1.1em;
+  box-shadow: 0 2px 24px rgba(0,0,0,0.09);
+  background: #e3f6e3;
+  color: #115c11;
+  border: 2px solid #16d116;
+  display: none;
+  transition: all 0.25s;
+}
+
+.estado-conexion.offline {
+  background: #ffeaea;
+  color: #950000;
+  border-color: #ff3b3b;
   display: block;
-  margin: 10px 0 0 5px;
 }
