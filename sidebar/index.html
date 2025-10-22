@@ -121,16 +121,7 @@
   </div>
 
   <!-- CONTENIDO PRINCIPAL A LA DERECHA -->
-  <div id="main-content" style="
-    margin-left: 220px;
-    padding: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: calc(100vh - 60px);
-    box-sizing: border-box;
-    text-align: center;
-  ">
+  <div id="main-content">
     <div id="home" style="display:none; width:80%; max-width:500px; padding:20px; border:1px solid #ccc; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.1);">Contenido de Home</div>
     <div id="dashboard" style="display:none; width:80%; max-width:500px; padding:20px; border:1px solid #ccc; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.1);">Contenido del Dashboard</div>
     <div id="calculadora">      <div class="container-flex">
@@ -229,6 +220,7 @@
           </div>
         </div>
       </div></div>
+        <div id="formula" style="display:none; width:80%; max-width:500px; padding:20px; border:1px solid #ccc; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.1);">Contenido de formula</div>
     <div id="historial" style="display:none; width:80%; max-width:500px; padding:20px; border:1px solid #ccc; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.1);">Contenido del Historial</div>
     <div id="notas"><div class="container" id="notasOfflineContainer">
         <h2>Notas de mi cultivo (Offline)</h2>
@@ -321,7 +313,7 @@
         if(text.includes('dashboard')) showContent('dashboard');
         if(text.includes('historial')) showContent('historial');
         if(text.includes('notas')) showContent('notas');
-        if(text.includes('mi propia fórmula')) showContent('calculadora'); // opcional
+        if(text.includes('mi propia fórmula')) showContent('formula'); // opcional
       });
     });
 
