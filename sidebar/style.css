@@ -37,7 +37,7 @@ header {
     left: 0;
     width: 100%; /* Ocupa todo el ancho */
     padding: 5px 5vw; /* Espaciado interno */
-    background: #03A64A; /* Color verde */
+    background: #0D89B6; /* Color verde */
     display: flex; /* Flexbox para distribuir elementos */
     justify-content: space-between; /* Espaciados a los lados */
     align-items: center; /* Centrado vertical */
@@ -106,7 +106,7 @@ header {
 /* Al pasar el mouse cambia colores */
 .navigation .btnLogin-popup:hover{
     background: white;
-    color: #03A64A; /* Verde */
+    color: #0D89B6; /* Verde */
 }
 
 /* CONTENEDOR PRINCIPAL (wrapper) */
@@ -269,7 +269,7 @@ header {
 .btn{
     width: 100%;
     height: 45px;
-    background:#03A64A ; /* Verde */
+    background:#0D89B6; /* Verde */
     border: none;
     outline: none;
     border-radius: 6px;
@@ -619,7 +619,7 @@ header {
   bottom: -6px;
   width: 100%;
   height: 3px;
-  background: #015007;
+  background: #0D89B6;
   border-radius: 5px;
   transform-origin: right;
   transform: scaleX(0);
@@ -648,7 +648,7 @@ header {
 
 .navigation .btnLogin-poput:hover {
   background: white;
-  color: #02D814;
+  color: #0D89B6;
 }
 
 
@@ -711,7 +711,7 @@ th {
 }
 
 h1 {
-  background-color:#03A64A;
+  background-color:#0D89B6;
   color:white; 
   padding: 20px;
   border-radius: 10px;
@@ -762,7 +762,7 @@ h1 {
 
 #result {
   background-color: rgba(255, 255, 255, 0.4);;
-  border-left: 5px solid #4caf50;
+  border-left: 5px solid #0D89B6;
   padding: 20px;
   margin-top: 20px;
   font-size: 1.1em;

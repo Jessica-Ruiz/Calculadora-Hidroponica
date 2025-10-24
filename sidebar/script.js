@@ -1054,3 +1054,83 @@ async function mostrarResultadosDexie() {
     `;
   });
 }
+
+//Mejora en parametros
+function verificarParametros() {
+  const planta = document.getElementById('planta').value;
+  const etapa = document.getElementById('etapa').value;
+
+  // Tomar los valores en string para validar texto
+  const phValor = document.getElementById('ph').value.trim();
+  const ceValor = document.getElementById('ce').value.trim();
+  const tempValor = document.getElementById('temperatura').value.trim();
+  const humedadValor = document.getElementById('humedad').value.trim();
+
+  const resultado = document.getElementById('resultado');
+
+  // Validación: campos vacíos
+  if (!phValor || !ceValor || !tempValor || !humedadValor) {
+    resultado.innerHTML = `<span style="color:red;">Por favor, completa todos los campos antes de verificar.</span>`;
+    return;
+  }
+
+  // Validación: caracteres no numéricos
+  if (
+    isNaN(phValor) || isNaN(ceValor) || isNaN(tempValor) || isNaN(humedadValor)
+  ) {
+    resultado.innerHTML = `<span style="color:red;">Solo se permiten números en los campos. No ingreses letras ni símbolos.</span>`;
+    return;
+  }
+
+  // Convertir a número para validaciones siguientes
+  const ph = parseFloat(phValor);
+  const ce = parseFloat(ceValor);
+  const temperatura = parseFloat(tempValor);
+  const humedad = parseFloat(humedadValor);
+
+  // Validación: valores negativos
+  if (ph < 0 || ce < 0 || temperatura < 0 || humedad < 0) {
+    resultado.innerHTML = `<span style="color:red;">No se permiten valores negativos en ningún parámetro.</span>`;
+    return;
+  }
+
+  // Validación: decimales en humedad (si quieres solo enteros)
+  if (!/^\d+(\.\d+)?$/.test(humedadValor) || parseFloat(humedadValor) !== parseInt(humedadValor)) {
+    resultado.innerHTML = `<span style="color:red;">La humedad debe ser un número entero entre 0 y 100.</span>`;
+    return;
+  }
+  if (humedad > 100) {
+    resultado.innerHTML = `<span style="color:red;">La humedad no puede ser mayor a 100%.</span>`;
+    return;
+  }
+
+  // Verifica si la etapa existe para la planta seleccionada
+  const rango = rangosCultivos?.[planta]?.[etapa];
+
+  if (!rango) {
+    resultado.innerHTML = `<span style="color:red;">La etapa <b>${etapa}</b> no existe para la planta <b>${planta.charAt(0).toUpperCase() + planta.slice(1)}</b>.<br>Por favor, selecciona una etapa válida.</span>`;
+    return;
+  }
+
+  // Verificación por parámetro
+  const dentroPH = ph >= rango.ph[0] && ph <= rango.ph[1];
+  const dentroCE = ce >= rango.ce[0] && ce <= rango.ce[1];
+  const dentroTemp = temperatura >= rango.temperatura[0] && temperatura <= rango.temperatura[1];
+  const dentroHumedad = humedad >= rango.humedad[0] && humedad <= rango.humedad[1];
+
+  let mensaje = "";
+  if (dentroPH && dentroCE && dentroTemp && dentroHumedad) {
+    mensaje = `<span style="color:green;">✅ Todos los parámetros están dentro del rango recomendado para la etapa seleccionada.</span>`;
+    resultado.style.color = "green";
+  } else {
+    mensaje = `<span style="color:red;">❌ Algunos parámetros están fuera del rango recomendado:</span><ul style="color:red;">`;
+    if (!dentroPH) mensaje += `<li>pH: ingresaste <b>${ph}</b> (recomendado: <b>${rango.ph[0]} - ${rango.ph[1]}</b>)</li>`;
+    if (!dentroCE) mensaje += `<li>CE: ingresaste <b>${ce}</b> (recomendado: <b>${rango.ce[0]} - ${rango.ce[1]} mS/cm</b>)</li>`;
+    if (!dentroTemp) mensaje += `<li>Temperatura: ingresaste <b>${temperatura}°C</b> (recomendado: <b>${rango.temperatura[0]} - ${rango.temperatura[1]}°C</b>)</li>`;
+    if (!dentroHumedad) mensaje += `<li>Humedad: ingresaste <b>${humedad}%</b> (recomendado: <b>${rango.humedad[0]}% - ${rango.humedad[1]}%</b>)</li>`;
+    mensaje += "</ul>";
+    resultado.style.color = "red";
+  }
+  resultado.innerHTML = mensaje;
+}
+
