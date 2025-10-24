@@ -889,6 +889,12 @@ async function guardarNotaDexie() {
   await db.notas.add({ texto: nota, fecha: new Date().toLocaleString() });
   document.getElementById("nota").value = "";
   mostrarNotasDexie();
+  // Intentar sincronizar inmediatamente si estamos online (silencioso)
+  if (navigator.onLine) {
+    try { await sincronizar({ notify: false }); } catch (e) { console.error('Auto-sync nota:', e); }
+  }
+  // registrar en historial de usuario
+  try { appendUserHistory({ time: new Date().toISOString(), type: 'nota_guardada', texto: nota }); } catch (e) { /* noop */ }
 }
 
 async function mostrarNotasDexie() {
@@ -908,9 +914,151 @@ async function mostrarNotasDexie() {
 async function borrarNotaDexie(id) {
   await db.notas.delete(id);
   mostrarNotasDexie();
+  try { appendUserHistory({ time: new Date().toISOString(), type: 'nota_borrada', id }); } catch (e) { /* noop */ }
 }
 
 document.addEventListener("DOMContentLoaded", mostrarNotasDexie);
+
+// Mostrar contador de ítems pendientes de sincronización
+// Nota: se eliminó el badge visual de "pendientes".
+// En su lugar registramos todas las acciones del usuario en 'appUserHistory' y mostramos
+// el contenido en el panel principal `#historial`.
+
+function appendUserHistory(entry) {
+  try {
+    const key = 'appUserHistory';
+    const raw = localStorage.getItem(key) || '[]';
+    const arr = JSON.parse(raw);
+    arr.push(entry);
+    while (arr.length > 500) arr.shift();
+    localStorage.setItem(key, JSON.stringify(arr));
+  } catch (e) { console.error('appendUserHistory error', e); }
+  // actualizar vista si estamos mostrando historial
+  try { renderHistorialSection(); } catch (e) { /* noop */ }
+}
+
+async function renderHistorialSection() {
+  const histEl = document.getElementById('historial');
+  if (!histEl) return;
+  // cabecera
+  let html = `<div class="historial-title">Historial completo</div>`;
+  // Actividad del usuario
+  try {
+    const raw = localStorage.getItem('appUserHistory') || '[]';
+    const arr = JSON.parse(raw).slice().reverse();
+    html += `<div class="historial-subtitle"><strong>Actividad</strong></div>`;
+    if (arr.length === 0) html += `<div class="historial-empty">No hay actividad registrada.</div>`;
+    html += `<div class="historial-list">`;
+    arr.forEach(a => {
+      html += `<div class="historial-item"><div class="time">${new Date(a.time).toLocaleString()}</div><div class="kind">${escapeHtml(a.type)}</div><div class="payload">${escapeHtml(JSON.stringify(a, null, 2))}</div></div>`;
+    });
+    html += `</div>`;
+  } catch (e) { html += `<div class="historial-empty">Error cargando actividad</div>`; }
+
+  // Historial de sincronizaciones
+  try {
+    const raw2 = localStorage.getItem('appSyncHistory') || '[]';
+    const arr2 = JSON.parse(raw2).slice().reverse();
+    html += `<div style="margin-top:12px"><strong>Sincronizaciones</strong></div>`;
+    if (arr2.length === 0) html += `<div class="historial-empty">No hay sincronizaciones registradas.</div>`;
+    html += `<div class="historial-list">`;
+    arr2.forEach(s => {
+      html += `<div class="historial-item"><div class="time">${new Date(s.time).toLocaleString()}</div><div class="kind">${s.ok? 'OK':'ERROR'}</div><div class="payload">Items: ${s.transferred||0}${s.errors?`<div style=\"margin-top:6px;color:#c33\">${escapeHtml(JSON.stringify(s.errors))}</div>`:''}</div></div>`;
+    });
+    html += `</div>`;
+  } catch (e) { html += `<div class="historial-empty">Error cargando sincronizaciones</div>`; }
+
+  // Notificaciones
+  try {
+    const raw3 = localStorage.getItem('appNotificationHistory') || '[]';
+    const arr3 = JSON.parse(raw3).slice().reverse();
+    html += `<div style="margin-top:12px"><strong>Notificaciones</strong></div>`;
+    if (arr3.length === 0) html += `<div class="historial-empty">No hay notificaciones.</div>`;
+    html += `<div class="historial-list">`;
+    arr3.forEach(n => {
+      html += `<div class="historial-item"><div class="time">${new Date(n.time).toLocaleString()}</div><div class="kind">${n.type}</div><div class="payload">${escapeHtml(n.message)}</div></div>`;
+    });
+    html += `</div>`;
+  } catch (e) { html += `<div class="historial-empty">Error cargando notificaciones</div>`; }
+
+  histEl.innerHTML = html;
+}
+
+// Panel de historial (notificaciones + sincronizaciones + pendientes)
+function toggleHistoryPanel() {
+  let panel = document.getElementById('historyPanel');
+  if (panel) { panel.remove(); return; }
+  createHistoryPanel();
+}
+
+function createHistoryPanel() {
+  const panel = document.createElement('div');
+  panel.id = 'historyPanel';
+  panel.className = 'history-panel';
+
+  panel.innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:space-between;">
+      <h3>Historial & Pendientes</h3>
+      <button class="history-close" aria-label="cerrar">✕</button>
+    </div>
+    <div class="history-section" id="hist-pendientes">
+      <h4>Pendientes</h4>
+      <div id="hist-pendientes-list">Cargando...</div>
+    </div>
+    <div class="history-section" id="hist-sync">
+      <h4>Historial de sincronizaciones</h4>
+      <div id="hist-sync-list">Cargando...</div>
+    </div>
+    <div class="history-section" id="hist-notifs">
+      <h4>Notificaciones</h4>
+      <div id="hist-notifs-list">Cargando...</div>
+    </div>
+  `;
+
+  document.body.appendChild(panel);
+  panel.querySelector('.history-close').addEventListener('click', () => panel.remove());
+  renderHistoryPanel();
+}
+
+async function renderHistoryPanel() {
+  const pendientesList = document.getElementById('hist-pendientes-list');
+  const syncList = document.getElementById('hist-sync-list');
+  const notifsList = document.getElementById('hist-notifs-list');
+  if (!pendientesList || !syncList || !notifsList) return;
+
+  // cargar pendientes desde Dexie
+  try {
+    const notas = await db.notas.toArray();
+    const resultados = await db.resultados.toArray();
+    let html = '';
+    if (notas.length === 0 && resultados.length === 0) html = '<i>No hay pendientes.</i>';
+    notas.forEach(n => { html += `<div class="history-item"><b>Nota</b> <div>${n.fecha}</div><div style="margin-top:6px">${escapeHtml(n.texto)}</div></div>`; });
+    resultados.forEach(r => { html += `<div class="history-item"><b>Resultado</b> <div>${r.fecha}</div><pre style="margin-top:6px">${escapeHtml(r.texto)}</pre></div>`; });
+    pendientesList.innerHTML = html;
+  } catch (e) { pendientesList.innerHTML = '<i>Error cargando pendientes</i>'; }
+
+  // cargar historial de sincronizaciones
+  try {
+    const raw = localStorage.getItem('appSyncHistory') || '[]';
+    const arr = JSON.parse(raw).slice().reverse();
+    if (arr.length === 0) syncList.innerHTML = '<i>No hay historial de sincronizaciones.</i>';
+    else syncList.innerHTML = arr.map(s => `<div class="history-item"><b>${s.ok? 'OK':'ERROR'}</b> <div>${new Date(s.time).toLocaleString()}</div><div>Items: ${s.transferred||0}</div>${s.errors?`<div style="margin-top:6px;color:#fca5a5">${escapeHtml(JSON.stringify(s.errors))}</div>`:''}</div>`).join('');
+  } catch (e) { syncList.innerHTML = '<i>Error cargando historial</i>'; }
+
+  // cargar historial de notificaciones
+  try {
+    const raw2 = localStorage.getItem('appNotificationHistory') || '[]';
+    const arr2 = JSON.parse(raw2).slice().reverse();
+    if (arr2.length === 0) notifsList.innerHTML = '<i>No hay notificaciones.</i>';
+    else notifsList.innerHTML = arr2.map(n => `<div class="history-item"><div>${new Date(n.time).toLocaleString()}</div><div style="margin-top:6px">${escapeHtml(n.message)}</div></div>`).join('');
+  } catch (e) { notifsList.innerHTML = '<i>Error cargando notificaciones</i>'; }
+}
+
+function renderHistoryPanelIfOpen() {
+  if (document.getElementById('historyPanel')) renderHistoryPanel();
+}
+
+function escapeHtml(s) { return (''+s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
 let ultimoResultadoCalculadora = "";
 
@@ -933,6 +1081,11 @@ async function guardarResultadoDexie() {
   if (!ultimoResultadoCalculadora.trim()) return;
   await db.resultados.add({ texto: ultimoResultadoCalculadora, fecha: new Date().toLocaleString() });
   mostrarResultadosDexie();
+  // Intentar sincronizar inmediatamente si estamos online (silencioso)
+  if (navigator.onLine) {
+    try { await sincronizar({ notify: false }); } catch (e) { console.error('Auto-sync resultado:', e); }
+  }
+  try { appendUserHistory({ time: new Date().toISOString(), type: 'resultado_guardado', texto: ultimoResultadoCalculadora }); } catch (e) { /* noop */ }
 }
 
 async function mostrarResultadosDexie() {
@@ -952,28 +1105,213 @@ async function mostrarResultadosDexie() {
 async function borrarResultadoDexie(id) {
   await db.resultados.delete(id);
   mostrarResultadosDexie();
+  try { appendUserHistory({ time: new Date().toISOString(), type: 'resultado_borrado', id }); } catch (e) { /* noop */ }
 }
 
 document.addEventListener("DOMContentLoaded", mostrarResultadosDexie);
 
-// ========== AVISO EN TIEMPO REAL DE CONEXIÓN ==========
-function mostrarEstadoConexion() {
-  const div = document.getElementById('estadoConexion');
-  if (!div) return;
-  if (navigator.onLine) {
-    div.textContent = "Estás en línea";
-    div.className = "estado-conexion";
-    div.style.display = "block";
-    setTimeout(() => div.style.display = "none", 3000);
-  } else {
-    div.textContent = "Estás en MODO OFFLINE";
-    div.className = "estado-conexion offline";
-    div.style.display = "block";
+// ========== AVISO EN TIEMPO REAL DE CONEXIÓN (TOASTS ANIMADOS) ==========
+// Helper: inyectar estilos para los toasts si no existen
+function ensureToastStyles() {
+  // Los estilos de toast e historial ahora están en style.css; aquí solo aseguramos
+  // que el contenedor exista (no inyectamos estilos desde JS).
+  if (!document.querySelector('.toast-container')) {
+    const container = document.createElement('div');
+    container.className = 'toast-container';
+    document.body.appendChild(container);
   }
 }
+
+// Elegir paleta según el contraste de la página
+function pickToastPalette() {
+  try {
+    const bodyStyle = getComputedStyle(document.body);
+    const bg = bodyStyle.backgroundColor || '#ffffff';
+    const m = bg.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/i);
+    let r=255,g=255,b=255;
+    if (m) { r = +m[1]; g = +m[2]; b = +m[3]; }
+    // cálculo simple de luminancia
+    const lum = (0.2126*r + 0.7152*g + 0.0722*b) / 255;
+    const darkBg = lum < 0.5;
+
+    if (darkBg) {
+      return {
+        textColor: '#ffffff',
+        // tonos azules translúcidos (estética tipo "glass") para online/sync
+        success: ['rgba(14,165,233,0.16)', 'rgba(3,105,161,0.12)'],
+        error: ['rgba(239,68,68,0.18)', 'rgba(220,38,38,0.12)'],
+        info: ['rgba(14,165,233,0.16)', 'rgba(3,105,161,0.12)'],
+        offline: ['rgba(99,102,241,0.12)', 'rgba(79,70,229,0.08)'],
+        panelBg: 'rgba(17,24,39,0.96)',
+        panelText: '#f9fafb',
+        itemBg: 'rgba(255,255,255,0.04)'
+      };
+    }
+    return {
+      textColor: '#042033',
+      // tonos azules translúcidos para continuidad visual (online / sync)
+      success: ['rgba(14,165,233,0.16)', 'rgba(3,105,161,0.10)'],
+      error: ['rgba(239,68,68,0.14)', 'rgba(220,38,38,0.10)'],
+      info: ['rgba(14,165,233,0.16)', 'rgba(3,105,161,0.10)'],
+      offline: ['rgba(17,24,39,0.08)', 'rgba(55,65,81,0.06)'],
+      panelBg: '#ffffff',
+      panelText: '#0f172a',
+      itemBg: 'rgba(15,23,42,0.04)'
+    };
+  } catch (e) {
+    return {
+      textColor: '#ffffff',
+      success: ['#059669', '#10b981'],
+      error: ['#dc2626', '#ef4444'],
+      info: ['#1f2937', '#6366f1'],
+      offline: ['#374151', '#4b5563'],
+      panelBg: '#ffffff',
+      panelText: '#0f172a',
+      itemBg: 'rgba(15,23,42,0.04)'
+    };
+  }
+}
+
+// Mostrar toast elegante (type: 'success'|'error'|'info'|'offline')
+function showToast(message, type = 'info', ttl = 3500) {
+  ensureToastStyles();
+  let container = document.querySelector('.toast-container');
+  if (!container) {
+    container = document.createElement('div');
+    container.className = 'toast-container';
+    document.body.appendChild(container);
+  }
+  const el = document.createElement('div');
+  el.className = `toast toast--${type}`;
+
+  const emojiMap = {
+    success: '✅',
+    error: '❌',
+    info: 'ℹ️',
+    offline: '📴'
+  };
+
+  const emoji = emojiMap[type] || '🔔';
+
+  el.innerHTML = `
+    <div class="toast-emoji">${emoji}</div>
+    <div class="toast-text">${message}</div>
+    <button class="toast-close" aria-label="cerrar">✕</button>
+  `;
+
+  container.appendChild(el);
+
+  // Auto hide (ttl === 0 => sticky)
+  let timeoutId = null;
+  if (ttl > 0) {
+    timeoutId = setTimeout(() => {
+      el.classList.add('hide');
+      setTimeout(() => el.remove(), 240);
+    }, ttl);
+  }
+
+  // Close button
+  const closeBtn = el.querySelector('.toast-close');
+  closeBtn.addEventListener('click', () => {
+    if (timeoutId) clearTimeout(timeoutId);
+    el.classList.add('hide');
+    setTimeout(() => el.remove(), 160);
+  });
+
+  // Allow click on the toast itself to dismiss
+  el.addEventListener('click', (ev) => {
+    // ignore clicks on the close button (already handled)
+    if (ev.target === closeBtn) return;
+    if (timeoutId) clearTimeout(timeoutId);
+    el.classList.add('hide');
+    setTimeout(() => el.remove(), 160);
+  });
+
+  // Guardar en historial de notificaciones (localStorage, mantener 50)
+  try {
+    const key = 'appNotificationHistory';
+    const raw = localStorage.getItem(key) || '[]';
+    const list = JSON.parse(raw);
+    list.push({ time: new Date().toISOString(), type, message });
+    while (list.length > 50) list.shift();
+    localStorage.setItem(key, JSON.stringify(list));
+    // También registrar en el historial unificado del usuario
+    try { appendUserHistory({ time: new Date().toISOString(), type: `notif_${type}`, message }); } catch (e) { /* noop */ }
+  } catch (e) { /* noop */ }
+
+  return el;
+}
+
+// Estado de sincronización automática
+let __autoSyncIntervalId = null;
+const AUTO_SYNC_INTERVAL_MS = 5 * 60 * 1000; // 5 minutos
+
+function startAutoSync() {
+  // Si ya está corriendo, no hacemos nada
+  if (__autoSyncIntervalId) return;
+  // Hacer una sincronización inmediata
+  (async () => {
+    try {
+      await sincronizar({notify:false});
+    } catch (e) { /* ignore */ }
+  })();
+  __autoSyncIntervalId = setInterval(async () => {
+    try {
+      await sincronizar({notify:false});
+    } catch (e) { console.error('Auto-sync error', e); }
+  }, AUTO_SYNC_INTERVAL_MS);
+}
+
+function stopAutoSync() {
+  if (!__autoSyncIntervalId) return;
+  clearInterval(__autoSyncIntervalId);
+  __autoSyncIntervalId = null;
+}
+
+function mostrarEstadoConexion() {
+  // Mostrar un toast elegante cuando cambia el estado
+  if (navigator.onLine) {
+    showToast('Conexión restaurada — trabajando online', 'success', 3000);
+    // al volver online, iniciar auto-sync y lanzar sincronización inmediata
+    startAutoSync();
+    // también intentar sincronizar inmediatamente con notificaciones
+    sincronizar({notify:true}).catch(e => console.error(e));
+  } else {
+    showToast('Has pasado a MODO OFFLINE', 'offline', 0);
+    // Detener sincronización periódica mientras estemos offline
+    stopAutoSync();
+  }
+}
+
 window.addEventListener('online', mostrarEstadoConexion);
 window.addEventListener('offline', mostrarEstadoConexion);
-document.addEventListener('DOMContentLoaded', mostrarEstadoConexion);
+document.addEventListener('DOMContentLoaded', () => {
+  mostrarEstadoConexion();
+  // Si al cargar ya estamos online, arrancar auto-sync
+  if (navigator.onLine) startAutoSync();
+  // renderizar historial al inicio
+  try { renderHistorialSection(); } catch (e) { /* noop */ }
+});
+
+// Cuando el usuario abre la sección 'historial', forzamos un render del historial.
+document.addEventListener('DOMContentLoaded', () => {
+  const hist = document.getElementById('historial');
+  if (!hist) return;
+  // Si cambia el estilo (display) o el contenido del atributo, renderizar
+  const obs = new MutationObserver(() => {
+    try { if (hist.offsetParent !== null) renderHistorialSection(); } catch (e) { }
+  });
+  obs.observe(hist, { attributes: true, attributeFilter: ['style', 'class'] });
+  // también refrescar cuando se muestran otras secciones por click en el menú
+  document.querySelectorAll('.sidebar .menu-items-static > .menu-link').forEach(link => {
+    link.addEventListener('click', function(e) {
+      const text = this.textContent.toLowerCase();
+      if (text.includes('historial')) {
+        try { renderHistorialSection(); } catch (e) { }
+      }
+    });
+  });
+});
 
 // ========== MEJORAS VISUALES DE NOTAS Y RESULTADOS ==========
 async function mostrarNotasDexie() {
@@ -1033,6 +1371,7 @@ async function mostrarNotasDexie() {
       </div>
     `;
   });
+  try { renderHistorialSection(); } catch (e) { /* noop */ }
 }
 
 async function mostrarResultadosDexie() {
@@ -1053,6 +1392,7 @@ async function mostrarResultadosDexie() {
       </div>
     `;
   });
+  try { renderHistorialSection(); } catch (e) { /* noop */ }
 }
 
 //Mejora en parametros
@@ -1133,4 +1473,116 @@ function verificarParametros() {
   }
   resultado.innerHTML = mensaje;
 }
+
+
+async function sincronizar(options = {}) {
+  const notify = options.notify !== false;
+  if (!navigator.onLine) {
+    if (notify) showToast('No hay conexión. La sincronización quedará en cola.', 'offline', 3500);
+    return { ok: false, reason: 'offline' };
+  }
+
+  let progressToast;
+  if (notify) progressToast = showToast('Sincronizando datos...', 'info', 0);
+
+  try {
+    const notasLocales = await db.notas.toArray();
+    const resultadosLocales = await db.resultados.toArray();
+
+    if ((notasLocales.length === 0) && (resultadosLocales.length === 0)) {
+      if (notify) {
+        if (progressToast) progressToast.remove();
+        showToast('No hay datos locales para sincronizar.', 'info', 2500);
+      }
+      // registrar en historial que no había datos para sincronizar
+      try { appendUserHistory({ time: new Date().toISOString(), type: 'sincronizar_sin_datos' }); } catch (e) { /* noop */ }
+      try { renderHistorialSection(); } catch (e) { /* noop */ }
+      return { ok: true, transferred: 0 };
+    }
+
+    const errores = [];
+    let transferred = 0;
+
+    // Sincronizar notas
+    for (const n of notasLocales) {
+      try {
+        const payload = { texto: n.texto, fecha: n.fecha };
+        const { data, error } = await supabaseClient.from('notas').insert([payload]);
+        if (error) {
+          errores.push(`Nota id=${n.id}: ${error.message}`);
+        } else {
+          await db.notas.delete(n.id);
+          transferred++;
+        }
+      } catch (e) {
+        errores.push(`Nota id=${n.id}: ${e.message || e}`);
+      }
+    }
+
+    // Sincronizar resultados
+    for (const r of resultadosLocales) {
+      try {
+        const payload = { texto: r.texto, fecha: r.fecha };
+        const { data, error } = await supabaseClient.from('resultados').insert([payload]);
+        if (error) {
+          errores.push(`Resultado id=${r.id}: ${error.message}`);
+        } else {
+          await db.resultados.delete(r.id);
+          transferred++;
+        }
+      } catch (e) {
+        errores.push(`Resultado id=${r.id}: ${e.message || e}`);
+      }
+    }
+
+    // Refrescar vistas locales
+    try { mostrarNotasDexie(); } catch (e) { /* noop */ }
+    try { mostrarResultadosDexie(); } catch (e) { /* noop */ }
+
+    if (progressToast) progressToast.remove();
+
+    if (errores.length) {
+      if (notify) showToast(`Sincronizado con errores (${transferred} items). Revisa la consola.`, 'error', 6000);
+      console.warn('Errores de sincronización:', errores);
+      try { appendUserHistory({ time: new Date().toISOString(), type: 'sincronizacion', ok:false, transferred, errors: errores.slice(0,5) }); } catch (e) { /* noop */ }
+      // Guardar en historial de sincronizaciones
+      try {
+        const key = 'appSyncHistory';
+        const raw = localStorage.getItem(key) || '[]';
+        const arr = JSON.parse(raw);
+        arr.push({ time: new Date().toISOString(), ok: false, transferred, errors: errores.slice(0,5) });
+        while (arr.length > 50) arr.shift();
+        localStorage.setItem(key, JSON.stringify(arr));
+      } catch (e) { /* noop */ }
+      renderHistoryPanelIfOpen();
+      return { ok: false, errors: errores, transferred };
+    } else {
+      if (notify) showToast(`Sincronización completada (${transferred} items).`, 'success', 3500);
+      try { appendUserHistory({ time: new Date().toISOString(), type: 'sincronizacion', ok:true, transferred }); } catch (e) { /* noop */ }
+      try {
+        const key = 'appSyncHistory';
+        const raw = localStorage.getItem(key) || '[]';
+        const arr = JSON.parse(raw);
+        arr.push({ time: new Date().toISOString(), ok: true, transferred });
+        while (arr.length > 50) arr.shift();
+        localStorage.setItem(key, JSON.stringify(arr));
+      } catch (e) { /* noop */ }
+      renderHistoryPanelIfOpen();
+      return { ok: true, transferred };
+    }
+  } catch (err) {
+    if (progressToast) progressToast.remove();
+    console.error('Error en sincronizar:', err);
+    if (notify) showToast('Ocurrió un error durante la sincronización. Mira la consola.', 'error', 4500);
+    return { ok: false, reason: 'exception', error: String(err) };
+  }
+}
+
+// Exponer la función para la consola y añadir un botón visible para el usuario
+// Exponer la función para la consola (se mantiene) — botón manual eliminado
+window.sincronizar = sincronizar;
+document.addEventListener('DOMContentLoaded', () => {
+
+});
+
 
