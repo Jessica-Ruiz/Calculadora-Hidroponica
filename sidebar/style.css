@@ -17,18 +17,7 @@ html, body { width:100%;
     z-index:1000;
 }
 
-/* Hace que html y body ocupen toda la pantalla */
-html,body{
-    height: 100%;
-    width: 100%;
-}
 
-body {
-  height: 100vh;
-  display: flex;
-  background: var(--color-surface);
-  background-size: cover;
-}
 
 /* Estilos del header */
 header {
@@ -36,13 +25,15 @@ header {
     top: 0;
     left: 0;
     width: 100%; /* Ocupa todo el ancho */
-    padding: 5px 5vw; /* Espaciado interno */
+    padding: 3px 3vw; /* Espaciado interno */
     background: #0D89B6; /* Color verde */
     display: flex; /* Flexbox para distribuir elementos */
     justify-content: space-between; /* Espaciados a los lados */
     align-items: center; /* Centrado vertical */
     z-index: 99; /* Encima de otros elementos */
 }
+
+
 
 /* Estilo del título HIDROSOFT */
 .HIDROSOFT {
@@ -309,15 +300,6 @@ header {
   --user-bg-color: #FAFAFC;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
-}
-
-
-
 /* Sidebar */
 .sidebar {
   position: fixed;
@@ -401,24 +383,7 @@ header {
   color: var(--color-text-primary);
 }
 
-/* Contenedor de menú con scroll */
-.menu_container {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  flex: 1;             /* ocupa todo el espacio disponible */
-  overflow-y: auto;    /* scroll solo aquí */
-  padding: 0.5rem 0;
-}
 
-.menu_container::-webkit-scrollbar {
-  width: 5px;
-}
-
-.menu_container::-webkit-scrollbar-thumb {
-  background-color: rgba(0,0,0,0.2);
-  border-radius: 5px;
-}
 
 /* Buscador */
 .buscador {
@@ -670,444 +635,12 @@ header {
   overflow-y: auto; 
 }
 
-
-.container {
-  margin: 20px auto;
-  padding: 30px;    
-  max-width: 1200px; 
-  width: 100%;       
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-  background-color: rgba(255, 255, 255, 0.8);
-  text-align: center;
-  display: block;    
-  overflow-x: hidden; 
-}
-
-
-
-table {
-  width: 100%;            
-  table-layout: auto;     
-  border-collapse: collapse;
-  margin-top: 20px;
-}
-
-table, th, td {
-  border: 2px solid rgba(0, 0, 0, 0.4);
-}
-
-th, td {
-  padding: 12px;            
-  text-align: center;
-  min-width: 100px;         
-  white-space: normal;      
-  word-break: break-word;   
-}
-
-th {
-  background-color: white;
-}
-
-h1 {
-  background-color:#0D89B6;
-  color:white; 
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  text-align: center;
-}
-
-.container-flex {
-  display: flex;
-  flex-direction: column;  
-  gap: 2rem;
-  padding: 15px;
-  background-color:white;
-  border: 1px solid #000000;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  max-width: 1000px;
-  margin: 20px auto;
-  align-items: center;  
-}
-
-.tablas-container {
-  width: 100%;          
-  max-width: 900px;     
-  margin: 0 auto;
-  box-sizing: border-box;
-}
-
-.tabla-nutrientes {
-  width: 100%;          
-  table-layout: auto;   
-}
-
-.tabla-nutrientes th,
-.tabla-nutrientes td {
-  border: 1px solid #000000;
-  padding: 12px; 
-  text-align: center;
-  min-width: 100px; 
-  white-space: normal;
-  word-break: break-word;
-}
-
-.form-container {
-  flex: 1;
-  min-width: 280px;
-}
-
-#result {
-  background-color: rgba(255, 255, 255, 0.4);;
-  border-left: 5px solid #0D89B6;
-  padding: 20px;
-  margin-top: 20px;
-  font-size: 1.1em;
-  color: #2e7d32;
-  white-space: pre-line; 
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-}
-
-.contenedor-fila {
-  display: flex;
-  gap: 20px;        /* Espacio entre cajas */
-  justify-content: center; /* Centra horizontalmente */
-  align-items: flex-start; /* Alinea arriba */
-}
-
-
-
-/* === BLOQUE DE NOTAS OFFLINE Y RESULTADOS GUARDADOS === */
-
-/* Contenedor principal de notas adaptativo */
-#notas {
-  display: none;           /* se muestra con JS */
-  margin: 20px auto;       /* centrado horizontal */
-  width: 95%;              /* ocupa casi todo el ancho de la pantalla */
-  max-width: none;         /* sin límite de ancho */
-  max-height: 80vh;        /* altura máxima relativa a la ventana */
-  overflow-y: auto;        /* scroll vertical si hay mucho contenido */
-  box-sizing: border-box;
-}
-
-/* Contenedor interno de notas y resultados */
-#notasOfflineContainer,
-#resultadosGuardados {
-  width: 100%;             /* ocupa todo el ancho del padre */
-  max-width: 100%;         /* sin límite */
-  margin: 0 auto;          /* centrado */
-  max-height: 75vh;        /* altura máxima relativa a la ventana */
-  overflow-y: auto;        /* scroll si el contenido es alto */
-  background: #f9f9f9;
-  border: 2px solid #0D89B6;
-  border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(13,137,182,0.07);
-  padding: 25px 20px;
-  box-sizing: border-box;
-}
-
-#notasOfflineContainer h2,
-#resultadosGuardados h3 {
-  color: #0D89B6;
-  margin-bottom: 10px;
-  text-align: center;
-}
-
-#notasOfflineContainer textarea {
-  width: 100%;             /* ocupa todo el ancho disponible */
-  min-height: 80px;
-  border: 1.5px solid #0D89B6;
-  border-radius: 7px;
-  padding: 10px;
-  resize: vertical;
-  margin-bottom: 10px;
-  font-size: 1em;
-  box-sizing: border-box;
-}
-
-#notasOfflineContainer button,
-#resultadosGuardados button {
-  margin-top: 10px;
-  background: #0D89B6;
-  color: white;
-  border: none;
-  padding: 7px 18px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-#notasOfflineContainer button:hover,
-#resultadosGuardados button:hover {
-  background: #085672;
-}
-
-#notasGuardadas > div,
-#resultadosGuardados > div {
-  background: #fff;
-  border: 1px solid #d8eefd;
-  border-radius: 8px;
-  margin: 14px 0;
-  padding: 14px 16px;
-  text-align: left;
-  box-shadow: 0 2px 4px rgba(13,137,182,0.06);
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-}
-
-#notasGuardadas > div > div,
-#resultadosGuardados > div > div {
-  flex: 1;
-}
-
-#notasGuardadas b,
-#resultadosGuardados b {
-  color: #0D89B6;
-  font-size: 0.98em;
-}
-
-#notasGuardadas button,
-#resultadosGuardados button {
-  margin-left: 16px;
-  font-size: 0.95em;
-  padding: 6px 13px;
-}
-
-#notasGuardadas i,
-#resultadosGuardados i {
-  color: #888;
-  font-size: 1.08em;
-  display: block;
-  margin: 10px 0 0 5px;
-}
-
-/* Tarjetas decorativas para notas y resultados guardados */
-.nota-tarjeta, .resultado-tarjeta {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  gap: 18px;
-  background: linear-gradient(135deg, #e0f7fa 80%, #d1eaff 100%);
-  border: 1.5px solid #0D89B6;
-  border-radius: 16px;
-  box-shadow: 0 4px 16px rgba(13,137,182,0.08);
-  margin: 16px 0;
-  padding: 18px 24px 15px 18px;
-  position: relative;
-  transition: box-shadow 0.2s, border 0.2s;
-}
-
-.nota-tarjeta:hover, .resultado-tarjeta:hover {
-  box-shadow: 0 8px 32px rgba(13,137,182,0.15);
-  border-color: #11c6f7;
-}
-
-.nota-icono, .resultado-icono {
-  font-size: 2em;
-  margin-right: 5px;
-  opacity: 0.85;
-  flex-shrink: 0;
-  filter: drop-shadow(0 1px 3px #b8e9ff);
-}
-
-.nota-contenido, .resultado-contenido {
-  flex: 1;
-  min-width: 0;
-}
-
-.nota-fecha, .resultado-fecha {
-  color: #0D89B6;
-  font-size: 0.93em;
-  font-weight: bold;
-  margin-bottom: 8px;
-  letter-spacing: 0.03em;
-}
-
-.nota-texto, .resultado-texto {
-  color: #03506b;
-  font-size: 1.12em;
-  margin: 0 0 3px 0;
-  word-break: break-word;
-  white-space: pre-line;
-}
-
-.resultado-texto {
-  font-family: 'JetBrains Mono', 'Fira Mono', monospace, monospace;
-  background: #f1fbfd;
-  border-radius: 6px;
-  padding: 7px 11px;
-  margin-top: 3px;
-}
-
-.nota-tarjeta button, .resultado-tarjeta button {
-  margin-top: 3px;
-  margin-left: 18px;
-  background: #0D89B6;
-  color: white;
-  border: none;
-  padding: 7px 14px;
-  border-radius: 6px;
-  font-size: 0.98em;
-  cursor: pointer;
-  transition: background 0.2s;
-  align-self: flex-start;
-}
-
-.nota-tarjeta button:hover, .resultado-tarjeta button:hover {
-  background: #0277bd;
-}
-
-/* Estado de conexión (arriba fijo) */
-.estado-conexion {
-  position: fixed;
-  top: 85px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 120;
-  padding: 10px 32px;
-  border-radius: 20px;
-  font-weight: bold;
-  font-size: 1.1em;
-  box-shadow: 0 2px 24px rgba(0,0,0,0.09);
-  background: #e3f6e3;
-  color: #115c11;
-  border: 2px solid #16d116;
-  display: none;
-  transition: all 0.25s;
-}
-
-.estado-conexion.offline {
-  background: #ffeaea;
-  color: #950000;
-  border-color: #ff3b3b;
-  display: block;
-}
-
-
 #calculadora,
 #calendario,
 #parametros {
   display: none;
 }
 
-
-/* Contenedor principal */
-#main-content {
-  margin-left: 220px;
-  padding: 30px;
-  min-height: calc(100vh - 60px);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  box-sizing: border-box;
-  background-color: #f5f5f5;
-}
-
-/* Bloques internos */
-#main-content > div {
-  display: none; /* Se activa con JS */
-  width: 90%;
-  max-width: 800px;
-  padding: 25px;
-  margin: 15px 0;
-  border-radius: 10px;
-  background-color: #fff;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  text-align: left;
-}
-
-/* Encabezados dentro de los bloques */
-#main-content h1, #main-content h2 {
-  margin-bottom: 15px;
-  color: #333;
-  font-weight: 600;
-}
-
-/* Formularios */
-#main-content form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-#main-content label {
-  font-weight: 500;
-  margin-bottom: 5px;
-}
-
-#main-content input, 
-#main-content select, 
-#main-content textarea, 
-#main-content button {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 1rem;
-}
-
-#main-content button {
-  background-color: #0D89B6;
-  color: white;
-  cursor: pointer;
-  border: none;
-  transition: 0.3s;
-}
-
-#main-content button:hover {
-  background-color: #0b6f91;
-}
-
-/* Resultados y tablas */
-.result-container, #resultadosGuardados, #tablaEtapas {
-  margin-top: 15px;
-  padding: 10px;
-  border-radius: 6px;
-  background-color: #eef6f9;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 15px;
-}
-
-th, td {
-  padding: 10px;
-  border: 1px solid #ccc;
-  text-align: center;
-}
-
-@media (max-width: 768px) {
-  #main-content {
-    margin-left: 0;
-    padding: 15px;
-  }
-  #main-content > div {
-    width: 100%;
-    padding: 15px;
-  }
-}
-#main-content > div {
-    width: 100%;
-    max-width: 100%;
-    padding: 40px; /* opcional */
-}
-#main-content > div {
-    width: 100%;          /* Ocupa todo el ancho disponible */
-    max-width: none;      /* Quita límite de 500px */
-    height: 100%;         /* Ocupa toda la altura del contenedor */
-    min-height: calc(100vh - 60px); /* Ajusta altura debajo del header */
-    padding: 20px;        /* Puedes mantener un poco de espacio */
-    border: none;         /* Opcional: quitar borde si no quieres el cuadro */
-    border-radius: 0;     /* Opcional: quitar esquinas redondeadas */
-    box-shadow: none;     /* Opcional: quitar sombra */
-    box-sizing: border-box;
-}
 
 /* ----- Toaster / Notificaciones (estilo "glass" azulado) ----- */
 .toast-container {
@@ -1157,5 +690,236 @@ th, td {
 
 /* Pequeños ajustes para botones dentro del historial */
 .historial-item button { background:#0D89B6; color:#fff; border:none; padding:6px 10px; border-radius:6px; cursor:pointer }
+
+
+
+
+
+
+
+/* === ESTILO UNIFICADO DE TODAS LAS SECCIONES === */
+#main-content {
+  flex: 1;
+  margin-left: 260px; /* espacio del sidebar */
+  padding: 30px;
+  background-color: #f5f6fa;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  font-family: 'Poppins', sans-serif;
+  box-sizing: border-box;
+}
+
+/* Cada sección principal (calculadora, calendario, etc.) */
+#main-content > div {
+  display: none;
+  flex: 1;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+  border: 1px solid #e0e0e0;
+  box-sizing: border-box;
+  width: 100%;
+  height: auto;
+  min-height: calc(100vh - 80px); /* que se adapte al espacio visible */
+  overflow-y: auto;
+  transition: all 0.3s ease;
+}
+
+/* Mostrar solo la sección activa */
+#main-content > div.active {
+  display: block;
+}
+
+/* Títulos */
+#main-content h1, 
+#main-content h2 {
+  text-align: center;
+  font-weight: 700;
+  margin-bottom: 25px;
+  color: #333;
+}
+
+/* Formularios y campos */
+#main-content form label,
+#main-content label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 6px;
+  color: #444;
+}
+
+#main-content input,
+#main-content select,
+#main-content textarea {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 16px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 16px;
+  outline: none;
+  transition: 0.3s;
+  background-color: #f9f9f9;
+}
+
+#main-content input:focus,
+#main-content select:focus,
+#main-content textarea:focus {
+  border-color: #56b68b;
+  box-shadow: 0 0 6px rgba(86, 182, 139, 0.4);
+}
+
+/* Botones */
+#main-content button {
+  background-color: #56b68b;
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  padding: 12px;
+  width: 100%;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+#main-content button:hover {
+  background-color: #4ba97f;
+}
+
+
+/* Contenedores de resultados o almacenamiento */
+#main-content .result-container,
+#main-content #resultadosGuardados,
+#main-content #tablaEtapas,
+#main-content .almacenamiento {
+  background-color: #f0fff7;
+  border: 1px solid #cdeedd;
+  padding: 20px;
+  border-radius: 12px;
+  margin-top: 20px;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+/* Tablas */
+#main-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+#main-content th, 
+#main-content td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+  font-size: 15px;
+}
+
+#main-content th {
+  background-color: #56b68b;
+  color: white;
+}
+
+/* Textareas */
+#main-content textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Scroll suave dentro de secciones */
+#main-content > div::-webkit-scrollbar {
+  width: 8px;
+}
+#main-content > div::-webkit-scrollbar-thumb {
+  background-color: rgba(86, 182, 139, 0.5);
+  border-radius: 4px;
+}
+
+
+
+
+
+/* === ESTILO DEL HISTORIAL (adaptado al diseño general) === */
+#historial {
+  display: none; /* se muestra con JS */
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  min-height: calc(100vh - 60px);
+  padding: 40px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+/* Título principal */
+#historial h1 {
+  background-color: #0D89B6;
+  color: white;
+  padding: 18px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+/* Tabla de historial */
+#historial table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  border: 2px solid rgba(0, 0, 0, 0.4);
+}
+
+#historial th, 
+#historial td {
+  padding: 12px;
+  text-align: center;
+  border: 1.5px solid #ccc;
+  font-size: 1rem;
+  color: #333;
+  word-break: break-word;
+}
+
+#historial th {
+  background-color: #0D89B6;
+  color: white;
+  font-weight: 600;
+}
+
+#historial td {
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+/* Botones dentro del historial */
+#historial button {
+  background: #0D89B6;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  font-size: 0.95em;
+}
+
+#historial button:hover {
+  background: #0b6f91;
+}
+
+/* Diseño adaptable */
+@media (max-width: 768px) {
+  #historial {
+    padding: 20px;
+  }
+  #historial table {
+    font-size: 0.9rem;
+  }
+}
 
 

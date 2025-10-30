@@ -900,16 +900,29 @@ async function guardarNotaDexie() {
 async function mostrarNotasDexie() {
   let contenedor = document.getElementById("notasGuardadas");
   if (!contenedor) return;
+
   const notas = await db.notas.reverse().toArray();
   contenedor.innerHTML = "<h3>Notas guardadas:</h3>";
-  if (notas.length === 0) contenedor.innerHTML += "<i>No hay notas guardadas.</i>";
+
+  if (notas.length === 0) {
+    contenedor.innerHTML += "<i>No hay notas guardadas.</i>";
+    return;
+  }
+
   notas.forEach(n => {
-    contenedor.innerHTML += `<div style="border:1px solid #999;padding:8px;margin:4px 0;">
-      <b>${n.fecha}</b>:<br>${n.texto}
-      <button onclick="borrarNotaDexie(${n.id})">Borrar</button>
-    </div>`;
+    contenedor.innerHTML += `
+      <div class="nota-card">
+        <div class="nota-texto">
+          <b>${n.fecha}</b><br>${n.texto}
+        </div>
+        <button class="btn-borrar" onclick="borrarNotaDexie(${n.id})">
+          <i class="bi bi-trash3-fill"></i>
+        </button>
+      </div>
+    `;
   });
 }
+
 
 async function borrarNotaDexie(id) {
   await db.notas.delete(id);
