@@ -426,44 +426,34 @@ document.addEventListener('DOMContentLoaded', function() {
         result = 'La opción es incorrecta.';
     }
 
-    // ===========================
-    // GENERAR TABLA
-    // ===========================
+     // ------------------------------
+    // Generar tabla de resultados actuales
+    // ------------------------------
     const filas = result.trim().split('\n');
-    let tablaHTML = `
-      <table border="1" style="border-collapse: collapse; width: 100%; margin-top: 10px;">
-        <thead>
-          <tr style="background-color: #e0e0e0;">
-            <th>Compuesto</th>
-            <th>Cantidad (g)</th>
-          </tr>
-        </thead>
-        <tbody>
-    `;
-    filas.forEach(linea => {
+    let tablaHTML = `<table border="1" style="border-collapse: collapse; width: 100%; margin-top: 10px;">
+      <thead><tr style="background-color: #e0e0e0;"><th>Compuesto</th><th>Cantidad (g)</th></tr></thead><tbody>`;
+    filas.forEach(linea=>{
       const regex = /([\d.]+)\s+gramos\s+de\s+(.+)\./i;
       const match = linea.match(regex);
-      if (match) {
-        const cantidad = match[1];
-        const compuesto = match[2];
-        tablaHTML += `<tr><td>${compuesto}</td><td style="text-align: right;">${cantidad}</td></tr>`;
+      if(match){
+        tablaHTML += `<tr><td>${match[2]}</td><td style="text-align:right;">${match[1]}</td></tr>`;
       }
     });
     tablaHTML += `</tbody></table>`;
     resultContainer.innerHTML = tablaHTML;
 
-    // ===========================
-    // BOTÓN GUARDAR RESULTADOS
-    // ===========================
-    if (!document.getElementById('guardarResultados')) {
+    // ------------------------------
+    // Botón Guardar
+    // ------------------------------
+    if(!document.getElementById('guardarResultados')){
       const btnGuardar = document.createElement('button');
       btnGuardar.id = 'guardarResultados';
       btnGuardar.textContent = 'Guardar resultados';
       btnGuardar.style.marginTop = '10px';
       resultContainer.parentNode.insertBefore(btnGuardar, resultContainer.nextSibling);
 
-      btnGuardar.addEventListener('click', function() {
-        if (!navigator.onLine) {
+      btnGuardar.addEventListener('click', function(){
+        if(!navigator.onLine){
           guardarEnDexie(tablaHTML);
         } else {
           guardarEnSupabase(tablaHTML);
@@ -472,66 +462,105 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  // ===========================
-  // FUNCIONES DE GUARDADO
-  // ===========================
-  function guardarEnDexie(tabla) {
+  // ------------------------------
+  // Funciones de guardado
+  // ------------------------------
+  function guardarEnDexie(tabla){
     const db = new Dexie("hidrosoftDB");
     db.version(1).stores({ resultados: "++id, texto, fecha" });
     db.resultados.add({ texto: tabla, fecha: new Date().toISOString() })
-      .then(() => alert('Resultados guardados en Dexie (offline).'))
-      .catch(err => alert('Error guardando en Dexie: ' + err));
+      .then(()=> alert('Resultados guardados en Dexie (offline).'))
+      .catch(err=> alert('Error guardando en Dexie: '+err));
   }
 
-async function guardarEnSupabase(tabla) {
-  try {
-    const { data, error } = await supabaseClient
-      .from('resultados')    // <- usa supabaseClient, no supabase
-      .insert([
-        { texto: tabla, fecha: new Date().toISOString() }
-      ]);
-    if (error) throw error;
-    alert('Resultados guardados en Supabase.');
-  } catch (err) {
-    alert('Error guardando en Supabase: ' + err.message);
+  async function guardarEnSupabase(tabla){
+    try{
+      const { data, error } = await supabaseClient
+        .from('resultados')
+        .insert([{ texto: tabla, fecha: new Date().toISOString() }]);
+      if(error) throw error;
+      alert('Resultados guardados en Supabase.');
+      mostrarResultadosSupabase(); // refresca tabla
+    } catch(err){
+      alert('Error guardando en Supabase: ' + err.message);
+    }
   }
-}
 
+  // ------------------------------
+  // Mostrar resultados guardados en forma de tabla con botón borrar
+  // ------------------------------
+  async function mostrarResultadosSupabase(){
+    try{
+      const { data, error } = await supabaseClient
+        .from('resultados')
+        .select('*')
+        .order('fecha', { ascending: false });
+      if(error) throw error;
+
+      const resultadosContainer = document.getElementById('resultadosContainer');
+      resultadosContainer.innerHTML = '';
+
+      if(data.length === 0){
+        resultadosContainer.innerHTML = '<p>No hay resultados guardados.</p>';
+        return;
+      }
+
+      // Construir tabla completa
+      let tabla = `<table border="1" style="border-collapse: collapse; width: 100%;">
+        <thead>
+          <tr style="background-color: #e0e0e0;">
+            <th>Fecha</th>
+            <th>Compuestos y cantidades</th>
+            <th>Acción</th>
+          </tr>
+        </thead>
+        <tbody>`;
+
+      data.forEach(item=>{
+        const fechaCorta = new Date(item.fecha);
+        const fechaStr = `${fechaCorta.getDate().toString().padStart(2,'0')}/${
+          (fechaCorta.getMonth()+1).toString().padStart(2,'0')
+        } ${fechaCorta.getHours().toString().padStart(2,'0')}:${fechaCorta.getMinutes().toString().padStart(2,'0')}`;
+
+        tabla += `<tr>
+          <td style="vertical-align: top;">${fechaStr}</td>
+          <td>${item.texto}</td>
+          <td style="text-align:center;">
+            <button data-id="${item.id}" class="btnBorrar">Borrar</button>
+          </td>
+        </tr>`;
+      });
+
+      tabla += `</tbody></table>`;
+      resultadosContainer.innerHTML = tabla;
+
+      // Agregar eventos para borrar
+      const botones = document.querySelectorAll('.btnBorrar');
+      botones.forEach(btn=>{
+        btn.addEventListener('click', async function(){
+          const id = btn.getAttribute('data-id');
+          try{
+            const { error } = await supabaseClient
+              .from('resultados')
+              .delete()
+              .eq('id', id);
+            if(error) throw error;
+            mostrarResultadosSupabase(); // refrescar tabla
+          } catch(err){
+            alert('Error al borrar registro: ' + err.message);
+          }
+        });
+      });
+
+    } catch(err){
+      alert('Error al obtener resultados: '+err.message);
+    }
+  }
+
+  // Ejecutar al cargar la página
+  mostrarResultadosSupabase();
 
 });
-async function mostrarResultadosSupabase() {
-  try {
-    // Traer todos los resultados de la tabla 'resultados', ordenados por fecha descendente
-    const { data, error } = await supabaseClient
-      .from('resultados')
-      .select('*')
-      .order('fecha', { ascending: false });
-
-    if (error) throw error;
-
-    // Mostrar en consola (puedes adaptarlo para mostrar en HTML)
-    console.log("Resultados guardados en Supabase:", data);
-
-    // Ejemplo de mostrar en un contenedor HTML
-    const resultadosContainer = document.getElementById('resultadosContainer');
-    resultadosContainer.innerHTML = ''; // limpiar contenido previo
-
-    data.forEach(item => {
-      const div = document.createElement('div');
-      div.style.border = '1px solid #ccc';
-      div.style.padding = '10px';
-      div.style.margin = '5px 0';
-      div.innerHTML = `
-        <strong>Fecha:</strong> ${new Date(item.fecha).toLocaleString()}<br>
-        ${item.texto}
-      `;
-      resultadosContainer.appendChild(div);
-    });
-
-  } catch (err) {
-    alert('Error al obtener resultados: ' + err.message);
-  }
-}
 
 
 
