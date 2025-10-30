@@ -290,6 +290,57 @@ function calcularEtapas() {
   });
 
   document.getElementById("tablaEtapas").style.display = "table";
+  function calcularEtapas() {
+  const fechaInput = document.getElementById('fechaSiembra').value;
+  if (!fechaInput) {
+    alert('Por favor selecciona una fecha de siembra.');
+    return;
+  }
+
+  const fechaSiembra = new Date(fechaInput);
+  if (isNaN(fechaSiembra.getTime())) {
+    alert('Por favor selecciona una fecha válida.');
+    return;
+  }
+
+  const planta = parseInt(document.getElementById('options').value, 10);
+  const etapasPlanta = etapas[planta];
+
+  if (!Array.isArray(etapasPlanta)) {
+    alert('No hay información de etapas para la planta seleccionada.');
+    document.getElementById("tablaEtapas").style.display = "none";
+    return;
+  }
+
+  const tablaBody = document.getElementById("tablaBody");
+  tablaBody.innerHTML = "";
+
+  let resultadoTexto = ''; // <-- Aquí se guarda el texto para Dexie
+
+  etapasPlanta.forEach(etapa => {
+    const fechaInicio = new Date(fechaSiembra);
+    fechaInicio.setDate(fechaInicio.getDate() + Number(etapa.inicio));
+
+    const fechaFin = new Date(fechaSiembra);
+    fechaFin.setDate(fechaFin.getDate() + Number(etapa.fin));
+
+    const fila = document.createElement('tr');
+    fila.innerHTML = `
+      <td>${etapa.nombre}</td>
+      <td>${fechaInicio.toLocaleDateString()}</td>
+      <td>${fechaFin.toLocaleDateString()}</td>
+    `;
+    tablaBody.appendChild(fila);
+
+    resultadoTexto += `${etapa.nombre}: ${fechaInicio.toLocaleDateString()} - ${fechaFin.toLocaleDateString()}\n`;
+  });
+
+  document.getElementById("tablaEtapas").style.display = "table";
+
+  // Guardar en Dexie
+  guardarResultadoDexie('etapas', resultadoTexto);
+}
+
 }
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -302,458 +353,214 @@ document.addEventListener('DOMContentLoaded', function() {
     const option = parseInt(document.getElementById('option').value);
     const litersInput = document.getElementById('liters').value.trim();
 
-    // Validación 1: Campo vacío
-    if (litersInput === '') {
-      alert('⚠️ Por favor ingrese un valor antes de continuar.');
-      return;
-    }
-
-    // Validación 2: Comas en lugar de puntos
-    if (litersInput.includes(',')) {
-      alert('⚠️ Use punto (.) en lugar de coma (,) para los decimales.');
-      return;
-    }
-
-    // Validación 3: Solo números positivos (enteros o decimales)
-    const regexNumero = /^[0-9]*\.?[0-9]+$/;
-    if (!regexNumero.test(litersInput)) {
-      alert('⚠️ Solo se permiten números positivos. No use letras ni símbolos.');
-      return;
-    }
-
+    // Validaciones
+    if (litersInput === '') { alert('⚠️ Por favor ingrese un valor.'); return; }
+    if (litersInput.includes(',')) { alert('⚠️ Use punto (.) en lugar de coma.'); return; }
+    if (!/^[0-9]*\.?[0-9]+$/.test(litersInput)) { alert('⚠️ Solo números positivos.'); return; }
     const liters = parseFloat(litersInput);
+    if (liters <= 0) { alert('⚠️ El valor debe ser mayor que cero.'); return; }
 
-    // Validación 4: No permitir valores negativos o cero
-    if (liters <= 0) {
-      alert('⚠️ El valor debe ser mayor que cero.');
-      return;
+    let result = '';
+
+    // ===========================
+    // CÁLCULOS DE NUTRIENTES
+    // ===========================
+    // Nitrato de calcio
+    let nitratoCalcio = 40.078 + (2 * 14.0067) + (6 * 15.9994);
+    let porcentajeNitratoCalcioo = (40.078 * 100 / nitratoCalcio);
+
+    // Nitrato de potasio
+    let nitratoPotasio = 39.0983 + 14.0067 + 3 * 15.9994;
+    let porcentajeNitratoPotasioo = (39.0983 / nitratoPotasio) * 100;
+
+    // Fosfato de monoamoniaco
+    let fosfatoMonoamoniaco = 14.0067 + 6 * 1.00784 + 30.973762 + 4 * 15.9994;
+    let porcentajeFosfatoMonoamoniaco2 = (30.973762 / fosfatoMonoamoniaco) * 100;
+
+    // Sulfato de magnesio
+    let sulfatoMagnesio = 24.305 + 32.065 + 4 * 15.9994 + 7 * 1.00784 * 2 + 7 * 15.9994;
+    let porcentajeSulfatoMagnesio = (24.305 / sulfatoMagnesio) * 100;
+    let porcentajeSulfatoMagnesioo = (32.065 / sulfatoMagnesio) * 100;
+
+    // Sulfato ferroso
+    let sulfatoFerroso = 55.845 + 32.065 + 4 * 15.9994;
+    let porcentajeSulfatoFerrosoo = (32.065 / sulfatoFerroso) * 100;
+
+    // Sulfato de cobre
+    let sulfatoCobre = 63.54 + 32.065 + 4 * 15.9994;
+    let porcentajeSulfatoCobre = (63.54 / sulfatoCobre) * 100;
+
+    // Sulfato de manganeso
+    let sulfatoManganeso = 54.938 + 32.065 + 4 * 15.9994;
+    let porcentajeSulfatoManganesoo = (54.938 / sulfatoManganeso) * 100;
+
+    // Sulfato de zinc
+    let sulfatoZinc = 65.38 + 32.065 + 4 * 15.9994;
+    let porcentajeSulfatoZinc = (32.065 / sulfatoZinc) * 100;
+
+    // Ácido bórico
+    let acidoBorico = 3 * 1.00784 + 10.81 + 3 * 15.9994;
+    let porcentajeAcidoborico = (10.81 / acidoBorico) * 100;
+
+    // ===========================
+    // SWITCH SEGÚN OPCIÓN
+    // ===========================
+    switch (option) {
+      case 1:
+        result += `Cantidad en gramos del compuesto: ${((140 / porcentajeNitratoCalcioo)/10 * liters).toFixed(2)} gramos de nitrato de calcio.\n`;
+        result += `Cantidad en gramos del compuesto: ${((150 / porcentajeNitratoPotasioo)/10 * liters).toFixed(2)} gramos de nitrato de potasio.\n`;
+        result += `Cantidad en gramos del compuesto: ${((50 / porcentajeFosfatoMonoamoniaco2)/10 * liters).toFixed(2)} gramos de fosfato de monoamoniaco.\n`;
+        result += `Cantidad en gramos del compuesto: ${((55 / porcentajeSulfatoMagnesio)/10 * liters).toFixed(2)} gramos de sulfato de magnesio.\n`;
+        result += `Cantidad en gramos del compuesto: ${((3 / porcentajeSulfatoFerrosoo)/10 * liters).toFixed(2)} gramos de sulfato ferroso.\n`;
+        result += `Cantidad en gramos del compuesto: ${((0.5 / porcentajeSulfatoCobre)/10 * liters).toFixed(2)} gramos de sulfato de cobre.\n`;
+        result += `Cantidad en gramos del compuesto: ${((0.8 / porcentajeSulfatoManganesoo)/10 * liters).toFixed(2)} gramos de sulfato de manganeso.\n`;
+        result += `Cantidad en gramos del compuesto: ${((0.4 / porcentajeSulfatoZinc)/10 * liters).toFixed(2)} gramos de sulfato de zinc.\n`;
+        result += `Cantidad en gramos del compuesto: ${((0.8 / porcentajeAcidoborico)/10 * liters).toFixed(2)} gramos de ácido bórico.\n`;
+        break;
+      case 2:
+        result += `Cantidad en gramos del compuesto: ${((130 / porcentajeNitratoCalcioo)/10 * liters).toFixed(2)} gramos de nitrato de calcio.\n`;
+        result += `Cantidad en gramos del compuesto: ${((120 / porcentajeNitratoPotasioo)/10 * liters).toFixed(2)} gramos de nitrato de potasio.\n`;
+        break;
+      case 3:
+        result += `Cantidad en gramos del compuesto: ${((110 / porcentajeNitratoCalcioo)/10 * liters).toFixed(2)} gramos de nitrato de calcio.\n`;
+        result += `Cantidad en gramos del compuesto: ${((100 / porcentajeNitratoPotasioo)/10 * liters).toFixed(2)} gramos de nitrato de potasio.\n`;
+        break;
+      case 4:
+        result += `Cantidad en gramos del compuesto: ${((150 / porcentajeFosfatoMonoamoniaco2)/10 * liters).toFixed(2)} gramos de fosfato de monoamoniaco.\n`;
+        result += `Cantidad en gramos del compuesto: ${((60 / porcentajeSulfatoMagnesio)/10 * liters).toFixed(2)} gramos de sulfato de magnesio.\n`;
+        break;
+      case 5:
+        result += `Cantidad en gramos del compuesto: ${((160 / porcentajeNitratoCalcioo)/10 * liters).toFixed(2)} gramos de nitrato de calcio.\n`;
+        break;
+      case 6:
+        result += `Cantidad en gramos del compuesto: ${((50 / porcentajeSulfatoFerrosoo)/10 * liters).toFixed(2)} gramos de sulfato ferroso.\n`;
+        result += `Cantidad en gramos del compuesto: ${((20 / porcentajeSulfatoCobre)/10 * liters).toFixed(2)} gramos de sulfato de cobre.\n`;
+        break;
+      case 7:
+        result += `Cantidad en gramos del compuesto: ${((30 / porcentajeSulfatoManganesoo)/10 * liters).toFixed(2)} gramos de sulfato de manganeso.\n`;
+        result += `Cantidad en gramos del compuesto: ${((15 / porcentajeSulfatoZinc)/10 * liters).toFixed(2)} gramos de sulfato de zinc.\n`;
+        break;
+      case 8:
+        result += `Cantidad en gramos del compuesto: ${((10 / porcentajeAcidoborico)/10 * liters).toFixed(2)} gramos de ácido bórico.\n`;
+        break;
+      case 9:
+        result += `Cantidad en gramos del compuesto: ${((25 / porcentajeSulfatoMagnesio)/10 * liters).toFixed(2)} gramos de sulfato de magnesio.\n`;
+        result += `Cantidad en gramos del compuesto: ${((5 / porcentajeSulfatoCobre)/10 * liters).toFixed(2)} gramos de sulfato de cobre.\n`;
+        break;
+      default:
+        result = 'La opción es incorrecta.';
     }
 
-        let result = '';
-              //Nitrato de calcio
-                let nitratoCalcio = 40.078 +(2 * 14.0067)  + (6 * 15.9994);
-                let porcentajeNitratoCalcio = ((2 * 14.0067 * 100)/ nitratoCalcio) ;
-                let porcentajeNitratoCalcioo = (40.078  * 100/ nitratoCalcio);
-              //Nitrato de potasio
-                let nitratoPotasio = 39.0983 + 14.0067 + 3 * 15.9994;
-                let porcentajeNitratoPotasio = (14.0067 / nitratoPotasio) * 100;
-                let porcentajeNitratoPotasioo = (39.0983 / nitratoPotasio) * 100;
-              //fosfato de monoamoniaco
-                let fosfatoMonoamoniaco = 14.0067 + 6 * 1.00784 + 30.973762 + 4 * 15.9994;
-                let porcentajeFosfatoMonoamoniaco = (14.0067 / fosfatoMonoamoniaco) * 100;
-                let porcentajeFosfatoMonoamoniaco2 = (30.973762 / fosfatoMonoamoniaco) * 100;
-              //Sulfato de magnesio
-                let sulfatoMagnesio = 24.305 + 32.065 + 4 * 15.9994 + 7 * 1.00784 * 2 + 7 * 15.9994;
-                let porcentajeSulfatoMagnesio = (24.305 / sulfatoMagnesio) * 100;
-                let porcentajeSulfatoMagnesioo = (32.065 / sulfatoMagnesio) * 100;
-
-              
-                //Sulfato ferroso
-                let sulfatoFerroso = 55.845 + 32.065 + (4 * 15.9994);
-                let porcentajeSulfatoFerroso = (55.845 / sulfatoFerroso) * 100;
-                let porcentajeSulfatoFerrosoo = (32.065 / sulfatoFerroso) * 100;
-
-                //Sulfato de cobre
-                let sulfatoCobre = 63.54 + 32.065 + 4 * 15.9994;
-                let porcentajeSulfatoCobre = (63.54 / sulfatoCobre) * 100;
-                let porcentajeSulfatoCobree = (32.065 / sulfatoCobre) * 100;
-                //Sulfato de manganeso
-                let sulfatoManganeso = 54.938 + 32.065 + 4 * 15.9994;
-                let porcentajeSulfatoManganeso = (32.065 / sulfatoManganeso) * 100;
-                let porcentajeSulfatoManganesoo = (54.938 / sulfatoManganeso) * 100;
-                //sulfato zinc
-                let sulfatoZinc =65.38+32.065+4*15.9994;
-                let porcentajeSulfatoZinc = (32.065/sulfatoZinc) * 100;
-                let porcentajeSulfatoZincc = (65.38/sulfatoZinc) * 100;
-                //acido borico
-                let acidoBorico = 3 * 1.00784 + 10.81 + 3 * 15.9994;
-                let porcentajeAcidoborico = (10.81 / acidoBorico) * 100;
-        switch (option) {
-            case 1:
-              //Nitrato de calcio
-                let gramosNitratoCalcio = ( ((140 /porcentajeNitratoCalcioo)/10)*liters);
-                result += `Cantidad en gramos del compuesto: ${gramosNitratoCalcio.toFixed(2)} gramos de nitrato de calcio.\n`;
-              //Nitrato de potasio
-                let gramosNitratoPotasio = (((150/porcentajeNitratoPotasioo)/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosNitratoPotasio.toFixed(2)} gramos de nitrato de potasio.\n`;
-               //fosfato de monoamoniaco
-                let gramosFosfatoMonoamoniaco = (((50 /porcentajeFosfatoMonoamoniaco2 )/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosFosfatoMonoamoniaco.toFixed(2)} gramos de fosfato de monoamoniaco.\n`;
-
-                //Sulfato de magnesio
-                let gramosSulfatoMagnesio = ( ((55 /porcentajeSulfatoMagnesio )/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosSulfatoMagnesio.toFixed(2)} gramos de sulfato de magnesio.\n`;
-                //Sulfato ferroso
-                let gramosSulfatoFerroso = ( ((3/porcentajeSulfatoFerrosoo)/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosSulfatoFerroso.toFixed(2)} gramos de sulfato ferroso.\n`;
-                //Sulfato de cobre
-
-                let gramosSulfatoCobre = (((0.5 /porcentajeSulfatoCobre)/ 10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosSulfatoCobre.toFixed(2)} gramos de sulfato de cobre.\n`;
-
-                //Sulfato de manganeso
-                let gramosSulfatoManganeso = (((0.8/porcentajeSulfatoManganesoo/10)*liters)); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosSulfatoManganeso.toFixed(2)} gramos de sulfato de manganeso.\n`;
-                
-                //Sulfato de zinc
-
-                let gramosSulfatoZinc = (((0.4/porcentajeSulfatoZinc)/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosSulfatoZinc.toFixed(2)} gramos de sulfato de zinc.\n`;
-                //acido borico
-
-                let gramosAcidoBorico = (((0.8 /porcentajeAcidoborico)/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosAcidoBorico.toFixed(2)} gramos de ácido bórico.\n`;                
-
-                break;
-            case 2:
-              //Nitrato de calcio
-                let gramosNitratoCalciof = ( ((120 /porcentajeNitratoCalcioo)/10)*liters);
-
-                result += `Cantidad en gramos del compuesto: ${gramosNitratoCalciof.toFixed(2)} gramos de nitrato de calcio.\n`;
-              //Nitrato de potasio
-                let gramosNitratoPotasiof = (((200/porcentajeNitratoPotasioo)/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosNitratoPotasiof.toFixed(2)} gramos de nitrato de potasio.\n`;
-               //fosfato de monoamoniaco
-                let gramosFosfatoMonoamoniacof = (((40/porcentajeFosfatoMonoamoniaco2 )/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosFosfatoMonoamoniacof.toFixed(2)} gramos de fosfato de monoamoniaco.\n`;
-
-                //Sulfato de magnesio
-                let gramosSulfatoMagnesiof = ( ((50 /porcentajeSulfatoMagnesio )/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosSulfatoMagnesiof.toFixed(2)} gramos de sulfato de magnesio.\n`;
-                //Sulfato ferroso
-                let gramosSulfatoFerrosof = ( ((2/porcentajeSulfatoFerrosoo)/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosSulfatoFerrosof.toFixed(2)} gramos de sulfato ferroso.\n`;
-                //Sulfato de cobre
-
-                let gramosSulfatoCobref = (((0.05 /porcentajeSulfatoCobre)/ 10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosSulfatoCobref.toFixed(2)} gramos de sulfato de cobre.\n`;
-
-                //Sulfato de manganeso
-                let gramosSulfatoManganesof = (((0.5/porcentajeSulfatoManganesoo/10)*liters)); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosSulfatoManganesof.toFixed(2)} gramos de sulfato de manganeso.\n`;
-                
-                //Sulfato de zinc
-
-                let gramosSulfatoZincf = (((0.05/porcentajeSulfatoZinc)/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosSulfatoZincf.toFixed(2)} gramos de sulfato de zinc.\n`;
-                //acido borico
-
-                let gramosAcidoBoricof = (((0.4 /porcentajeAcidoborico)/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosAcidoBoricof.toFixed(2)} gramos de ácido bórico.\n`;                
-
-              
-                break;
-            case 3:
-              //Nitrato de calcio
-                let gramosNitratoCalciol = ( ((150 /porcentajeNitratoCalcioo)/10)*liters);      
-                result += `Cantidad en gramos del compuesto: ${gramosNitratoCalciol.toFixed(2)} gramos de nitrato de calcio.\n`;
-              //Nitrato de potasio
-                let gramosNitratoPotasiol = (((200/porcentajeNitratoPotasioo)/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosNitratoPotasiol.toFixed(2)} gramos de nitrato de potasio.\n`;
-               //fosfato de monoamoniaco
-                let gramosFosfatoMonoamoniacol = (((40/porcentajeFosfatoMonoamoniaco2 )/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosFosfatoMonoamoniacol.toFixed(2)} gramos de fosfato de monoamoniaco.\n`;
-
-                //Sulfato de magnesio
-                let gramosSulfatoMagnesiol = ( ((50 /porcentajeSulfatoMagnesio )/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosSulfatoMagnesiol.toFixed(2)} gramos de sulfato de magnesio.\n`;
-                //Sulfato ferroso
-                let gramosSulfatoFerrosol = ( ((2.5/porcentajeSulfatoFerrosoo)/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosSulfatoFerrosol.toFixed(2)} gramos de sulfato ferroso.\n`;
-                //Sulfato de cobre
-
-                let gramosSulfatoCobrel = (((0.05 /porcentajeSulfatoCobre)/ 10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosSulfatoCobrel.toFixed(2)} gramos de sulfato de cobre.\n`;
-
-                //Sulfato de manganeso
-                let gramosSulfatoManganesol = (((0.5/porcentajeSulfatoManganesoo/10)*liters)); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosSulfatoManganesol.toFixed(2)} gramos de sulfato de manganeso.\n`;
-                
-                //Sulfato de zinc
-
-                let gramosSulfatoZincl = (((0.05/porcentajeSulfatoZinc)/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosSulfatoZincl.toFixed(2)} gramos de sulfato de zinc.\n`;
-                //acido borico
-
-                let gramosAcidoBoricol = (((0.3 /porcentajeAcidoborico)/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosAcidoBoricol.toFixed(2)} gramos de ácido bórico.\n`;                
-
-              
-                break; 
-            case 4:
-                            //Nitrato de calcio
-                let gramosNitratoCalciog = ( ((120 /porcentajeNitratoCalcioo)/10)*liters);
-                
-                result += `Cantidad en gramos del compuesto: ${gramosNitratoCalciog.toFixed(2)} gramos de nitrato de calcio.\n`;
-              //Nitrato de potasio
-                let gramosNitratoPotasiog = (((250/porcentajeNitratoPotasioo)/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosNitratoPotasiog.toFixed(2)} gramos de nitrato de potasio.\n`;
-               //fosfato de monoamoniaco
-                let gramosFosfatoMonoamoniacog = (((45/porcentajeFosfatoMonoamoniaco2 )/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosFosfatoMonoamoniacog.toFixed(2)} gramos de fosfato de monoamoniaco.\n`;
-
-                //Sulfato de magnesio
-                let gramosSulfatoMagnesiog = ( ((45/porcentajeSulfatoMagnesio )/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosSulfatoMagnesiog.toFixed(2)} gramos de sulfato de magnesio.\n`;
-                //Sulfato ferroso
-                let gramosSulfatoFerrosog = ( ((3.0/porcentajeSulfatoFerrosoo)/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosSulfatoFerrosog.toFixed(2)} gramos de sulfato ferroso.\n`;
-                //Sulfato de cobre
-
-                let gramosSulfatoCobreg = (((0.05 /porcentajeSulfatoCobre)/ 10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosSulfatoCobreg.toFixed(2)} gramos de sulfato de cobre.\n`;
-
-                //Sulfato de manganeso
-                let gramosSulfatoManganesog = (((0.6/porcentajeSulfatoManganesoo/10)*liters)); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosSulfatoManganesog.toFixed(2)} gramos de sulfato de manganeso.\n`;
-                
-                //Sulfato de zinc
-
-                let gramosSulfatoZincg = (((0.06/porcentajeSulfatoZinc)/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosSulfatoZincg.toFixed(2)} gramos de sulfato de zinc.\n`;
-                //acido borico
-
-                let gramosAcidoBoricog = (((0.4 /porcentajeAcidoborico)/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosAcidoBoricog.toFixed(2)} gramos de ácido bórico.\n`;                
-
-              
-                break;
-            case 5:
-              //Nitrato de calcio
-                let gramosNitratoCalciom = ( ((150 /porcentajeNitratoCalcioo)/10)*liters);
-                
-                result += `Cantidad en gramos del compuesto: ${gramosNitratoCalciom.toFixed(2)} gramos de nitrato de calcio.\n`;
-              //Nitrato de potasio
-                let gramosNitratoPotasiom = (((300/porcentajeNitratoPotasioo)/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosNitratoPotasiom.toFixed(2)} gramos de nitrato de potasio.\n`;
-               //fosfato de monoamoniaco
-                let gramosFosfatoMonoamoniacom = (((40/porcentajeFosfatoMonoamoniaco2 )/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosFosfatoMonoamoniacom.toFixed(2)} gramos de fosfato de monoamoniaco.\n`;
-
-                //Sulfato de magnesio
-                let gramosSulfatoMagnesiom = ( ((55 /porcentajeSulfatoMagnesio )/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosSulfatoMagnesiom.toFixed(2)} gramos de sulfato de magnesio.\n`;
-                //Sulfato ferroso
-                let gramosSulfatoFerrosom = ( ((3.0/porcentajeSulfatoFerrosoo)/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosSulfatoFerrosom.toFixed(2)} gramos de sulfato ferroso.\n`;
-                //Sulfato de cobre
-
-                let gramosSulfatoCobrem = (((0.07/porcentajeSulfatoCobre)/ 10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosSulfatoCobrem.toFixed(2)} gramos de sulfato de cobre.\n`;
-
-                //Sulfato de manganeso
-                let gramosSulfatoManganesom = (((0.7/porcentajeSulfatoManganesoo/10)*liters)); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosSulfatoManganesom.toFixed(2)} gramos de sulfato de manganeso.\n`;
-                
-                //Sulfato de zinc
-
-                let gramosSulfatoZincm = (((0.07/porcentajeSulfatoZinc)/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosSulfatoZincm.toFixed(2)} gramos de sulfato de zinc.\n`;
-                //acido borico
-
-                let gramosAcidoBoricom = (((0.5 /porcentajeAcidoborico)/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosAcidoBoricom.toFixed(2)} gramos de ácido bórico.\n`;                
-
-              
-                break;
-            case 6:
-                              //Nitrato de calcio
-                let gramosNitratoCalcioe = ( ((130 /porcentajeNitratoCalcioo)/10)*liters);
-                
-                result += `Cantidad en gramos del compuesto: ${gramosNitratoCalcioe.toFixed(2)} gramos de nitrato de calcio.\n`;
-              //Nitrato de potasio
-                let gramosNitratoPotasioe = (((220/porcentajeNitratoPotasioo)/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosNitratoPotasioe.toFixed(2)} gramos de nitrato de potasio.\n`;
-               //fosfato de monoamoniaco
-                let gramosFosfatoMonoamoniacoe= (((45/porcentajeFosfatoMonoamoniaco2 )/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosFosfatoMonoamoniacoe.toFixed(2)} gramos de fosfato de monoamoniaco.\n`;
-
-                //Sulfato de magnesio
-                let gramosSulfatoMagnesioe = ( ((50 /porcentajeSulfatoMagnesio )/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosSulfatoMagnesioe.toFixed(2)} gramos de sulfato de magnesio.\n`;
-                //Sulfato ferroso
-                let gramosSulfatoFerrosoe = ( ((2.5/porcentajeSulfatoFerrosoo)/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosSulfatoFerrosoe.toFixed(2)} gramos de sulfato ferroso.\n`;
-                //Sulfato de cobre
-
-                let gramosSulfatoCobree = (((0.05 /porcentajeSulfatoCobre)/ 10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosSulfatoCobree.toFixed(2)} gramos de sulfato de cobre.\n`;
-
-                //Sulfato de manganeso
-                let gramosSulfatoManganesoe= (((0.6/porcentajeSulfatoManganesoo/10)*liters)); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosSulfatoManganesoe.toFixed(2)} gramos de sulfato de manganeso.\n`;
-                
-                //Sulfato de zinc
-
-                let gramosSulfatoZince = (((0.06/porcentajeSulfatoZinc)/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosSulfatoZince.toFixed(2)} gramos de sulfato de zinc.\n`;
-                //acido borico
-
-                let gramosAcidoBoricoe = (((0.35/porcentajeAcidoborico)/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosAcidoBoricoe.toFixed(2)} gramos de ácido bórico.\n`;                
-
-              
-                break;
-            case 7:
-              //Nitrato de calcio
-                let gramosNitratoCalcior = ( ((120 /porcentajeNitratoCalcioo)/10)*liters);
-                
-                result += `Cantidad en gramos del compuesto: ${gramosNitratoCalcior.toFixed(2)} gramos de nitrato de calcio.\n`;
-              //Nitrato de potasio
-                let gramosNitratoPotasior = (((220/porcentajeNitratoPotasioo)/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosNitratoPotasior.toFixed(2)} gramos de nitrato de potasio.\n`;
-               //fosfato de monoamoniaco
-                let gramosFosfatoMonoamoniacor = (((35/porcentajeFosfatoMonoamoniaco2 )/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosFosfatoMonoamoniacor.toFixed(2)} gramos de fosfato de monoamoniaco.\n`;
-
-                //Sulfato de magnesio
-                let gramosSulfatoMagnesior = ( ((40 /porcentajeSulfatoMagnesio )/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosSulfatoMagnesior.toFixed(2)} gramos de sulfato de magnesio.\n`;
-                //Sulfato ferroso
-                let gramosSulfatoFerrosor = ( ((2.5/porcentajeSulfatoFerrosoo)/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosSulfatoFerrosor.toFixed(2)} gramos de sulfato ferroso.\n`;
-                //Sulfato de cobre
-
-                let gramosSulfatoCobrer = (((0.05 /porcentajeSulfatoCobre)/ 10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosSulfatoCobrer.toFixed(2)} gramos de sulfato de cobre.\n`;
-
-                //Sulfato de manganeso
-                let gramosSulfatoManganesor = (((0.5/porcentajeSulfatoManganesoo/10)*liters)); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosSulfatoManganesor.toFixed(2)} gramos de sulfato de manganeso.\n`;
-                
-                //Sulfato de zinc
-
-                let gramosSulfatoZincr = (((0.05/porcentajeSulfatoZinc)/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosSulfatoZincr.toFixed(2)} gramos de sulfato de zinc.\n`;
-                //acido borico
-
-                let gramosAcidoBoricor = (((0.3 /porcentajeAcidoborico)/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosAcidoBoricor.toFixed(2)} gramos de ácido bórico.\n`;                
-
-              
-                break;
-            case 8:
-              //Nitrato de calcio
-                let gramosNitratoCalciop = ( ((120 /porcentajeNitratoCalcioo)/10)*liters);
-                
-                result += `Cantidad en gramos del compuesto: ${gramosNitratoCalciop.toFixed(2)} gramos de nitrato de calcio.\n`;
-              //Nitrato de potasio
-                let gramosNitratoPotasiop = (((200/porcentajeNitratoPotasioo)/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosNitratoPotasiop.toFixed(2)} gramos de nitrato de potasio.\n`;
-               //fosfato de monoamoniaco
-                let gramosFosfatoMonoamoniacop = (((40/porcentajeFosfatoMonoamoniaco2 )/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosFosfatoMonoamoniacop.toFixed(2)} gramos de fosfato de monoamoniaco.\n`;
-
-                //Sulfato de magnesio
-                let gramosSulfatoMagnesiop = ( ((45 /porcentajeSulfatoMagnesio )/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosSulfatoMagnesiop.toFixed(2)} gramos de sulfato de magnesio.\n`;
-                //Sulfato ferroso
-                let gramosSulfatoFerrosop = ( ((2.5/porcentajeSulfatoFerrosoo)/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosSulfatoFerrosop.toFixed(2)} gramos de sulfato ferroso.\n`;
-                //Sulfato de cobre
-
-                let gramosSulfatoCobrep = (((0.05 /porcentajeSulfatoCobre)/ 10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosSulfatoCobrep.toFixed(2)} gramos de sulfato de cobre.\n`;
-
-                //Sulfato de manganeso
-                let gramosSulfatoManganesop = (((0.6/porcentajeSulfatoManganesoo/10)*liters)); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosSulfatoManganesop.toFixed(2)} gramos de sulfato de manganeso.\n`;
-                
-                //Sulfato de zinc
-
-                let gramosSulfatoZincp = (((0.06/porcentajeSulfatoZinc)/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosSulfatoZincp.toFixed(2)} gramos de sulfato de zinc.\n`;
-                //acido borico
-
-                let gramosAcidoBoricop = (((0.35 /porcentajeAcidoborico)/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosAcidoBoricop.toFixed(2)} gramos de ácido bórico.\n`;                         
-                break;
-            case 9:
-              //Nitrato de calcio
-                let gramosNitratoCalcioc = ( ((130 /porcentajeNitratoCalcioo)/10)*liters);
-                
-                result += `Cantidad en gramos del compuesto: ${gramosNitratoCalcioc.toFixed(2)} gramos de nitrato de calcio.\n`;
-              //Nitrato de potasio
-                let gramosNitratoPotasioc = (((220/porcentajeNitratoPotasioo)/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosNitratoPotasioc.toFixed(2)} gramos de nitrato de potasio.\n`;
-               //fosfato de monoamoniaco
-                let gramosFosfatoMonoamoniacoc = (((40/porcentajeFosfatoMonoamoniaco2 )/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosFosfatoMonoamoniacoc.toFixed(2)} gramos de fosfato de monoamoniaco.\n`;
-
-                //Sulfato de magnesio
-                let gramosSulfatoMagnesioc = ( ((45 /porcentajeSulfatoMagnesio )/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosSulfatoMagnesioc.toFixed(2)} gramos de sulfato de magnesio.\n`;
-                //Sulfato ferroso
-                let gramosSulfatoFerrosoc = ( ((2.5/porcentajeSulfatoFerrosoo)/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosSulfatoFerrosoc.toFixed(2)} gramos de sulfato ferroso.\n`;
-                //Sulfato de cobre
-
-                let gramosSulfatoCobrec = (((0.05 /porcentajeSulfatoCobre)/ 10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosSulfatoCobrec.toFixed(2)} gramos de sulfato de cobre.\n`;
-
-                //Sulfato de manganeso
-                let gramosSulfatoManganesoc = (((0.6/porcentajeSulfatoManganesoo/10)*liters)); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosSulfatoManganesoc.toFixed(2)} gramos de sulfato de manganeso.\n`;
-                
-                //Sulfato de zinc
-
-                let gramosSulfatoZincc = (((0.06/porcentajeSulfatoZinc)/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosSulfatoZincc.toFixed(2)} gramos de sulfato de zinc.\n`;
-                //acido borico
-
-                let gramosAcidoBoricoc = (((0.35/porcentajeAcidoborico)/10)*liters); // Fórmula ajustada para calcular gramos
-                result += `Cantidad en gramos del compuesto: ${gramosAcidoBoricoc.toFixed(2)} gramos de ácido bórico.\n`;                
-
-              
-                break;
-            default:
-                result = 'La opción es incorrecta.';
-                break;
-        }
-
-        
-
-        resultContainer.textContent = result;
-        // Convertir el texto 'result' en una tabla
-const filas = result.trim().split('\n'); // Divide las líneas de resultados
-let tablaHTML = `
-  <table border="1" style="border-collapse: collapse; width: 100%; margin-top: 10px;">
-    <thead>
-      <tr style="background-color: #e0e0e0;">
-        <th>Compuesto</th>
-        <th>Cantidad (g)</th>
-      </tr>
-    </thead>
-    <tbody>
-`;
-
-filas.forEach(linea => {
-
-  const regex = /([\d.]+)\s+gramos\s+de\s+(.+)\./i;
-  const match = linea.match(regex);
-  if (match) {
-    const cantidad = match[1];
-    const compuesto = match[2];
-    tablaHTML += `
-      <tr>
-        <td>${compuesto}</td>
-        <td style="text-align: right;">${cantidad}</td>
-      </tr>
+    // ===========================
+    // GENERAR TABLA
+    // ===========================
+    const filas = result.trim().split('\n');
+    let tablaHTML = `
+      <table border="1" style="border-collapse: collapse; width: 100%; margin-top: 10px;">
+        <thead>
+          <tr style="background-color: #e0e0e0;">
+            <th>Compuesto</th>
+            <th>Cantidad (g)</th>
+          </tr>
+        </thead>
+        <tbody>
     `;
-  }
-});
-
-tablaHTML += `
-    </tbody>
-  </table>
-`;
-
-// Muestra la tabla en el contenedor de resultados
-resultContainer.innerHTML = tablaHTML;
-
+    filas.forEach(linea => {
+      const regex = /([\d.]+)\s+gramos\s+de\s+(.+)\./i;
+      const match = linea.match(regex);
+      if (match) {
+        const cantidad = match[1];
+        const compuesto = match[2];
+        tablaHTML += `<tr><td>${compuesto}</td><td style="text-align: right;">${cantidad}</td></tr>`;
+      }
     });
-    
+    tablaHTML += `</tbody></table>`;
+    resultContainer.innerHTML = tablaHTML;
+
+    // ===========================
+    // BOTÓN GUARDAR RESULTADOS
+    // ===========================
+    if (!document.getElementById('guardarResultados')) {
+      const btnGuardar = document.createElement('button');
+      btnGuardar.id = 'guardarResultados';
+      btnGuardar.textContent = 'Guardar resultados';
+      btnGuardar.style.marginTop = '10px';
+      resultContainer.parentNode.insertBefore(btnGuardar, resultContainer.nextSibling);
+
+      btnGuardar.addEventListener('click', function() {
+        if (!navigator.onLine) {
+          guardarEnDexie(tablaHTML);
+        } else {
+          guardarEnSupabase(tablaHTML);
+        }
+      });
+    }
+  });
+
+  // ===========================
+  // FUNCIONES DE GUARDADO
+  // ===========================
+  function guardarEnDexie(tabla) {
+    const db = new Dexie("hidrosoftDB");
+    db.version(1).stores({ resultados: "++id, texto, fecha" });
+    db.resultados.add({ texto: tabla, fecha: new Date().toISOString() })
+      .then(() => alert('Resultados guardados en Dexie (offline).'))
+      .catch(err => alert('Error guardando en Dexie: ' + err));
+  }
+
+async function guardarEnSupabase(tabla) {
+  try {
+    const { data, error } = await supabaseClient
+      .from('resultados')    // <- usa supabaseClient, no supabase
+      .insert([
+        { texto: tabla, fecha: new Date().toISOString() }
+      ]);
+    if (error) throw error;
+    alert('Resultados guardados en Supabase.');
+  } catch (err) {
+    alert('Error guardando en Supabase: ' + err.message);
+  }
+}
+
+
 });
+async function mostrarResultadosSupabase() {
+  try {
+    // Traer todos los resultados de la tabla 'resultados', ordenados por fecha descendente
+    const { data, error } = await supabaseClient
+      .from('resultados')
+      .select('*')
+      .order('fecha', { ascending: false });
+
+    if (error) throw error;
+
+    // Mostrar en consola (puedes adaptarlo para mostrar en HTML)
+    console.log("Resultados guardados en Supabase:", data);
+
+    // Ejemplo de mostrar en un contenedor HTML
+    const resultadosContainer = document.getElementById('resultadosContainer');
+    resultadosContainer.innerHTML = ''; // limpiar contenido previo
+
+    data.forEach(item => {
+      const div = document.createElement('div');
+      div.style.border = '1px solid #ccc';
+      div.style.padding = '10px';
+      div.style.margin = '5px 0';
+      div.innerHTML = `
+        <strong>Fecha:</strong> ${new Date(item.fecha).toLocaleString()}<br>
+        ${item.texto}
+      `;
+      resultadosContainer.appendChild(div);
+    });
+
+  } catch (err) {
+    alert('Error al obtener resultados: ' + err.message);
+  }
+}
+
+// Llamas a esta función cuando quieras mostrar los resultados
+mostrarResultadosSupabase();
+
 
 
 
@@ -831,8 +638,8 @@ const rangosCultivos = {
   }
 };
 
-
-function verificarParametros() {
+// Función para verificar los parámetros
+document.getElementById('verificarParametrosBtn').addEventListener('click', function() {
   const planta = document.getElementById('planta').value;
   const etapa = document.getElementById('etapa').value;
 
@@ -845,6 +652,7 @@ function verificarParametros() {
   if (isNaN(ph) || isNaN(ce) || isNaN(temperatura) || isNaN(humedad)) {
     resultado.textContent = "Por favor, ingresa todos los valores correctamente.";
     resultado.style.color = "red";
+    document.getElementById('guardarResultadoParametros').style.display = 'none';
     return;
   }
 
@@ -853,9 +661,9 @@ function verificarParametros() {
   if (!rango) {
     resultado.textContent = "No hay datos para la planta o la etapa seleccionada.";
     resultado.style.color = "red";
+    document.getElementById('guardarResultadoParametros').style.display = 'none';
     return;
   }
-
 
   const dentroPH = ph >= rango.ph[0] && ph <= rango.ph[1];
   const dentroCE = ce >= rango.ce[0] && ce <= rango.ce[1];
@@ -866,7 +674,6 @@ function verificarParametros() {
     resultado.innerHTML = "Todos los parámetros están dentro del rango recomendado.";
     resultado.style.color = "green";
   } else {
-
     let mensaje = "Parámetros fuera del rango recomendado:<br>";
     if (!dentroPH) mensaje += `- pH: entre ${rango.ph[0]} y ${rango.ph[1]}<br>`;
     if (!dentroCE) mensaje += `- CE: entre ${rango.ce[0]} y ${rango.ce[1]} mS/cm<br>`;
@@ -875,62 +682,388 @@ function verificarParametros() {
     resultado.innerHTML = mensaje;
     resultado.style.color = "red";
   }
-}
 
-const db = new Dexie("hidrosoftDB");
-db.version(1).stores({
-  notas: "++id, texto, fecha",
-  resultados: "++id, texto, fecha"
+  // Mostrar el botón de guardar
+  document.getElementById('guardarResultadoParametros').style.display = 'inline-block';
 });
 
+// Función para mostrar todos los parámetros guardados (Dexie + Supabase)
+async function mostrarParametrosCompletos() {
+  const cont = document.getElementById("resultadosGuardadosParametros");
+  cont.innerHTML = "<h3>Parámetros guardados:</h3>";
+
+  // --- 1. Obtener datos de Dexie ---
+  const datosDexie = await db.parametros.reverse().toArray();
+
+  // --- 2. Obtener datos de Supabase ---
+  let datosSupabase = [];
+  if (navigator.onLine) {
+    try {
+      const { data, error } = await supabaseClient
+        .from('parametros')
+        .select('*')
+        .order('fecha', { ascending: false });
+      if (error) throw error;
+      datosSupabase = data || [];
+    } catch (err) {
+      console.warn("Error obteniendo datos de Supabase:", err.message);
+    }
+  }
+
+  if (datosDexie.length === 0 && datosSupabase.length === 0) {
+    cont.innerHTML += "<i>No hay parámetros guardados.</i>";
+    return;
+  }
+
+  // --- 3. Construir tabla HTML ---
+  let tablaHTML = `
+    <table border="1" style="border-collapse: collapse; width: 100%; margin-top: 10px;">
+      <thead>
+        <tr style="background-color: #e0e0e0;">
+          <th>Fuente</th>
+          <th>Fecha</th>
+          <th>Planta / Etapa</th>
+          <th>pH</th>
+          <th>CE</th>
+          <th>Temperatura (°C)</th>
+          <th>Humedad (%)</th>
+          <th>Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+  `;
+
+  // --- 3a. Agregar datos de Dexie ---
+  datosDexie.forEach(p => {
+    const matches = p.texto.match(/Planta: (.+), Etapa: (.+), pH: (.+), CE: (.+), Temp: (.+)°C, Hum: (.+)%/);
+    if (matches) {
+      tablaHTML += `
+        <tr>
+          <td>Local (Dexie)</td>
+          <td>${new Date(p.fecha).toLocaleString()}</td>
+          <td>${matches[1]} / ${matches[2]}</td>
+          <td>${matches[3]}</td>
+          <td>${matches[4]}</td>
+          <td>${matches[5]}</td>
+          <td>${matches[6]}</td>
+          <td><button onclick="borrarParametro('${p.id}')">Borrar</button></td>
+        </tr>
+      `;
+    }
+  });
+
+  // --- 3b. Agregar datos de Supabase ---
+  datosSupabase.forEach(p => {
+    const matches = p.texto.match(/Planta: (.+), Etapa: (.+), pH: (.+), CE: (.+), Temp: (.+)°C, Hum: (.+)%/);
+    if (matches) {
+      tablaHTML += `
+        <tr>
+          <td>Online (Supabase)</td>
+          <td>${new Date(p.fecha).toLocaleString()}</td>
+          <td>${matches[1]} / ${matches[2]}</td>
+          <td>${matches[3]}</td>
+          <td>${matches[4]}</td>
+          <td>${matches[5]}</td>
+          <td>${matches[6]}</td>
+          <td><i>No editable</i></td>
+        </tr>
+      `;
+    }
+  });
+
+  tablaHTML += `</tbody></table>`;
+  cont.innerHTML += tablaHTML;
+}
+
+// --- 4. Llamar la función al cargar la página ---
+document.addEventListener('DOMContentLoaded', mostrarParametrosCompletos);
+
+// --- 5. Modificar guardarResultadoParametros para actualizar la vista ---
+document.getElementById('guardarResultadoParametros').addEventListener('click', async function() {
+  const planta = document.getElementById('planta').value;
+  const etapa = document.getElementById('etapa').value;
+  const ph = document.getElementById('ph').value;
+  const ce = document.getElementById('ce').value;
+  const temperatura = document.getElementById('temperatura').value;
+  const humedad = document.getElementById('humedad').value;
+
+  const texto = `Planta: ${planta}, Etapa: ${etapa}, pH: ${ph}, CE: ${ce}, Temp: ${temperatura}°C, Hum: ${humedad}%`;
+
+  // Guardar en Dexie
+  await db.parametros.add({ texto, fecha: new Date().toISOString() });
+
+  // Guardar en Supabase
+  if (navigator.onLine) {
+    try {
+      const { error } = await supabaseClient.from('parametros').insert([{ texto, fecha: new Date().toISOString() }]);
+      if (error) throw error;
+    } catch (err) {
+      console.warn("No se pudo guardar en Supabase:", err.message);
+    }
+  }
+
+  showToast("Parámetros guardados", "success", 2000);
+  mostrarParametrosCompletos(); // Actualizar la tabla combinada
+});
+
+
+// ===============================
+// 📦 Base local con Dexie (Offline)
+// ===============================
+const db = new Dexie("hidrosoftDB");
+db.version(2).stores({
+  notas: "++id, texto, fecha",
+  resultados: "++id, texto, fecha",
+  calendario: "++id, evento, fecha, descripcion",
+  parametros: "++id, planta, etapa, ph, ce, temperatura, humedad, fecha"
+});
+
+
+// ===============================
+// 🧾 1. Funciones: Notas
+// ===============================
 async function guardarNotaDexie() {
   const nota = document.getElementById("nota").value;
   if (!nota.trim()) return;
+
   await db.notas.add({ texto: nota, fecha: new Date().toLocaleString() });
   document.getElementById("nota").value = "";
   mostrarNotasDexie();
-  // Intentar sincronizar inmediatamente si estamos online (silencioso)
-  if (navigator.onLine) {
-    try { await sincronizar({ notify: false }); } catch (e) { console.error('Auto-sync nota:', e); }
-  }
-  // registrar en historial de usuario
-  try { appendUserHistory({ time: new Date().toISOString(), type: 'nota_guardada', texto: nota }); } catch (e) { /* noop */ }
+  showToast("Nota guardada localmente", "success", 2000);
 }
 
 async function mostrarNotasDexie() {
-  let contenedor = document.getElementById("notasGuardadas");
-  if (!contenedor) return;
-
+  const cont = document.getElementById("notasGuardadas");
+  if (!cont) return;
   const notas = await db.notas.reverse().toArray();
-  contenedor.innerHTML = "<h3>Notas guardadas:</h3>";
 
+  cont.innerHTML = "<h3>Notas guardadas:</h3>";
   if (notas.length === 0) {
-    contenedor.innerHTML += "<i>No hay notas guardadas.</i>";
+    cont.innerHTML += "<i>No hay notas guardadas.</i>";
     return;
   }
 
   notas.forEach(n => {
-    contenedor.innerHTML += `
+    cont.innerHTML += `
       <div class="nota-card">
-        <div class="nota-texto">
-          <b>${n.fecha}</b><br>${n.texto}
-        </div>
-        <button class="btn-borrar" onclick="borrarNotaDexie(${n.id})">
-          <i class="bi bi-trash3-fill"></i>
-        </button>
-      </div>
-    `;
+        <b>${n.fecha}</b>: ${n.texto}
+        <button onclick="borrarNotaDexie(${n.id})">Borrar</button>
+      </div>`;
   });
 }
-
 
 async function borrarNotaDexie(id) {
   await db.notas.delete(id);
   mostrarNotasDexie();
-  try { appendUserHistory({ time: new Date().toISOString(), type: 'nota_borrada', id }); } catch (e) { /* noop */ }
+  showToast("Nota eliminada", "info", 1500);
 }
 
-document.addEventListener("DOMContentLoaded", mostrarNotasDexie);
+// ===============================
+// 📊 2. Funciones: Resultados
+// ===============================
+async function guardarResultadoDexie(resultadoTexto) {
+  await db.resultados.add({ texto: resultadoTexto, fecha: new Date().toLocaleString() });
+  mostrarResultadosDexie();
+  showToast("Resultado guardado localmente", "success", 2000);
+}
+
+async function mostrarResultadosDexie() {
+  const cont = document.getElementById("resultadosGuardados");
+  if (!cont) return;
+  const resultados = await db.resultados.reverse().toArray();
+
+  cont.innerHTML = "<h3>Resultados guardados:</h3>";
+  if (resultados.length === 0) {
+    cont.innerHTML += "<i>No hay resultados guardados.</i>";
+    return;
+  }
+
+  resultados.forEach(r => {
+    cont.innerHTML += `
+      <div class="resultado-card">
+        <b>${r.fecha}</b>: ${r.texto}
+        <button onclick="borrarResultadoDexie(${r.id})">Borrar</button>
+      </div>`;
+  });
+}
+
+async function borrarResultadoDexie(id) {
+  await db.resultados.delete(id);
+  mostrarResultadosDexie();
+  showToast("Resultado eliminado", "info", 1500);
+}
+
+// ===============================
+// 📅 3. Funciones: Calendario
+// ===============================
+async function guardarEventoCalendario() {
+  const evento = document.getElementById("evento").value;
+  const fecha = document.getElementById("fechaEvento").value;
+  const descripcion = document.getElementById("descripcionEvento").value;
+
+  if (!evento.trim() || !fecha.trim()) {
+    alert("Completa el nombre y la fecha del evento.");
+    return;
+  }
+
+  await db.calendario.add({ evento, fecha, descripcion });
+  mostrarEventosCalendario();
+  showToast("Evento guardado localmente", "success", 2000);
+}
+
+async function mostrarEventosCalendario() {
+  const cont = document.getElementById("eventosGuardados");
+  if (!cont) return;
+  const eventos = await db.calendario.reverse().toArray();
+
+  cont.innerHTML = "<h3>Eventos guardados:</h3>";
+  if (eventos.length === 0) {
+    cont.innerHTML += "<i>No hay eventos registrados.</i>";
+    return;
+  }
+
+  eventos.forEach(e => {
+    cont.innerHTML += `
+      <div class="evento-card">
+        <b>${e.fecha}</b> - ${e.evento}<br>
+        <small>${e.descripcion || ""}</small><br>
+        <button onclick="borrarEventoCalendario(${e.id})">Borrar</button>
+      </div>`;
+  });
+}
+
+async function borrarEventoCalendario(id) {
+  await db.calendario.delete(id);
+  mostrarEventosCalendario();
+  showToast("Evento eliminado", "info", 1500);
+}
+
+// ===============================
+// 🌿 4. Funciones: Parámetros
+// ===============================
+async function guardarParametros() {
+  const planta = document.getElementById("planta").value;
+  const etapa = document.getElementById("etapa").value;
+  const ph = document.getElementById("ph").value;
+  const ce = document.getElementById("ce").value;
+  const temperatura = document.getElementById("temperatura").value;
+  const humedad = document.getElementById("humedad").value;
+
+  if (!planta || !etapa || !ph || !ce || !temperatura || !humedad) {
+    alert("Completa todos los parámetros antes de guardar.");
+    return;
+  }
+
+  await db.parametros.add({
+    planta, etapa, ph, ce, temperatura, humedad,
+    fecha: new Date().toLocaleString()
+  });
+  mostrarParametrosGuardados();
+  showToast("Parámetros guardados localmente", "success", 2000);
+}
+
+async function mostrarParametrosGuardados() {
+  const cont = document.getElementById("parametrosGuardados");
+  if (!cont) return;
+  const datos = await db.parametros.reverse().toArray();
+
+  cont.innerHTML = "<h3>Parámetros guardados:</h3>";
+  if (datos.length === 0) {
+    cont.innerHTML += "<i>No hay parámetros guardados.</i>";
+    return;
+  }
+
+  datos.forEach(p => {
+    cont.innerHTML += `
+      <div class="parametro-card">
+        <b>${p.fecha}</b> - ${p.planta} (${p.etapa})<br>
+        pH: ${p.ph}, CE: ${p.ce}, Temp: ${p.temperatura}°C, Hum: ${p.humedad}%<br>
+        <button onclick="borrarParametro(${p.id})">Borrar</button>
+      </div>`;
+  });
+}
+
+async function borrarParametro(id) {
+  await db.parametros.delete(id);
+  mostrarParametrosGuardados();
+  showToast("Registro eliminado", "info", 1500);
+}
+
+// ===============================
+// 🔄 5. Sincronización Dexie ↔ Supabase
+// ===============================
+async function sincronizar() {
+  let errores = [];
+  showToast("Sincronizando datos...", "info", 2000);
+
+  // Notas
+  for (const n of await db.notas.toArray()) {
+    try {
+      const { error } = await supabaseClient.from('notas').insert([n]);
+      if (error) throw error;
+      await db.notas.delete(n.id);
+    } catch (e) {
+      errores.push(`Nota ${n.id}: ${e.message}`);
+    }
+  }
+
+  // Resultados
+  for (const r of await db.resultados.toArray()) {
+    try {
+      const { error } = await supabaseClient.from('resultados').insert([r]);
+      if (error) throw error;
+      await db.resultados.delete(r.id);
+    } catch (e) {
+      errores.push(`Resultado ${r.id}: ${e.message}`);
+    }
+  }
+
+  // Calendario
+  for (const c of await db.calendario.toArray()) {
+    try {
+      const { error } = await supabaseClient.from('calendario').insert([c]);
+      if (error) throw error;
+      await db.calendario.delete(c.id);
+    } catch (e) {
+      errores.push(`Evento ${c.id}: ${e.message}`);
+    }
+  }
+
+  // Parámetros
+  for (const p of await db.parametros.toArray()) {
+    try {
+      const { error } = await supabaseClient.from('parametros').insert([p]);
+      if (error) throw error;
+      await db.parametros.delete(p.id);
+    } catch (e) {
+      errores.push(`Parámetro ${p.id}: ${e.message}`);
+    }
+  }
+
+  if (errores.length === 0) {
+    showToast("Datos sincronizados correctamente", "success", 3000);
+  } else {
+    console.warn("Errores de sincronización:", errores);
+    showToast("Algunos datos no se pudieron subir", "warning", 3000);
+  }
+}
+
+// Auto-sincronizar al volver la conexión
+window.addEventListener("online", sincronizar);
+
+// ===============================
+// 🔔 Función Toast (mensajes visuales)
+// ===============================
+function showToast(msg, type = "info", time = 2000) {
+  const toast = document.createElement("div");
+  toast.className = `toast ${type}`;
+  toast.innerText = msg;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), time);
+}
+
+
+
 
 // Mostrar contador de ítems pendientes de sincronización
 // Nota: se eliminó el badge visual de "pendientes".

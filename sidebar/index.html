@@ -10,13 +10,9 @@
 </head>
 <body>
 
-  
-
   <!-- ENCABEZADO -->
   <header>
-
-      <button class="btnLogin-popup">Login</button>
-
+    <button class="btnLogin-popup">Login</button>
   </header>
 
   <!-- SIDEBAR -->
@@ -45,7 +41,7 @@
             <span>Home</span>
           </a>
         </li>
-      <li class="menu-items menu-items-static">
+        <li class="menu-items menu-items-static">
           <a href="#" class="menu-link">
             <i class="bi bi-clipboard-data"></i>
             <span>Dashboard</span>
@@ -73,7 +69,6 @@
           </a>
         </li>
 
-
         <li class="menu-items menu-items-static">
           <a href="#" class="menu-link">
             <i class="bi bi-clock-history"></i>
@@ -81,7 +76,7 @@
           </a>
         </li>
 
-         <li class="menu-items menu-items-static">
+        <li class="menu-items menu-items-static">
           <a href="#" class="menu-link">
             <i class="bi bi-journal-text"></i>
             <span>Notas</span>
@@ -121,77 +116,81 @@
     </div>
   </div>
 
-  <!-- CONTENIDO PRINCIPAL A LA DERECHA -->
+  <!-- CONTENIDO PRINCIPAL -->
   <div id="main-content">
-    <div id="home"><div class="home-container">
-  <div class="welcome-section">
-    <h1>Bienvenido a <span>Hidrosoft</span></h1>
-    <p>Tu asistente digital para el cultivo hidropónico inteligente. Gestiona tus nutrientes, etapas de crecimiento y parámetros ambientales en un solo lugar.</p>
-    <img src="ChatGPT Image 29 oct 2025, 10_03_53 p.m..png" alt="Sistema hidropónico" class="home-image">
-  </div>
 
-  <div class="quick-access">
-    <h2>Accesos rápidos</h2>
-    <div class="cards">
-      <div class="card" onclick="showContent('calculadora')">
-        <i class="bi bi-calculator"></i>
-        <h3>Calculadora de Nutrientes</h3>
-        <p>Calcula las dosis exactas para cada cultivo.</p>
-      </div>
+    <!-- HOME -->
+    <div id="home">
+      <div class="home-container">
+        <div class="welcome-section">
+          <h1>Bienvenido a <span>Hidrosoft</span></h1>
+          <p>Tu asistente digital para el cultivo hidropónico inteligente. Gestiona tus nutrientes, etapas de crecimiento y parámetros ambientales en un solo lugar.</p>
+          <img src="ChatGPT Image 29 oct 2025, 10_03_53 p.m..png" alt="Sistema hidropónico" class="home-image">
+        </div>
 
-      <div class="card" onclick="showContent('calendario')">
-        <i class="bi bi-calendar-event"></i>
-        <h3>Calendario de Cultivo</h3>
-        <p>Organiza tus siembras y cosechas fácilmente.</p>
-      </div>
-
-      <div class="card" onclick="showContent('parametros')">
-        <i class="bi bi-bar-chart-line"></i>
-        <h3>Verificación de Parámetros</h3>
-        <p>Controla pH, CE y condiciones del ambiente.</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="tip-section">
-    <h2>💧 Consejo del día</h2>
-<p id="consejo-texto">"Recuerda revisar la conductividad eléctrica cada tres días para evitar acumulación de sales."</p>
-<button id="nuevoConsejoBtn">Nuevo consejo</button>
-</div>
-</div>
-</div>
-    <div id="dashboard" style="display:none; width:80%; max-width:500px; padding:20px; border:1px solid #ccc; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.1);">Contenido del Dashboard</div>
-    <div id="calculadora">      <div class="section-container">
-        <div class="form-container">
-          <div class="container">
-                  <h1>Calculadora de Nutrientes</h1>
-            <form id="nutrientForm">
-              <label for="option">Selecciona un compuesto:</label>
-              <select id="option">
-                <option value="1">TOMATE</option>
-                <option value="2">FRESAS</option>
-                <option value="3">LECHUGA</option>
-                <option value="4">GUATILA</option>
-                <option value="5">MORA</option>
-                <option value="6">ESPINACAS</option>
-                <option value="7">ROMERO</option>
-                <option value="8">PEREJIL</option>
-                <option value="9">CILANTRO</option>
-              </select>
-              <label for="liters">Litros:</label>
-              <input type="number" id="liters" step="any" required />
-              <button type="submit">Calcular</button>
-            </form>
-
-            <div id="result" class="result-container"></div>
-            <button id="guardarResultadoBtn" style="display:none;" onclick="guardarResultadoDexie()">Guardar este resultado</button>
-            <div id="resultadosGuardados"></div>
+        <div class="quick-access">
+          <h2>Accesos rápidos</h2>
+          <div class="cards">
+            <div class="card" onclick="showContent('calculadora')">
+              <i class="bi bi-calculator"></i>
+              <h3>Calculadora de Nutrientes</h3>
+              <p>Calcula las dosis exactas para cada cultivo.</p>
+            </div>
+            <div class="card" onclick="showContent('calendario')">
+              <i class="bi bi-calendar-event"></i>
+              <h3>Calendario de Cultivo</h3>
+              <p>Organiza tus siembras y cosechas fácilmente.</p>
+            </div>
+            <div class="card" onclick="showContent('parametros')">
+              <i class="bi bi-bar-chart-line"></i>
+              <h3>Verificación de Parámetros</h3>
+              <p>Controla pH, CE y condiciones del ambiente.</p>
+            </div>
           </div>
         </div>
 
+        <div class="tip-section">
+          <h2>💧 Consejo del día</h2>
+          <p id="consejo-texto">"Recuerda revisar la conductividad eléctrica cada tres días para evitar acumulación de sales."</p>
+          <button id="nuevoConsejoBtn">Nuevo consejo</button>
+        </div>
+      </div>
+    </div>
 
-      </div></div>
-    <div id="calendario"><div class="container">
+    <!-- DASHBOARD -->
+    <div id="dashboard" style="display:none;">Contenido del Dashboard</div>
+
+    <!-- CALCULADORA -->
+    <div id="calculadora" style="display:none;">
+      <div class="container">
+        <h1>Calculadora de Nutrientes</h1>
+        <form id="nutrientForm">
+          <label for="option">Selecciona un compuesto:</label>
+          <select id="option">
+            <option value="1">TOMATE</option>
+            <option value="2">FRESAS</option>
+            <option value="3">LECHUGA</option>
+            <option value="4">GUATILA</option>
+            <option value="5">MORA</option>
+            <option value="6">ESPINACAS</option>
+            <option value="7">ROMERO</option>
+            <option value="8">PEREJIL</option>
+            <option value="9">CILANTRO</option>
+          </select>
+          <label for="liters">Litros:</label>
+          <input type="number" id="liters" step="any" required />
+          <button type="submit">Calcular</button>
+        </form>
+        <div id="result" class="result-container"></div>
+        <button id="guardarResultadoCalc" style="display:none;" onclick="guardarResultadoCalc()">Guardar este resultado</button>
+        <div id="resultadosGuardadosCalc"></div>
+        <div id="resultadosContainer"></div>
+      </div>
+    </div>
+
+    <!-- CALENDARIO -->
+    <div id="calendario" style="display:none;">
+      <div class="container">
         <h1>Calendario de Etapas del Cultivo</h1>
         <label for="options">Selecciona una planta:</label>
         <select id="options">
@@ -212,60 +211,77 @@
         <br><br>
         <table id="tablaEtapas" border="1" style="display:none;">
           <thead>
-            <tr>
-              <th>Etapa</th>
-              <th>Fecha inicio</th>
-              <th>Fecha fin</th>
-            </tr>
+            <tr><th>Etapa</th><th>Fecha inicio</th><th>Fecha fin</th></tr>
           </thead>
           <tbody id="tablaBody"></tbody>
         </table>
-      </div></div>
-    <div id="parametros"><div class="container-flex">
-        <div class="form-container">
-          <div class="container">
-            <h1>pH, Conductividad Eléctrica y Condiciones de Cultivo</h1>
-            <h2>Verificación de Parámetros por Etapa</h2>
-            <label for="planta">Selecciona una planta:</label>
-            <select id="planta">
-              <option value="fresa">Fresa</option>
-              <option value="guatila">Guatila</option>
-              <option value="mora">Mora</option>
-              <option value="lechuga">Lechuga</option>
-              <option value="espinaca">Espinaca</option>
-              <option value="romero">Romero</option>
-              <option value="perejil">Perejil</option>
-              <option value="cilantro">Cilantro</option>
-              <option value="tomate">Tomate</option>
-            </select>
-            <label for="etapa">Selecciona la etapa:</label>
-            <select id="etapa">
-              <option value="germinacion">Germinación</option>
-              <option value="plantula">Plántula</option>
-              <option value="vegetativo">Desarrollo vegetativo</option>
-              <option value="floracion">Floración</option>
-              <option value="fructificacion">Fructificación</option>
-              <option value="cosecha">Cosecha</option>
-            </select>
-            <br><br>
-            <label>pH: <input type="number" id="ph" step="0.1"></label><br>
-            <label>CE: <input type="number" id="ce" step="0.1"></label><br>
-            <label>Temperatura (°C): <input type="number" id="temperatura"></label><br>
-            <label>Humedad (%): <input type="number" id="humedad"></label><br><br>
-            <button onclick="verificarParametros()">Verificar</button>
-            <p id="resultado"></p>
-          </div>
-        </div>
-      </div></div>
-        <div id="formula" style="display:none; width:80%; max-width:500px; padding:20px; border:1px solid #ccc; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.1);">Contenido de formula</div>
-    <div id="historial">Contenido del Historial</div>
-    <div id="notas"><div class="container" id="notasOfflineContainer">
+        <button id="guardarResultadoCalendario" style="display:none;" onclick="guardarResultadoCalendario()">Guardar este resultado</button>
+        <div id="resultadosGuardadosCalendario"></div>
+      </div>
+    </div>
+
+<!-- PARÁMETROS -->
+<div id="parametros" style="display:none;">
+  <div class="container">
+    <h1>pH, Conductividad Eléctrica y Condiciones de Cultivo</h1>
+    <h2>Verificación de Parámetros por Etapa</h2>
+
+    <label for="planta">Selecciona una planta:</label>
+    <select id="planta">
+      <option value="fresa">Fresa</option>
+      <option value="guatila">Guatila</option>
+      <option value="mora">Mora</option>
+      <option value="lechuga">Lechuga</option>
+      <option value="espinaca">Espinaca</option>
+      <option value="romero">Romero</option>
+      <option value="perejil">Perejil</option>
+      <option value="cilantro">Cilantro</option>
+      <option value="tomate">Tomate</option>
+    </select>
+
+    <label for="etapa">Selecciona la etapa:</label>
+    <select id="etapa">
+      <option value="germinacion">Germinación</option>
+      <option value="plantula">Plántula</option>
+      <option value="vegetativo">Desarrollo vegetativo</option>
+      <option value="floracion">Floración</option>
+      <option value="fructificacion">Fructificación</option>
+      <option value="cosecha">Cosecha</option>
+    </select>
+
+    <br><br>
+    <label>pH: <input type="number" id="ph" step="0.1"></label><br>
+    <label>CE: <input type="number" id="ce" step="0.1"></label><br>
+    <label>Temperatura (°C): <input type="number" id="temperatura"></label><br>
+    <label>Humedad (%): <input type="number" id="humedad"></label><br><br>
+
+    <button id="verificarParametrosBtn">Verificar</button>
+    <p id="resultado"></p>
+
+    <button id="guardarResultadoParametros" style="display:none;">Guardar este resultado</button>
+    <div id="resultadosGuardadosParametros"></div>
+  </div>
+</div>
+
+    <!-- HISTORIAL -->
+    <div id="historial" style="display:none;">
+      <div class="container">
+        <h1>Historial de Resultados Guardados</h1>
+        <div id="historialResultados"></div>
+        <button onclick="cargarHistorial()">Actualizar historial</button>
+      </div>
+    </div>
+
+    <!-- NOTAS -->
+    <div id="notas" style="display:none;">
+      <div class="container" id="notasOfflineContainer">
         <h2>Notas de mi cultivo (Offline)</h2>
         <textarea id="nota" placeholder="Escribe aquí tu nota" rows="4" cols="50"></textarea>
         <br>
         <button onclick="guardarNotaDexie()">Guardar nota</button>
         <div id="notasGuardadas"></div>
-      </div></div>
+      </div>
+    </div>
   </div>
 
   <!-- LOGIN Y REGISTRO -->
