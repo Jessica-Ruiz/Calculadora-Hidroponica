@@ -88,7 +88,7 @@
     <div class="footer">
       <ul class="menu">
         <li class="menu-items menu-items-static">
-          <a href="#" class="menu-link">
+          <a href="#" class="menu-link" onclick="showContent('notificaciones')">
             <i class="bi bi-bell-fill"></i>
             <span>Notificaciones</span>
           </a>
@@ -158,7 +158,63 @@
     </div>
 
     <!-- DASHBOARD -->
-    <div id="dashboard" style="display:none;">Contenido del Dashboard</div>
+    <div id="dashboard" style="display:none;">
+      <h1>Panel de Control</h1>
+      
+      <div class="dashboard">
+        <!-- Resumen de Actividad -->
+        <div class="dashboard-card activity-summary">
+          <div class="dashboard-card-header">
+            <i class="bi bi-activity"></i>
+            <h3>Actividad del Sistema</h3>
+          </div>
+          <div class="dashboard-card-content">
+            <div class="stat-grid">
+              <!-- Se llenará dinámicamente -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Estadísticas de Cálculos -->
+        <div class="dashboard-card calculation-stats">
+          <div class="dashboard-card-header">
+            <i class="bi bi-calculator"></i>
+            <h3>Estadísticas</h3>
+          </div>
+          <div class="dashboard-card-content">
+            <div class="stat-grid">
+              <!-- Se llenará dinámicamente -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Estado del Sistema -->
+        <div class="dashboard-card system-status">
+          <div class="dashboard-card-header">
+            <i class="bi bi-wifi"></i>
+            <h3>Estado del Sistema</h3>
+          </div>
+          <div class="dashboard-card-content">
+            <div class="status-grid">
+              <!-- Se llenará dinámicamente -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Cultivos Activos -->
+        <div class="dashboard-card active-crops">
+          <div class="dashboard-card-header">
+            <i class="bi bi-flower1"></i>
+            <h3>Cultivos Activos</h3>
+          </div>
+          <div class="dashboard-card-content">
+            <ul class="crop-list">
+              <!-- Se llenará dinámicamente -->
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- CALCULADORA -->
     <div id="calculadora" style="display:none;">
@@ -282,6 +338,14 @@
         <div id="notasGuardadas"></div>
       </div>
     </div>
+
+    <!-- NOTIFICACIONES -->
+    <div id="notificaciones" style="display:none;">
+      <div class="container">
+        <h1>Centro de Notificaciones</h1>
+        <div id="notificacionesList"></div>
+      </div>
+    </div>
   </div>
 
   <!-- LOGIN Y REGISTRO -->
@@ -341,6 +405,22 @@
         <button type="submit" class="btn">Registrar</button>
         <div class="olvidar">
           <p>¿Ya tienes una cuenta? <a href="#" class="login-link">Inicia sesión</a></p>
+        </div>
+      </form>
+    </div>
+
+    <!-- Recuperar Contraseña -->
+    <div class="form-box forgot-password" style="display:none;">
+      <h2>Recuperar Contraseña</h2>
+      <form>
+        <div class="input-box">
+          <span class="icon"><ion-icon name="mail-outline"></ion-icon></span>
+          <input type="email" name="email" required>
+          <label>Email</label>
+        </div>
+        <button type="submit" class="btn">Enviar enlace de recuperación</button>
+        <div class="olvidar">
+          <p>¿Recordaste tu contraseña? <a href="#" class="back-to-login">Volver a iniciar sesión</a></p>
         </div>
       </form>
     </div>

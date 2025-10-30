@@ -17,13 +17,63 @@ const loginLink = document.querySelector(".login-link");
 const registerLink = document.querySelector(".register-link");
 const btnPopup = document.querySelector(".btnLogin-popup");
 const iconClose = document.querySelector(".icon-close");
+const forgotPasswordLink = document.querySelector(".recordar-contraseña a");
+const backToLoginLink = document.querySelector(".back-to-login");
 
 // Mostrar overlay al presionar botón login
 btnPopup.addEventListener("click", () => { document.getElementById("overlay-login").style.display="flex"; });
 
-// Cambiar entre login y registro
-registerLink.addEventListener("click", e=>{ e.preventDefault(); wrapper.classList.add("active"); });
-loginLink.addEventListener("click", e=>{ e.preventDefault(); wrapper.classList.remove("active"); });
+// Cambiar entre formularios
+registerLink.addEventListener("click", e=>{ 
+  e.preventDefault(); 
+  wrapper.classList.add("active");
+  document.querySelector(".form-box.forgot-password").style.display = "none";
+  document.querySelector(".form-box.register").style.display = "block";
+});
+
+loginLink.addEventListener("click", e=>{ 
+  e.preventDefault(); 
+  wrapper.classList.remove("active");
+  document.querySelector(".form-box.forgot-password").style.display = "none";
+  document.querySelector(".form-box.login").style.display = "block";
+});
+
+// Manejo de recuperación de contraseña
+forgotPasswordLink.addEventListener("click", e => {
+  e.preventDefault();
+  document.querySelector(".form-box.login").style.display = "none";
+  document.querySelector(".form-box.register").style.display = "none";
+  document.querySelector(".form-box.forgot-password").style.display = "block";
+});
+
+backToLoginLink.addEventListener("click", e => {
+  e.preventDefault();
+  document.querySelector(".form-box.forgot-password").style.display = "none";
+  document.querySelector(".form-box.login").style.display = "block";
+});
+
+// Formulario de recuperación de contraseña
+document.querySelector(".form-box.forgot-password form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const email = e.target.email.value;
+  
+  try {
+    const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+      redirectTo: window.location.origin + '/reset-password'
+    });
+    
+    if (error) {
+      showToast("Error: " + error.message, "error");
+    } else {
+      showToast("Se ha enviado un enlace de recuperación a tu email", "success");
+      // Volver al formulario de login
+      document.querySelector(".form-box.forgot-password").style.display = "none";
+      document.querySelector(".form-box.login").style.display = "block";
+    }
+  } catch (err) {
+    showToast("Error al enviar el email de recuperación", "error");
+  }
+});
 
 // Cerrar overlay
 iconClose.addEventListener("click", ()=>{ document.getElementById("overlay-login").style.display="none"; });
@@ -1002,17 +1052,49 @@ async function renderHistorialSection() {
   const histEl = document.getElementById('historial');
   if (!histEl) return;
   // cabecera
-  let html = `<div class="historial-title">Historial completo</div>`;
+  let html = `<div class="historial-title">Historial de Actividades</div>`;
   // Actividad del usuario
   try {
     const raw = localStorage.getItem('appUserHistory') || '[]';
     const arr = JSON.parse(raw).slice().reverse();
-    html += `<div class="historial-subtitle"><strong>Actividad</strong></div>`;
-    if (arr.length === 0) html += `<div class="historial-empty">No hay actividad registrada.</div>`;
     html += `<div class="historial-list">`;
-    arr.forEach(a => {
-      html += `<div class="historial-item"><div class="time">${new Date(a.time).toLocaleString()}</div><div class="kind">${escapeHtml(a.type)}</div><div class="payload">${escapeHtml(JSON.stringify(a, null, 2))}</div></div>`;
-    });
+    if (arr.length === 0) {
+      html += `<div class="historial-empty">No hay actividad registrada.</div>`;
+    } else {
+      arr.forEach(a => {
+        const fecha = new Date(a.time);
+        const hora = fecha.toLocaleTimeString('es-ES', { 
+          hour: '2-digit', 
+          minute: '2-digit'
+        });
+        
+        // Simplificar el tipo de actividad para mostrar
+        let actividad = a.type;
+        switch(a.type) {
+          case 'resultado_guardado':
+            actividad = 'Guardó un resultado de cálculo';
+            break;
+          case 'resultado_borrado':
+            actividad = 'Borró un resultado';
+            break;
+          case 'notif_success':
+            actividad = 'Operación exitosa';
+            break;
+          case 'notif_error':
+            actividad = 'Error en operación';
+            break;
+          case 'sincronizacion':
+            actividad = a.ok ? 'Sincronización exitosa' : 'Error de sincronización';
+            break;
+          // Puedes agregar más casos según las actividades que manejes
+        }
+        
+        html += `<div class="historial-item">
+          <div class="time">${hora}</div>
+          <div class="activity">${actividad}</div>
+        </div>`;
+      });
+    }
     html += `</div>`;
   } catch (e) { html += `<div class="historial-empty">Error cargando actividad</div>`; }
 
@@ -1028,19 +1110,6 @@ async function renderHistorialSection() {
     });
     html += `</div>`;
   } catch (e) { html += `<div class="historial-empty">Error cargando sincronizaciones</div>`; }
-
-  // Notificaciones
-  try {
-    const raw3 = localStorage.getItem('appNotificationHistory') || '[]';
-    const arr3 = JSON.parse(raw3).slice().reverse();
-    html += `<div style="margin-top:12px"><strong>Notificaciones</strong></div>`;
-    if (arr3.length === 0) html += `<div class="historial-empty">No hay notificaciones.</div>`;
-    html += `<div class="historial-list">`;
-    arr3.forEach(n => {
-      html += `<div class="historial-item"><div class="time">${new Date(n.time).toLocaleString()}</div><div class="kind">${n.type}</div><div class="payload">${escapeHtml(n.message)}</div></div>`;
-    });
-    html += `</div>`;
-  } catch (e) { html += `<div class="historial-empty">Error cargando notificaciones</div>`; }
 
   histEl.innerHTML = html;
 }
@@ -1069,10 +1138,6 @@ function createHistoryPanel() {
     <div class="history-section" id="hist-sync">
       <h4>Historial de sincronizaciones</h4>
       <div id="hist-sync-list">Cargando...</div>
-    </div>
-    <div class="history-section" id="hist-notifs">
-      <h4>Notificaciones</h4>
-      <div id="hist-notifs-list">Cargando...</div>
     </div>
   `;
 
@@ -1105,14 +1170,6 @@ async function renderHistoryPanel() {
     if (arr.length === 0) syncList.innerHTML = '<i>No hay historial de sincronizaciones.</i>';
     else syncList.innerHTML = arr.map(s => `<div class="history-item"><b>${s.ok? 'OK':'ERROR'}</b> <div>${new Date(s.time).toLocaleString()}</div><div>Items: ${s.transferred||0}</div>${s.errors?`<div style="margin-top:6px;color:#fca5a5">${escapeHtml(JSON.stringify(s.errors))}</div>`:''}</div>`).join('');
   } catch (e) { syncList.innerHTML = '<i>Error cargando historial</i>'; }
-
-  // cargar historial de notificaciones
-  try {
-    const raw2 = localStorage.getItem('appNotificationHistory') || '[]';
-    const arr2 = JSON.parse(raw2).slice().reverse();
-    if (arr2.length === 0) notifsList.innerHTML = '<i>No hay notificaciones.</i>';
-    else notifsList.innerHTML = arr2.map(n => `<div class="history-item"><div>${new Date(n.time).toLocaleString()}</div><div style="margin-top:6px">${escapeHtml(n.message)}</div></div>`).join('');
-  } catch (e) { notifsList.innerHTML = '<i>Error cargando notificaciones</i>'; }
 }
 
 function renderHistoryPanelIfOpen() {
@@ -1346,12 +1403,83 @@ function mostrarEstadoConexion() {
 
 window.addEventListener('online', mostrarEstadoConexion);
 window.addEventListener('offline', mostrarEstadoConexion);
+// Función para renderizar las notificaciones
+function renderNotificacionesSection() {
+  const notifEl = document.getElementById('notificacionesList');
+  if (!notifEl) return;
+
+  try {
+    const raw = localStorage.getItem('appNotificationHistory') || '[]';
+    const notificaciones = JSON.parse(raw).slice().reverse();
+    
+    let html = `<div class="notificaciones-list">`;
+    
+    if (notificaciones.length === 0) {
+      html += `<div class="notificaciones-empty">No hay notificaciones</div>`;
+    } else {
+      notificaciones.forEach(n => {
+        const fecha = new Date(n.time);
+        const hora = fecha.toLocaleTimeString('es-ES', { 
+          hour: '2-digit', 
+          minute: '2-digit'
+        });
+        
+        let iconClass = 'bi-info-circle';
+        let typeClass = 'info';
+        
+        switch(n.type) {
+          case 'success':
+            iconClass = 'bi-check-circle';
+            typeClass = 'success';
+            break;
+          case 'error':
+            iconClass = 'bi-exclamation-circle';
+            typeClass = 'error';
+            break;
+          case 'offline':
+            iconClass = 'bi-wifi-off';
+            typeClass = 'offline';
+            break;
+        }
+        
+        html += `
+          <div class="notificacion-item ${typeClass}">
+            <i class="bi ${iconClass}"></i>
+            <div class="notificacion-content">
+              <div class="notificacion-time">${hora}</div>
+              <div class="notificacion-message">${n.message}</div>
+            </div>
+          </div>
+        `;
+      });
+    }
+    
+    html += `</div>`;
+    notifEl.innerHTML = html;
+  } catch (e) {
+    notifEl.innerHTML = '<div class="notificaciones-empty">Error cargando notificaciones</div>';
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   mostrarEstadoConexion();
   // Si al cargar ya estamos online, arrancar auto-sync
   if (navigator.onLine) startAutoSync();
-  // renderizar historial al inicio
-  try { renderHistorialSection(); } catch (e) { /* noop */ }
+  // renderizar historial y notificaciones al inicio
+  try { 
+    renderHistorialSection(); 
+    renderNotificacionesSection();
+  } catch (e) { /* noop */ }
+  
+  // Actualizar notificaciones cuando se muestra la sección
+  document.querySelectorAll('.sidebar .menu-items-static > .menu-link').forEach(link => {
+    link.addEventListener('click', function(e) {
+      const text = this.textContent.toLowerCase();
+      if (text.includes('notificaciones')) {
+        try { renderNotificacionesSection(); } catch (e) { /* noop */ }
+      }
+    });
+  });
 });
 
 // Cuando el usuario abre la sección 'historial', forzamos un render del historial.
@@ -1681,3 +1809,112 @@ document.getElementById('nuevoConsejoBtn').addEventListener('click', mostrarCons
 window.addEventListener('DOMContentLoaded', () => {
   showContent('home');
 });
+
+// Dashboard
+document.addEventListener('DOMContentLoaded', () => {
+  // Actualizar estadísticas del dashboard
+  actualizarDashboard();
+
+  // Actualizar cada minuto
+  setInterval(actualizarDashboard, 60000);
+});
+
+async function actualizarDashboard() {
+  try {
+    // Obtener datos de la base de datos local
+    const notas = await db.notas.count();
+    const resultados = await db.resultados.count();
+    const parametros = await db.parametros.count();
+    
+    // Obtener datos de Supabase si hay conexión
+    let notasOnline = 0;
+    let resultadosOnline = 0;
+    let parametrosOnline = 0;
+    
+    if (navigator.onLine) {
+      try {
+        const { count: notasCount } = await supabaseClient.from('notas').select('id', { count: 'exact', head: true });
+        const { count: resultadosCount } = await supabaseClient.from('resultados').select('id', { count: 'exact', head: true });
+        const { count: parametrosCount } = await supabaseClient.from('parametros').select('id', { count: 'exact', head: true });
+        
+        notasOnline = notasCount || 0;
+        resultadosOnline = resultadosCount || 0;
+        parametrosOnline = parametrosCount || 0;
+      } catch (error) {
+        console.error('Error obteniendo datos online:', error);
+      }
+    }
+
+    // Actividad del sistema
+    document.querySelector('.activity-summary .stat-grid').innerHTML = `
+      <div class="stat">
+        <div>Notas</div>
+        <div>${notas + notasOnline}</div>
+      </div>
+      <div class="stat">
+        <div>Cálculos</div>
+        <div>${resultados + resultadosOnline}</div>
+      </div>
+      <div class="stat">
+        <div>Parámetros</div>
+        <div>${parametros + parametrosOnline}</div>
+      </div>
+    `;
+
+    // Estado del sistema
+    const onlineStatus = navigator.onLine;
+    document.querySelector('.system-status .status-grid').innerHTML = `
+      <div class="status-indicator">
+        <div class="dot ${onlineStatus ? 'online' : 'offline'}"></div>
+        <div>Sistema ${onlineStatus ? 'Online' : 'Offline'}</div>
+      </div>
+      <div class="status-indicator">
+        <div class="dot ${db ? 'online' : 'offline'}"></div>
+        <div>Base de Datos Local</div>
+      </div>
+      <div class="status-indicator">
+        <div class="dot ${supabaseClient ? 'online' : 'offline'}"></div>
+        <div>Base de Datos Online</div>
+      </div>
+    `;
+
+    // Cultivos Activos (obtener de la base de datos)
+    const cultivosEl = document.querySelector('.active-crops .crop-list');
+    cultivosEl.innerHTML = ''; // Limpiar lista actual
+    
+    try {
+      // Obtener cultivos activos de Supabase
+      if (navigator.onLine) {
+        const { data: cultivos, error } = await supabaseClient
+          .from('cultivos_activos')
+          .select('*')
+          .limit(5);
+          
+        if (!error && cultivos.length > 0) {
+          cultivos.forEach(cultivo => {
+            cultivosEl.innerHTML += `
+              <li class="crop-item">
+                <div class="crop-icon">🌱</div>
+                <div class="crop-info">
+                  <div class="crop-name">${cultivo.nombre}</div>
+                  <div class="crop-status">${cultivo.etapa}</div>
+                </div>
+              </li>
+            `;
+          });
+        } else {
+          cultivosEl.innerHTML = '<p>No hay cultivos activos registrados</p>';
+        }
+      } else {
+        cultivosEl.innerHTML = '<p>Datos no disponibles en modo offline</p>';
+      }
+    } catch (error) {
+      console.error('Error al cargar cultivos:', error);
+      cultivosEl.innerHTML = '<p>Error al cargar cultivos</p>';
+    }
+
+  } catch (error) {
+    console.error('Error actualizando dashboard:', error);
+    showToast('Error al actualizar dashboard', 'error');
+  }
+}
