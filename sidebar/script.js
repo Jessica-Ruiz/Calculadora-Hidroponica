@@ -1599,3 +1599,37 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
+//concejos
+// === Consejos aleatorios de hidroponía ===
+const consejos = [
+  "Mantén el pH entre 5.5 y 6.5 para una mejor absorción de nutrientes.",
+  "Evita la exposición directa al sol del depósito de agua para prevenir algas.",
+  "Cambia la solución nutritiva cada 10 a 14 días para evitar desequilibrios.",
+  "Limpia los tubos y recipientes regularmente para evitar obstrucciones.",
+  "Usa agua sin cloro o déjala reposar 24 horas antes de usarla.",
+  "Verifica la temperatura de la solución: lo ideal es entre 18 y 24 °C.",
+  "No sobrealimentes las plantas; un exceso de nutrientes puede dañarlas.",
+  "Asegúrate de que las raíces reciban suficiente oxígeno.",
+  "Mide la conductividad eléctrica (CE) con frecuencia para mantener el equilibrio.",
+  "Controla la humedad del ambiente para prevenir hongos y moho."
+];
+
+// Función para mostrar un consejo aleatorio
+function mostrarConsejoAleatorio() {
+  const randomIndex = Math.floor(Math.random() * consejos.length);
+  document.getElementById('consejo-texto').textContent = `"${consejos[randomIndex]}"`;
+}
+
+// Mostrar un consejo distinto al abrir la página
+window.addEventListener('DOMContentLoaded', mostrarConsejoAleatorio);
+
+// Botón para generar un nuevo consejo
+document.getElementById('nuevoConsejoBtn').addEventListener('click', mostrarConsejoAleatorio);
+
+
+
+//cargar al principio home 
+// Mostrar Home al cargar la página
+window.addEventListener('DOMContentLoaded', () => {
+  showContent('home');
+});

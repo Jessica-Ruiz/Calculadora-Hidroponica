@@ -18,23 +18,6 @@ html, body { width:100%;
 }
 
 
-
-/* Estilos del header */
-header {
-    position: fixed; /* Siempre visible arriba */
-    top: 0;
-    left: 0;
-    width: 100%; /* Ocupa todo el ancho */
-    padding: 3px 3vw; /* Espaciado interno */
-    background: #0D89B6; /* Color verde */
-    display: flex; /* Flexbox para distribuir elementos */
-    justify-content: space-between; /* Espaciados a los lados */
-    align-items: center; /* Centrado vertical */
-    z-index: 99; /* Encima de otros elementos */
-}
-
-
-
 /* Estilo del título HIDROSOFT */
 .HIDROSOFT {
     font-size: 2em; /* Tamaño grande */
@@ -303,16 +286,20 @@ header {
 /* Sidebar */
 .sidebar {
   position: fixed;
-  display: flex;
-  flex-direction: column;
+  top: 0;                 /* comienza desde arriba */
+  left: 0;                /* pegada al borde izquierdo */
   width: 15rem;
-  height: 100%;
+  height: 100vh;          /* ocupa todo el alto visible */
   background: var(--color-surface);
   box-shadow: 1px 0px 10px rgba(0, 0, 0, 0.1);
   padding: 1.4rem 1rem 0 1rem;
+  display: flex;
+  flex-direction: column;
   transition: width 0.5s ease;
-  margin-top: 60px;
+  margin-top: 0;          /* elimina el margen superior */
+  overflow-y: auto;       /* agrega scroll si el contenido es largo */
 }
+
 .slider-container::-webkit-scrollbar {
     width: 6px;           /* grosor del scroll */
 }
@@ -697,35 +684,30 @@ header {
 
 
 
-/* === ESTILO UNIFICADO DE TODAS LAS SECCIONES === */
 #main-content {
   flex: 1;
   margin-left: 260px; /* espacio del sidebar */
   padding: 30px;
-  background-color: #f5f6fa;
+  background: linear-gradient(to bottom, #f5f6fa, #e8f0f2);
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  font-family: 'Poppins', sans-serif;
-  box-sizing: border-box;
 }
 
-/* Cada sección principal (calculadora, calendario, etc.) */
+/* Cada sección principal */
 #main-content > div {
   display: none;
   flex: 1;
-  background: #fff;
-  border-radius: 20px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-  padding: 40px;
+  background: #ffffff;
+  border-radius: 25px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+  padding: 50px;
   border: 1px solid #e0e0e0;
-  box-sizing: border-box;
   width: 100%;
-  height: auto;
-  min-height: calc(100vh - 80px); /* que se adapte al espacio visible */
+  min-height: calc(100vh - 80px);
   overflow-y: auto;
-  transition: all 0.3s ease;
+  transition: all 0.4s ease;
 }
 
 /* Mostrar solo la sección activa */
@@ -734,11 +716,22 @@ header {
 }
 
 /* Títulos */
-#main-content h1, 
+#main-content h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 25px;
+  background: linear-gradient(90deg, #56b68b, #4ba97f);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+
 #main-content h2 {
+  font-size: 1.8rem;
   text-align: center;
   font-weight: 700;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
   color: #333;
 }
 
@@ -755,21 +748,22 @@ header {
 #main-content select,
 #main-content textarea {
   width: 100%;
-  padding: 12px;
-  margin-bottom: 16px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 18px;
+  border: 1px solid #d1d8de;
+  border-radius: 12px;
   font-size: 16px;
   outline: none;
-  transition: 0.3s;
-  background-color: #f9f9f9;
+  background-color: #fdfdfd;
+  box-shadow: inset 0 2px 5px rgba(0,0,0,0.03);
+  transition: all 0.3s;
 }
 
 #main-content input:focus,
 #main-content select:focus,
 #main-content textarea:focus {
   border-color: #56b68b;
-  box-shadow: 0 0 6px rgba(86, 182, 139, 0.4);
+  box-shadow: 0 0 8px rgba(86,182,139,0.3);
 }
 
 /* Botones */
@@ -778,17 +772,19 @@ header {
   color: #fff;
   font-weight: 600;
   border: none;
-  border-radius: 10px;
-  padding: 12px;
+  border-radius: 12px;
+  padding: 14px;
   width: 100%;
   cursor: pointer;
-  transition: 0.3s;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(86,182,139,0.3);
 }
 
 #main-content button:hover {
   background-color: #4ba97f;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(86,182,139,0.4);
 }
-
 
 /* Contenedores de resultados o almacenamiento */
 #main-content .result-container,
@@ -807,20 +803,26 @@ header {
 #main-content table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 15px;
-}
-
-#main-content th, 
-#main-content td {
-  border: 1px solid #ddd;
-  padding: 10px;
-  text-align: center;
-  font-size: 15px;
+  margin-top: 20px;
+  border-radius: 12px;
+  overflow: hidden;
 }
 
 #main-content th {
   background-color: #56b68b;
   color: white;
+  font-weight: 600;
+  padding: 12px;
+}
+
+#main-content td {
+  padding: 12px;
+  border-bottom: 1px solid #e0e0e0;
+  color: #555;
+}
+
+#main-content tr:nth-child(even) {
+  background-color: #f9f9f9;
 }
 
 /* Textareas */
@@ -829,18 +831,19 @@ header {
   min-height: 100px;
 }
 
-/* Scroll suave dentro de secciones */
+/* Scroll personalizado dentro de secciones */
 #main-content > div::-webkit-scrollbar {
   width: 8px;
 }
+
 #main-content > div::-webkit-scrollbar-thumb {
-  background-color: rgba(86, 182, 139, 0.5);
+  background: linear-gradient(#56b68b, #4ba97f);
   border-radius: 4px;
 }
 
-
-
-
+#main-content > div::-webkit-scrollbar-track {
+  background: #f0f0f0;
+}
 
 /* === ESTILO DEL HISTORIAL (adaptado al diseño general) === */
 #historial {
@@ -921,5 +924,96 @@ header {
     font-size: 0.9rem;
   }
 }
+
+
+
+/* === HOME === */
+.home-container {
+  padding: 30px;
+  text-align: center;
+}
+
+.welcome-section h1 {
+  font-size: 2.2rem;
+  color: #0D89B6;
+}
+
+.welcome-section span {
+  color: #56b68b;
+  font-weight: 700;
+}
+
+.welcome-section p {
+  max-width: 700px;
+  margin: 10px auto;
+  color: #555;
+  font-size: 1.1rem;
+}
+
+.home-image {
+  width: 60%;
+  max-width: 450px;
+  border-radius: 15px;
+  margin: 20px 0;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.quick-access {
+  margin-top: 40px;
+}
+
+.quick-access h2 {
+  color: #0D89B6;
+  margin-bottom: 20px;
+}
+
+.cards {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 25px;
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 15px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  padding: 25px;
+  width: 250px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+}
+
+.card i {
+  font-size: 2rem;
+  color: #56b68b;
+  margin-bottom: 10px;
+}
+
+.card h3 {
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.tip-section {
+  margin-top: 50px;
+  background-color: #e7f7f0;
+  border-radius: 10px;
+  padding: 15px;
+  max-width: 600px;
+  margin-inline: auto;
+}
+
+.tip-section p {
+  font-style: italic;
+  color: #333;
+}
+
+
 
 

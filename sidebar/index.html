@@ -10,6 +10,8 @@
 </head>
 <body>
 
+  
+
   <!-- ENCABEZADO -->
   <header>
 
@@ -121,7 +123,43 @@
 
   <!-- CONTENIDO PRINCIPAL A LA DERECHA -->
   <div id="main-content">
-    <div id="home" style="display:none; width:80%; max-width:500px; padding:20px; border:1px solid #ccc; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.1);">Contenido de Home</div>
+    <div id="home"><div class="home-container">
+  <div class="welcome-section">
+    <h1>Bienvenido a <span>Hidrosoft</span></h1>
+    <p>Tu asistente digital para el cultivo hidropónico inteligente. Gestiona tus nutrientes, etapas de crecimiento y parámetros ambientales en un solo lugar.</p>
+    <img src="ChatGPT Image 29 oct 2025, 10_03_53 p.m..png" alt="Sistema hidropónico" class="home-image">
+  </div>
+
+  <div class="quick-access">
+    <h2>Accesos rápidos</h2>
+    <div class="cards">
+      <div class="card" onclick="showContent('calculadora')">
+        <i class="bi bi-calculator"></i>
+        <h3>Calculadora de Nutrientes</h3>
+        <p>Calcula las dosis exactas para cada cultivo.</p>
+      </div>
+
+      <div class="card" onclick="showContent('calendario')">
+        <i class="bi bi-calendar-event"></i>
+        <h3>Calendario de Cultivo</h3>
+        <p>Organiza tus siembras y cosechas fácilmente.</p>
+      </div>
+
+      <div class="card" onclick="showContent('parametros')">
+        <i class="bi bi-bar-chart-line"></i>
+        <h3>Verificación de Parámetros</h3>
+        <p>Controla pH, CE y condiciones del ambiente.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="tip-section">
+    <h2>💧 Consejo del día</h2>
+<p id="consejo-texto">"Recuerda revisar la conductividad eléctrica cada tres días para evitar acumulación de sales."</p>
+<button id="nuevoConsejoBtn">Nuevo consejo</button>
+</div>
+</div>
+</div>
     <div id="dashboard" style="display:none; width:80%; max-width:500px; padding:20px; border:1px solid #ccc; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.1);">Contenido del Dashboard</div>
     <div id="calculadora">      <div class="section-container">
         <div class="form-container">
