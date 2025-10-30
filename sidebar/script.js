@@ -246,76 +246,139 @@ function calcularEtapas() {
 }
 
 // ===========================
-// Función que llama al guardar
+// Guardar y mostrar calendario con tabla y borrar
 // ===========================
-function guardarResultadoCalendario() {
-  if (!navigator.onLine) {
-    guardarEnDexieCalendario(resultadoTextoGlobal);
-  } else {
-    guardarEnSupabaseCalendario(resultadoTextoGlobal);
-  }
-}
+document.addEventListener('DOMContentLoaded', function() {
+  const btnGuardar = document.getElementById('guardarResultadoCalendario');
 
-// ===========================
-// Guardar en Dexie
-// ===========================
-function guardarEnDexieCalendario(texto) {
-  const db = new Dexie("hidrosoftDB");
-  db.version(1).stores({ calendario: "++id, texto, fecha" });
-  db.calendario.add({ texto, fecha: new Date().toISOString() })
-    .then(() => alert('Calendario guardado en Dexie (offline).'))
-    .catch(err => alert('Error guardando en Dexie: ' + err));
-}
+  // ===========================
+  // Función calcular etapas
+  // ===========================
+  window.calcularEtapas = function() {
+    const fechaInput = document.getElementById('fechaSiembra').value;
+    if (!fechaInput) { alert('Por favor selecciona una fecha de siembra.'); return; }
+    const fechaSiembra = new Date(fechaInput);
+    if (isNaN(fechaSiembra.getTime())) { alert('Fecha inválida'); return; }
 
-// ===========================
-// Guardar en Supabase
-// ===========================
-async function guardarEnSupabaseCalendario(texto) {
-  try {
-    const { data, error } = await supabaseClient
-      .from('calendario')
-      .insert([{ texto, fecha: new Date().toISOString() }]);
-    if (error) throw error;
-    alert('Calendario guardado en Supabase.');
-    mostrarResultadosCalendario();
-  } catch (err) {
-    alert('Error guardando en Supabase: ' + err.message);
-  }
-}
+    const planta = parseInt(document.getElementById('options').value, 10);
+    const etapasPlanta = etapas[planta];
+    if (!Array.isArray(etapasPlanta)) { alert('No hay información de etapas'); return; }
 
-// ===========================
-// Mostrar resultados guardados
-// ===========================
-async function mostrarResultadosCalendario() {
-  try {
-    const { data, error } = await supabaseClient
-      .from('calendario')
-      .select('*')
-      .order('fecha', { ascending: false });
+    const tablaBody = document.getElementById("tablaBody");
+    tablaBody.innerHTML = '';
+    resultadoTextoGlobal = '';
 
-    if (error) throw error;
+    etapasPlanta.forEach(etapa => {
+      let fechaInicio = isNaN(Number(etapa.inicio)) ? etapa.inicio : new Date(fechaSiembra.getTime() + Number(etapa.inicio)*24*60*60*1000);
+      let fechaFin = isNaN(Number(etapa.fin)) ? etapa.fin : new Date(fechaSiembra.getTime() + Number(etapa.fin)*24*60*60*1000);
 
-    const contenedor = document.getElementById('resultadosGuardadosCalendario');
-    contenedor.innerHTML = '';
+      const fila = document.createElement('tr');
+      fila.innerHTML = `
+        <td>${etapa.nombre}</td>
+        <td>${fechaInicio instanceof Date ? fechaInicio.toLocaleDateString() : fechaInicio}</td>
+        <td>${fechaFin instanceof Date ? fechaFin.toLocaleDateString() : fechaFin}</td>
+      `;
+      tablaBody.appendChild(fila);
 
-    data.forEach(item => {
-      const div = document.createElement('div');
-      div.style.border = '1px solid #ccc';
-      div.style.padding = '10px';
-      div.style.margin = '5px 0';
-      div.innerHTML = `<strong>Fecha:</strong> ${new Date(item.fecha).toLocaleString()}<br>${item.texto.replace(/\n/g, '<br>')}`;
-      contenedor.appendChild(div);
+      resultadoTextoGlobal += `${etapa.nombre}: ${fechaInicio instanceof Date ? fechaInicio.toLocaleDateString() : fechaInicio} - ${fechaFin instanceof Date ? fechaFin.toLocaleDateString() : fechaFin}\n`;
     });
 
-  } catch (err) {
-    alert('Error al obtener resultados del calendario: ' + err.message);
-  }
-}
+    document.getElementById("tablaEtapas").style.display = "table";
+    btnGuardar.style.display = 'inline-block';
+  };
 
-// ===========================
-// Llamada inicial
-// ===========================
-mostrarResultadosCalendario();
+  // ===========================
+  // Guardar calendario
+  // ===========================
+  btnGuardar.addEventListener('click', function() {
+    if(!navigator.onLine) guardarEnDexieCalendario(resultadoTextoGlobal);
+    else guardarEnSupabaseCalendario(resultadoTextoGlobal);
+  });
+
+  function guardarEnDexieCalendario(texto){
+    const db = new Dexie("hidrosoftDB");
+    db.version(1).stores({ calendario: "++id, texto, fecha" });
+    db.calendario.add({ texto, fecha: new Date().toISOString() })
+      .then(() => {
+        alert('Calendario guardado (offline)');
+        mostrarResultadosCalendario();
+      })
+      .catch(err => alert('Error Dexie: ' + err));
+  }
+
+  async function guardarEnSupabaseCalendario(texto){
+    try {
+      const { error } = await supabaseClient
+        .from('calendario')
+        .insert([{ texto, fecha: new Date().toISOString() }]);
+      if(error) throw error;
+      alert('Calendario guardado en Supabase.');
+      mostrarResultadosCalendario();
+    } catch(err) {
+      alert('Error Supabase: ' + err.message);
+    }
+  }
+
+  // ===========================
+  // Mostrar calendarios guardados en tabla con botón borrar
+  // ===========================
+  async function mostrarResultadosCalendario(){
+    try {
+      const { data, error } = await supabaseClient
+        .from('calendario')
+        .select('*')
+        .order('fecha', { ascending: false });
+      if(error) throw error;
+
+      const contenedor = document.getElementById('resultadosGuardadosCalendario');
+      if(!data || data.length === 0) { 
+        contenedor.innerHTML = '<p>No hay calendarios guardados.</p>'; 
+        return; 
+      }
+
+      let tabla = `<table border="1" style="border-collapse: collapse; width: 100%;">
+        <thead>
+          <tr style="background-color:#e0e0e0">
+            <th>Fecha</th>
+            <th>Etapas</th>
+            <th>Acción</th>
+          </tr>
+        </thead>
+        <tbody>`;
+
+      data.forEach(item => {
+        const fecha = new Date(item.fecha);
+        const fechaStr = `${fecha.getDate().toString().padStart(2,'0')}/${
+          (fecha.getMonth()+1).toString().padStart(2,'0')} ${fecha.getHours().toString().padStart(2,'0')}:${fecha.getMinutes().toString().padStart(2,'0')}`;
+        tabla += `<tr>
+          <td>${fechaStr}</td>
+          <td>${item.texto.replace(/\n/g,'<br>')}</td>
+          <td style="text-align:center;"><button class="btnBorrar" data-id="${item.id}">Borrar</button></td>
+        </tr>`;
+      });
+
+      tabla += `</tbody></table>`;
+      contenedor.innerHTML = tabla;
+
+      // Borrar registro
+      document.querySelectorAll('.btnBorrar').forEach(btn => {
+        btn.addEventListener('click', async function(){
+          const id = btn.getAttribute('data-id');
+          try {
+            const { error } = await supabaseClient.from('calendario').delete().eq('id', id);
+            if(error) throw error;
+            mostrarResultadosCalendario();
+          } catch(err){ alert('Error al borrar: ' + err.message); }
+        });
+      });
+
+    } catch(err) {
+      alert('Error mostrando calendarios: ' + err.message);
+    }
+  }
+
+  mostrarResultadosCalendario();
+});
 
 
 document.addEventListener('DOMContentLoaded', function() {
