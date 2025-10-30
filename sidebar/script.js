@@ -903,7 +903,7 @@ db.version(2).stores({
 
 
 // ===============================
-// 🧾 1. Funciones: Notas
+//  Funciones: Notas
 // ===============================
 async function guardarNotaDexie() {
   const nota = document.getElementById("nota").value;
