@@ -60,7 +60,6 @@ document.querySelector(".form-box.login form").addEventListener("submit", async 
 // REGISTRO
 
 
-
 // REGISTRO DE USUARIOS
 
 
@@ -181,127 +180,35 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-const etapas ={
-    1: [
-    { nombre: "Germinación", inicio: 0, fin: 10 },
-    { nombre: "Plántula", inicio: 11, fin: 30 },
-    { nombre: "Desarrollo vegetativo", inicio: 31, fin: 60 },
-    { nombre: "Floración", inicio: 61, fin: 100 },
-    { nombre: "Cosecha", inicio: 90, fin: 150 },
-  ],
-    2: [
-    { nombre: "Germinación", inicio: 0, fin: 21 },
-    { nombre: "Plántula", inicio: 22, fin: 42},
-    { nombre: "Desarrollo vegetativo", inicio: 43, fin: 84 },
-    { nombre: "Floración", inicio: 85, fin: 126 },
-    { nombre: "Cosecha", inicio: 127, fin: 168 },
-    ],
-    3: [
-    { nombre: "Germinación", inicio: 0, fin: 14 },
-    { nombre: "Plántula", inicio: 15, fin: 28 },
-    { nombre: "Desarrollo vegetativo", inicio: 29, fin: 56 },
-    { nombre: "Floración", inicio: 57, fin: 84 },
-    { nombre: "Cosecha", inicio: 85, fin: 112 },
-    ],
-    4: [
-    { nombre: "Germinación", inicio: 0, fin: 14 },
-    { nombre: "Plántula", inicio: 15, fin: 35 },
-    { nombre: "Desarrollo vegetativo", inicio: 36, fin: 70 },
-    { nombre: "Floración", inicio: 71, fin: 112 },
-    { nombre: "Cosecha", inicio: 113, fin: 140 },
-    ],
-    5: [
-    { nombre: "Germinación", inicio: 0, fin: 7 },
-    { nombre: "Plántula", inicio: 8, fin: 14},
-    { nombre: "Desarrollo vegetativo", inicio: 15, fin: 28 },
-    { nombre: "Floración",inicio:"No da futos",fin:"No da frutos"},
-    { nombre: "Cosecha", inicio: 29, fin: 42 },
-    ],
-    6: [
-    { nombre: "Germinación", inicio: 0, fin: 7 },
-    { nombre: "Plántula", inicio: 8, fin: 14 },
-    { nombre: "Desarrollo vegetativo", inicio: 15, fin: 28 },
-    { nombre: "Floración", inicio: "No da frutos", fin: "No da frutos" },
-    { nombre: "Cosecha", inicio: 29, fin: 35 },
-    ],
-    7: [
-    { nombre: "Germinación", inicio: 0, fin: 21 },
-    { nombre: "Plántula", inicio: 22, fin: 42 },
-    { nombre: "Desarrollo vegetativo", inicio: 43, fin: 70 },
-    { nombre: "Floración", inicio: 71, fin: 84 },
-    { nombre: "Cosecha", inicio: 71, fin: 84 },
-    ],
-    8: [
-    { nombre: "Germinación", inicio: 0, fin: 14 },
-    { nombre: "Plántula", inicio: 15, fin: 28 },
-    { nombre: "Desarrollo vegetativo", inicio: 29, fin: 49 },
-    { nombre: "Floración", inicio: "No da frutos", fin: "No da frutos" },
-    { nombre: "Cosecha", inicio: 42, fin: 56 },
-    ],
-    9: [
-    { nombre: "Germinación", inicio: 0, fin: 7 },
-    { nombre: "Plántula", inicio: 8, fin: 14 },
-    { nombre: "Desarrollo vegetativo", inicio: 15, fin: 28 },
-    { nombre: "Floración", inicio:"No da frutos", fin: "No da frut0s" },
-    { nombre: "Cosecha", inicio: 29, fin: 42 },
-    ]
-  }
+// ===========================
+// Variables globales
+// ===========================
+let resultadoTextoGlobal = '';
+
+// ===========================
+// Etapas por planta
+// ===========================
+const etapas = {
+  1: [ { nombre: "Germinación", inicio: 0, fin: 10 }, { nombre: "Plántula", inicio: 11, fin: 30 }, { nombre: "Desarrollo vegetativo", inicio: 31, fin: 60 }, { nombre: "Floración", inicio: 61, fin: 100 }, { nombre: "Cosecha", inicio: 90, fin: 150 } ],
+  2: [ { nombre: "Germinación", inicio: 0, fin: 21 }, { nombre: "Plántula", inicio: 22, fin: 42 }, { nombre: "Desarrollo vegetativo", inicio: 43, fin: 84 }, { nombre: "Floración", inicio: 85, fin: 126 }, { nombre: "Cosecha", inicio: 127, fin: 168 } ],
+  3: [ { nombre: "Germinación", inicio: 0, fin: 14 }, { nombre: "Plántula", inicio: 15, fin: 28 }, { nombre: "Desarrollo vegetativo", inicio: 29, fin: 56 }, { nombre: "Floración", inicio: 57, fin: 84 }, { nombre: "Cosecha", inicio: 85, fin: 112 } ],
+  4: [ { nombre: "Germinación", inicio: 0, fin: 14 }, { nombre: "Plántula", inicio: 15, fin: 35 }, { nombre: "Desarrollo vegetativo", inicio: 36, fin: 70 }, { nombre: "Floración", inicio: 71, fin: 112 }, { nombre: "Cosecha", inicio: 113, fin: 140 } ],
+  5: [ { nombre: "Germinación", inicio: 0, fin: 7 }, { nombre: "Plántula", inicio: 8, fin: 14 }, { nombre: "Desarrollo vegetativo", inicio: 15, fin: 28 }, { nombre: "Floración", inicio: "No da frutos", fin: "No da frutos" }, { nombre: "Cosecha", inicio: 29, fin: 42 } ],
+  6: [ { nombre: "Germinación", inicio: 0, fin: 7 }, { nombre: "Plántula", inicio: 8, fin: 14 }, { nombre: "Desarrollo vegetativo", inicio: 15, fin: 28 }, { nombre: "Floración", inicio: "No da frutos", fin: "No da frutos" }, { nombre: "Cosecha", inicio: 29, fin: 35 } ],
+  7: [ { nombre: "Germinación", inicio: 0, fin: 21 }, { nombre: "Plántula", inicio: 22, fin: 42 }, { nombre: "Desarrollo vegetativo", inicio: 43, fin: 70 }, { nombre: "Floración", inicio: 71, fin: 84 }, { nombre: "Cosecha", inicio: 71, fin: 84 } ],
+  8: [ { nombre: "Germinación", inicio: 0, fin: 14 }, { nombre: "Plántula", inicio: 15, fin: 28 }, { nombre: "Desarrollo vegetativo", inicio: 29, fin: 49 }, { nombre: "Floración", inicio: "No da frutos", fin: "No da frutos" }, { nombre: "Cosecha", inicio: 42, fin: 56 } ],
+  9: [ { nombre: "Germinación", inicio: 0, fin: 7 }, { nombre: "Plántula", inicio: 8, fin: 14 }, { nombre: "Desarrollo vegetativo", inicio: 15, fin: 28 }, { nombre: "Floración", inicio:"No da frutos", fin: "No da frutos" }, { nombre: "Cosecha", inicio: 29, fin: 42 } ]
+};
+
+// ===========================
+// Función para calcular etapas
+// ===========================
 function calcularEtapas() {
   const fechaInput = document.getElementById('fechaSiembra').value;
-  if (!fechaInput) {
-    alert('Por favor selecciona una fecha de siembra.');
-    return;
-  }
+  if (!fechaInput) { alert('Por favor selecciona una fecha de siembra.'); return; }
 
   const fechaSiembra = new Date(fechaInput);
-  if (isNaN(fechaSiembra.getTime())) {
-    alert('Por favor selecciona una fecha válida.');
-    return;
-  }
-
-  const planta = parseInt(document.getElementById('options').value, 10);
-  const etapasPlanta = etapas[planta];
-
-  if (!Array.isArray(etapasPlanta)) {
-    // Si no tienes etapas definidas para esa planta muestra mensaje y no intentes iterar
-    alert('No hay información de etapas para la planta seleccionada.');
-    document.getElementById("tablaEtapas").style.display = "none";
-    return;
-  }
-
-  const tablaBody = document.getElementById("tablaBody");
-  tablaBody.innerHTML = "";
-
-  etapasPlanta.forEach(etapa => {
-    // crear nuevas fechas a partir de la fecha de siembra (no mutar la original)
-    const fechaInicio = new Date(fechaSiembra);
-    fechaInicio.setDate(fechaInicio.getDate() + Number(etapa.inicio));
-
-    const fechaFin = new Date(fechaSiembra);
-    fechaFin.setDate(fechaFin.getDate() + Number(etapa.fin));
-
-    const fila = document.createElement('tr');
-    fila.innerHTML = `
-      <td>${etapa.nombre}</td>
-      <td>${fechaInicio.toLocaleDateString()}</td>
-      <td>${fechaFin.toLocaleDateString()}</td>
-    `;
-    tablaBody.appendChild(fila);
-  });
-
-  document.getElementById("tablaEtapas").style.display = "table";
-  function calcularEtapas() {
-  const fechaInput = document.getElementById('fechaSiembra').value;
-  if (!fechaInput) {
-    alert('Por favor selecciona una fecha de siembra.');
-    return;
-  }
-
-  const fechaSiembra = new Date(fechaInput);
-  if (isNaN(fechaSiembra.getTime())) {
-    alert('Por favor selecciona una fecha válida.');
-    return;
-  }
+  if (isNaN(fechaSiembra.getTime())) { alert('Por favor selecciona una fecha válida.'); return; }
 
   const planta = parseInt(document.getElementById('options').value, 10);
   const etapasPlanta = etapas[planta];
@@ -314,34 +221,102 @@ function calcularEtapas() {
 
   const tablaBody = document.getElementById("tablaBody");
   tablaBody.innerHTML = "";
-
-  let resultadoTexto = ''; // <-- Aquí se guarda el texto para Dexie
+  resultadoTextoGlobal = '';
 
   etapasPlanta.forEach(etapa => {
-    const fechaInicio = new Date(fechaSiembra);
-    fechaInicio.setDate(fechaInicio.getDate() + Number(etapa.inicio));
-
-    const fechaFin = new Date(fechaSiembra);
-    fechaFin.setDate(fechaFin.getDate() + Number(etapa.fin));
+    let fechaInicio = isNaN(Number(etapa.inicio)) ? etapa.inicio : new Date(fechaSiembra.getTime() + Number(etapa.inicio)*24*60*60*1000);
+    let fechaFin = isNaN(Number(etapa.fin)) ? etapa.fin : new Date(fechaSiembra.getTime() + Number(etapa.fin)*24*60*60*1000);
 
     const fila = document.createElement('tr');
     fila.innerHTML = `
       <td>${etapa.nombre}</td>
-      <td>${fechaInicio.toLocaleDateString()}</td>
-      <td>${fechaFin.toLocaleDateString()}</td>
+      <td>${fechaInicio instanceof Date ? fechaInicio.toLocaleDateString() : fechaInicio}</td>
+      <td>${fechaFin instanceof Date ? fechaFin.toLocaleDateString() : fechaFin}</td>
     `;
     tablaBody.appendChild(fila);
 
-    resultadoTexto += `${etapa.nombre}: ${fechaInicio.toLocaleDateString()} - ${fechaFin.toLocaleDateString()}\n`;
+    resultadoTextoGlobal += `${etapa.nombre}: ${fechaInicio instanceof Date ? fechaInicio.toLocaleDateString() : fechaInicio} - ${fechaFin instanceof Date ? fechaFin.toLocaleDateString() : fechaFin}\n`;
   });
 
   document.getElementById("tablaEtapas").style.display = "table";
 
-  // Guardar en Dexie
-  guardarResultadoDexie('etapas', resultadoTexto);
+  // Mostrar botón de guardar
+  const btn = document.getElementById('guardarResultadoCalendario');
+  btn.style.display = 'inline-block';
 }
 
+// ===========================
+// Función que llama al guardar
+// ===========================
+function guardarResultadoCalendario() {
+  if (!navigator.onLine) {
+    guardarEnDexieCalendario(resultadoTextoGlobal);
+  } else {
+    guardarEnSupabaseCalendario(resultadoTextoGlobal);
+  }
 }
+
+// ===========================
+// Guardar en Dexie
+// ===========================
+function guardarEnDexieCalendario(texto) {
+  const db = new Dexie("hidrosoftDB");
+  db.version(1).stores({ calendario: "++id, texto, fecha" });
+  db.calendario.add({ texto, fecha: new Date().toISOString() })
+    .then(() => alert('Calendario guardado en Dexie (offline).'))
+    .catch(err => alert('Error guardando en Dexie: ' + err));
+}
+
+// ===========================
+// Guardar en Supabase
+// ===========================
+async function guardarEnSupabaseCalendario(texto) {
+  try {
+    const { data, error } = await supabaseClient
+      .from('calendario')
+      .insert([{ texto, fecha: new Date().toISOString() }]);
+    if (error) throw error;
+    alert('Calendario guardado en Supabase.');
+    mostrarResultadosCalendario();
+  } catch (err) {
+    alert('Error guardando en Supabase: ' + err.message);
+  }
+}
+
+// ===========================
+// Mostrar resultados guardados
+// ===========================
+async function mostrarResultadosCalendario() {
+  try {
+    const { data, error } = await supabaseClient
+      .from('calendario')
+      .select('*')
+      .order('fecha', { ascending: false });
+
+    if (error) throw error;
+
+    const contenedor = document.getElementById('resultadosGuardadosCalendario');
+    contenedor.innerHTML = '';
+
+    data.forEach(item => {
+      const div = document.createElement('div');
+      div.style.border = '1px solid #ccc';
+      div.style.padding = '10px';
+      div.style.margin = '5px 0';
+      div.innerHTML = `<strong>Fecha:</strong> ${new Date(item.fecha).toLocaleString()}<br>${item.texto.replace(/\n/g, '<br>')}`;
+      contenedor.appendChild(div);
+    });
+
+  } catch (err) {
+    alert('Error al obtener resultados del calendario: ' + err.message);
+  }
+}
+
+// ===========================
+// Llamada inicial
+// ===========================
+mostrarResultadosCalendario();
+
 
 document.addEventListener('DOMContentLoaded', function() {
   const form = document.getElementById('nutrientForm');
@@ -558,8 +533,6 @@ async function mostrarResultadosSupabase() {
   }
 }
 
-// Llamas a esta función cuando quieras mostrar los resultados
-mostrarResultadosSupabase();
 
 
 
@@ -638,16 +611,15 @@ const rangosCultivos = {
   }
 };
 
-// Función para verificar los parámetros
 document.getElementById('verificarParametrosBtn').addEventListener('click', function() {
   const planta = document.getElementById('planta').value;
   const etapa = document.getElementById('etapa').value;
-
   const ph = parseFloat(document.getElementById('ph').value);
   const ce = parseFloat(document.getElementById('ce').value);
   const temperatura = parseFloat(document.getElementById('temperatura').value);
   const humedad = parseFloat(document.getElementById('humedad').value);
   const resultado = document.getElementById('resultado');
+  
 
   if (isNaN(ph) || isNaN(ce) || isNaN(temperatura) || isNaN(humedad)) {
     resultado.textContent = "Por favor, ingresa todos los valores correctamente.";
@@ -657,7 +629,6 @@ document.getElementById('verificarParametrosBtn').addEventListener('click', func
   }
 
   const rango = rangosCultivos?.[planta]?.[etapa];
-
   if (!rango) {
     resultado.textContent = "No hay datos para la planta o la etapa seleccionada.";
     resultado.style.color = "red";
@@ -683,20 +654,64 @@ document.getElementById('verificarParametrosBtn').addEventListener('click', func
     resultado.style.color = "red";
   }
 
-  // Mostrar el botón de guardar
   document.getElementById('guardarResultadoParametros').style.display = 'inline-block';
 });
 
-// Función para mostrar todos los parámetros guardados (Dexie + Supabase)
+
+document.getElementById('guardarResultadoParametros').addEventListener('click', async function() {
+  const planta = document.getElementById('planta').value;
+  const etapa = document.getElementById('etapa').value;
+  const ph = parseFloat(document.getElementById('ph').value);
+  const ce = parseFloat(document.getElementById('ce').value);
+  const temperatura = parseFloat(document.getElementById('temperatura').value);
+  const humedad = parseFloat(document.getElementById('humedad').value);
+  const fecha = new Date().toISOString();
+  const texto = `Planta: ${planta}, Etapa: ${etapa}, pH: ${ph}, CE: ${ce}, Temp: ${temperatura}°C, Hum: ${humedad}%`;
+
+  // Validar que los campos numéricos sean válidos
+  if ([ph, ce, temperatura, humedad].some(v => isNaN(v))) {
+    showToast("⚠️ Algunos valores no son numéricos", "error", 3000);
+    return;
+  }
+
+  // Guardar localmente (Dexie)
+  try {
+    await db.parametros.add({ planta, etapa, ph, ce, temperatura, humedad, texto, fecha });
+    showToast("💾 Guardado localmente en Dexie", "success", 2000);
+  } catch(err) {
+    console.error("Error guardando en Dexie:", err);
+    showToast("⚠️ Error guardando localmente", "error", 3000);
+  }
+
+  // Guardar en Supabase si hay conexión
+  if (navigator.onLine) {
+    try {
+      const { data, error } = await supabaseClient
+        .from('parametros')
+        .insert([{ planta, etapa, ph, ce, temperatura, humedad, texto, fecha }]);
+      if (error) throw error;
+      showToast("✅ Guardado en Supabase correctamente", "success", 3000);
+    } catch(err) {
+      console.error("Error guardando en Supabase:", err.message);
+      showToast("⚠️ No se pudo guardar en Supabase", "error", 3000);
+    }
+  } else {
+    showToast("⚠️ Estás offline, se guardó solo localmente", "warning", 3000);
+  }
+
+  // Mostrar todos los parámetros
+  mostrarParametrosCompletos();
+});
+
+// ===============================
+// Mostrar parámetros guardados (Dexie + Supabase)
 async function mostrarParametrosCompletos() {
   const cont = document.getElementById("resultadosGuardadosParametros");
   cont.innerHTML = "<h3>Parámetros guardados:</h3>";
 
-  // --- 1. Obtener datos de Dexie ---
   const datosDexie = await db.parametros.reverse().toArray();
-
-  // --- 2. Obtener datos de Supabase ---
   let datosSupabase = [];
+
   if (navigator.onLine) {
     try {
       const { data, error } = await supabaseClient
@@ -705,7 +720,7 @@ async function mostrarParametrosCompletos() {
         .order('fecha', { ascending: false });
       if (error) throw error;
       datosSupabase = data || [];
-    } catch (err) {
+    } catch(err) {
       console.warn("Error obteniendo datos de Supabase:", err.message);
     }
   }
@@ -715,7 +730,6 @@ async function mostrarParametrosCompletos() {
     return;
   }
 
-  // --- 3. Construir tabla HTML ---
   let tablaHTML = `
     <table border="1" style="border-collapse: collapse; width: 100%; margin-top: 10px;">
       <thead>
@@ -733,82 +747,59 @@ async function mostrarParametrosCompletos() {
       <tbody>
   `;
 
-  // --- 3a. Agregar datos de Dexie ---
   datosDexie.forEach(p => {
-    const matches = p.texto.match(/Planta: (.+), Etapa: (.+), pH: (.+), CE: (.+), Temp: (.+)°C, Hum: (.+)%/);
-    if (matches) {
-      tablaHTML += `
-        <tr>
-          <td>Local (Dexie)</td>
-          <td>${new Date(p.fecha).toLocaleString()}</td>
-          <td>${matches[1]} / ${matches[2]}</td>
-          <td>${matches[3]}</td>
-          <td>${matches[4]}</td>
-          <td>${matches[5]}</td>
-          <td>${matches[6]}</td>
-          <td><button onclick="borrarParametro('${p.id}')">Borrar</button></td>
-        </tr>
-      `;
-    }
+    tablaHTML += `
+      <tr>
+        <td>Local (Dexie)</td>
+        <td>${new Date(p.fecha).toLocaleString()}</td>
+        <td>${p.planta} / ${p.etapa}</td>
+        <td>${p.ph}</td>
+        <td>${p.ce}</td>
+        <td>${p.temperatura}</td>
+        <td>${p.humedad}</td>
+        <td><button onclick="borrarParametro(${p.id})">Borrar</button></td>
+      </tr>
+    `;
   });
 
-  // --- 3b. Agregar datos de Supabase ---
   datosSupabase.forEach(p => {
-    const matches = p.texto.match(/Planta: (.+), Etapa: (.+), pH: (.+), CE: (.+), Temp: (.+)°C, Hum: (.+)%/);
-    if (matches) {
-      tablaHTML += `
-        <tr>
-          <td>Online (Supabase)</td>
-          <td>${new Date(p.fecha).toLocaleString()}</td>
-          <td>${matches[1]} / ${matches[2]}</td>
-          <td>${matches[3]}</td>
-          <td>${matches[4]}</td>
-          <td>${matches[5]}</td>
-          <td>${matches[6]}</td>
-          <td><i>No editable</i></td>
-        </tr>
-      `;
-    }
+    tablaHTML += `
+      <tr>
+        <td>Online (Supabase)</td>
+        <td>${new Date(p.fecha).toLocaleString()}</td>
+        <td>${p.planta} / ${p.etapa}</td>
+        <td>${p.ph}</td>
+        <td>${p.ce}</td>
+        <td>${p.temperatura}</td>
+        <td>${p.humedad}</td>
+        <td><i>No editable</i></td>
+      </tr>
+    `;
   });
 
-  tablaHTML += `</tbody></table>`;
+  tablaHTML += "</tbody></table>";
   cont.innerHTML += tablaHTML;
 }
 
-// --- 4. Llamar la función al cargar la página ---
-document.addEventListener('DOMContentLoaded', mostrarParametrosCompletos);
-
-// --- 5. Modificar guardarResultadoParametros para actualizar la vista ---
-document.getElementById('guardarResultadoParametros').addEventListener('click', async function() {
-  const planta = document.getElementById('planta').value;
-  const etapa = document.getElementById('etapa').value;
-  const ph = document.getElementById('ph').value;
-  const ce = document.getElementById('ce').value;
-  const temperatura = document.getElementById('temperatura').value;
-  const humedad = document.getElementById('humedad').value;
-
-  const texto = `Planta: ${planta}, Etapa: ${etapa}, pH: ${ph}, CE: ${ce}, Temp: ${temperatura}°C, Hum: ${humedad}%`;
-
-  // Guardar en Dexie
-  await db.parametros.add({ texto, fecha: new Date().toISOString() });
-
-  // Guardar en Supabase
-  if (navigator.onLine) {
-    try {
-      const { error } = await supabaseClient.from('parametros').insert([{ texto, fecha: new Date().toISOString() }]);
-      if (error) throw error;
-    } catch (err) {
-      console.warn("No se pudo guardar en Supabase:", err.message);
-    }
+// ===============================
+// Borrar parámetros locales
+async function borrarParametro(id) {
+  if (!confirm("¿Deseas borrar este registro?")) return;
+  try {
+    await db.parametros.delete(Number(id));
+    showToast("Registro borrado", "success", 1500);
+    mostrarParametrosCompletos();
+  } catch(err) {
+    console.error("Error borrando registro:", err);
+    showToast("No se pudo borrar el registro", "error", 2000);
   }
-
-  showToast("Parámetros guardados", "success", 2000);
-  mostrarParametrosCompletos(); // Actualizar la tabla combinada
-});
-
+}
 
 // ===============================
-// 📦 Base local con Dexie (Offline)
+// Inicializar al cargar
+document.addEventListener('DOMContentLoaded', mostrarParametrosCompletos);
+// ===============================
+//  Base local con Dexie (Offline)
 // ===============================
 const db = new Dexie("hidrosoftDB");
 db.version(2).stores({
@@ -893,174 +884,6 @@ async function borrarResultadoDexie(id) {
   showToast("Resultado eliminado", "info", 1500);
 }
 
-// ===============================
-// 📅 3. Funciones: Calendario
-// ===============================
-async function guardarEventoCalendario() {
-  const evento = document.getElementById("evento").value;
-  const fecha = document.getElementById("fechaEvento").value;
-  const descripcion = document.getElementById("descripcionEvento").value;
-
-  if (!evento.trim() || !fecha.trim()) {
-    alert("Completa el nombre y la fecha del evento.");
-    return;
-  }
-
-  await db.calendario.add({ evento, fecha, descripcion });
-  mostrarEventosCalendario();
-  showToast("Evento guardado localmente", "success", 2000);
-}
-
-async function mostrarEventosCalendario() {
-  const cont = document.getElementById("eventosGuardados");
-  if (!cont) return;
-  const eventos = await db.calendario.reverse().toArray();
-
-  cont.innerHTML = "<h3>Eventos guardados:</h3>";
-  if (eventos.length === 0) {
-    cont.innerHTML += "<i>No hay eventos registrados.</i>";
-    return;
-  }
-
-  eventos.forEach(e => {
-    cont.innerHTML += `
-      <div class="evento-card">
-        <b>${e.fecha}</b> - ${e.evento}<br>
-        <small>${e.descripcion || ""}</small><br>
-        <button onclick="borrarEventoCalendario(${e.id})">Borrar</button>
-      </div>`;
-  });
-}
-
-async function borrarEventoCalendario(id) {
-  await db.calendario.delete(id);
-  mostrarEventosCalendario();
-  showToast("Evento eliminado", "info", 1500);
-}
-
-// ===============================
-// 🌿 4. Funciones: Parámetros
-// ===============================
-async function guardarParametros() {
-  const planta = document.getElementById("planta").value;
-  const etapa = document.getElementById("etapa").value;
-  const ph = document.getElementById("ph").value;
-  const ce = document.getElementById("ce").value;
-  const temperatura = document.getElementById("temperatura").value;
-  const humedad = document.getElementById("humedad").value;
-
-  if (!planta || !etapa || !ph || !ce || !temperatura || !humedad) {
-    alert("Completa todos los parámetros antes de guardar.");
-    return;
-  }
-
-  await db.parametros.add({
-    planta, etapa, ph, ce, temperatura, humedad,
-    fecha: new Date().toLocaleString()
-  });
-  mostrarParametrosGuardados();
-  showToast("Parámetros guardados localmente", "success", 2000);
-}
-
-async function mostrarParametrosGuardados() {
-  const cont = document.getElementById("parametrosGuardados");
-  if (!cont) return;
-  const datos = await db.parametros.reverse().toArray();
-
-  cont.innerHTML = "<h3>Parámetros guardados:</h3>";
-  if (datos.length === 0) {
-    cont.innerHTML += "<i>No hay parámetros guardados.</i>";
-    return;
-  }
-
-  datos.forEach(p => {
-    cont.innerHTML += `
-      <div class="parametro-card">
-        <b>${p.fecha}</b> - ${p.planta} (${p.etapa})<br>
-        pH: ${p.ph}, CE: ${p.ce}, Temp: ${p.temperatura}°C, Hum: ${p.humedad}%<br>
-        <button onclick="borrarParametro(${p.id})">Borrar</button>
-      </div>`;
-  });
-}
-
-async function borrarParametro(id) {
-  await db.parametros.delete(id);
-  mostrarParametrosGuardados();
-  showToast("Registro eliminado", "info", 1500);
-}
-
-// ===============================
-// 🔄 5. Sincronización Dexie ↔ Supabase
-// ===============================
-async function sincronizar() {
-  let errores = [];
-  showToast("Sincronizando datos...", "info", 2000);
-
-  // Notas
-  for (const n of await db.notas.toArray()) {
-    try {
-      const { error } = await supabaseClient.from('notas').insert([n]);
-      if (error) throw error;
-      await db.notas.delete(n.id);
-    } catch (e) {
-      errores.push(`Nota ${n.id}: ${e.message}`);
-    }
-  }
-
-  // Resultados
-  for (const r of await db.resultados.toArray()) {
-    try {
-      const { error } = await supabaseClient.from('resultados').insert([r]);
-      if (error) throw error;
-      await db.resultados.delete(r.id);
-    } catch (e) {
-      errores.push(`Resultado ${r.id}: ${e.message}`);
-    }
-  }
-
-  // Calendario
-  for (const c of await db.calendario.toArray()) {
-    try {
-      const { error } = await supabaseClient.from('calendario').insert([c]);
-      if (error) throw error;
-      await db.calendario.delete(c.id);
-    } catch (e) {
-      errores.push(`Evento ${c.id}: ${e.message}`);
-    }
-  }
-
-  // Parámetros
-  for (const p of await db.parametros.toArray()) {
-    try {
-      const { error } = await supabaseClient.from('parametros').insert([p]);
-      if (error) throw error;
-      await db.parametros.delete(p.id);
-    } catch (e) {
-      errores.push(`Parámetro ${p.id}: ${e.message}`);
-    }
-  }
-
-  if (errores.length === 0) {
-    showToast("Datos sincronizados correctamente", "success", 3000);
-  } else {
-    console.warn("Errores de sincronización:", errores);
-    showToast("Algunos datos no se pudieron subir", "warning", 3000);
-  }
-}
-
-// Auto-sincronizar al volver la conexión
-window.addEventListener("online", sincronizar);
-
-// ===============================
-// 🔔 Función Toast (mensajes visuales)
-// ===============================
-function showToast(msg, type = "info", time = 2000) {
-  const toast = document.createElement("div");
-  toast.className = `toast ${type}`;
-  toast.innerText = msg;
-  document.body.appendChild(toast);
-  setTimeout(() => toast.remove(), time);
-}
 
 
 
