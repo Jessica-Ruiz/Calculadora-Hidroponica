@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HIDROPONIA</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+</head>
+<body>
+
+  <!-- ENCABEZADO -->
+  <header>
+    <button class="btnLogin-popup">Login</button>
+  </header>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="header">
+      <div class="menu-btn">
+        <i class="bi bi-arrow-left"></i>
+      </div>
+    </div>
+
+    <div class="brand">
+      <img src="Copilot_20250923_095246-convertido-a-pequeño.jpeg" alt="logo">
+      <span>Hidrosoft</span>
+    </div>
+
+    <div class="menu_container">
+      <div class="buscador">
+        <i class="bi bi-search"></i>
+        <input type="text" placeholder="Buscador">
+      </div>
+
+      <ul class="menu">
+        <li class="menu-items menu-items-static active">
+          <a href="#" class="menu-link">
+            <i class="bi bi-house-fill"></i>
+            <span>Home</span>
+          </a>
+        </li>
+        <li class="menu-items menu-items-static">
+          <a href="#" class="menu-link">
+            <i class="bi bi-clipboard-data"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+
+        <!-- PLANTAS -->
+        <li class="menu-items menu-items-dropdown">
+          <a href="#" class="menu-link">
+            <i class="bi bi-flower1"></i>
+            <span>Plantas</span>
+            <i class="bi bi-caret-down-fill"></i>
+          </a>
+          <ul class="sub_menu" style="display:none;">
+            <li><a href="#">Calculadora</a></li>
+            <li><a href="#">Calendario</a></li>
+            <li><a href="#">Parámetros</a></li>
+          </ul>
+        </li>
+
+        <li class="menu-items menu-items-static">
+          <a href="#" class="menu-link">
+            <i class="bi bi-pencil-square"></i>
+            <span>Mi propia fórmula</span>
+          </a>
+        </li>
+
+        <li class="menu-items menu-items-static">
+          <a href="#" class="menu-link">
+            <i class="bi bi-clock-history"></i>
+            <span>Historial</span>
+          </a>
+        </li>
+
+        <li class="menu-items menu-items-static">
+          <a href="#" class="menu-link">
+            <i class="bi bi-journal-text"></i>
+            <span>Notas</span>
+          </a>
+        </li>
+      </ul>
+    </div> 
+
+    <div class="footer">
+      <ul class="menu">
+        <li class="menu-items menu-items-static">
+          <a href="#" class="menu-link" onclick="showContent('notificaciones')">
+            <i class="bi bi-bell-fill"></i>
+            <span>Notificaciones</span>
+          </a>
+        </li>
+        <li class="menu-items menu-items-static">
+          <a href="#" class="menu-link">
+            <i class="bi bi-gear"></i>
+            <span>Configuraciones</span>
+          </a>
+        </li>
+      </ul>
+
+      <div class="usuario">
+        <div class="usuario-img">
+          <img src="Copilot_20250921_211925 (1).png" alt="usuario">
+        </div>
+        <div class="datos_usuario">
+          <span class="name">Admin</span>
+          <span class="gmail">admin@gmail.com</span>
+        </div>
+        <div class="user-icon">
+          <i class="bi bi-box-arrow-left"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <div id="main-content">
+
+    <!-- HOME -->
+    <div id="home">
+      <div class="home-container">
+        <div class="welcome-section">
+          <h1>Bienvenido a <span>Hidrosoft</span></h1>
+          <p>Tu asistente digital para el cultivo hidropónico inteligente. Gestiona tus nutrientes, etapas de crecimiento y parámetros ambientales en un solo lugar.</p>
+          <img src="ChatGPT Image 29 oct 2025, 10_03_53 p.m..png" alt="Sistema hidropónico" class="home-image">
+        </div>
+
+        <div class="quick-access">
+          <h2>Accesos rápidos</h2>
+          <div class="cards">
+            <div class="card" onclick="showContent('calculadora')">
+              <i class="bi bi-calculator"></i>
+              <h3>Calculadora de Nutrientes</h3>
+              <p>Calcula las dosis exactas para cada cultivo.</p>
+            </div>
+            <div class="card" onclick="showContent('calendario')">
+              <i class="bi bi-calendar-event"></i>
+              <h3>Calendario de Cultivo</h3>
+              <p>Organiza tus siembras y cosechas fácilmente.</p>
+            </div>
+            <div class="card" onclick="showContent('parametros')">
+              <i class="bi bi-bar-chart-line"></i>
+              <h3>Verificación de Parámetros</h3>
+              <p>Controla pH, CE y condiciones del ambiente.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="tip-section">
+          <h2>💧 Consejo del día</h2>
+          <p id="consejo-texto">"Recuerda revisar la conductividad eléctrica cada tres días para evitar acumulación de sales."</p>
+          <button id="nuevoConsejoBtn">Nuevo consejo</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div id="dashboard" style="display:none;">
+      <h1>Panel de Control</h1>
+      
+      <div class="dashboard">
+        <!-- Resumen de Actividad -->
+        <div class="dashboard-card activity-summary">
+          <div class="dashboard-card-header">
+            <i class="bi bi-activity"></i>
+            <h3>Actividad del Sistema</h3>
+          </div>
+          <div class="dashboard-card-content">
+            <div class="stat-grid">
+              <!-- Se llenará dinámicamente -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Estadísticas de Cálculos -->
+        <div class="dashboard-card calculation-stats">
+          <div class="dashboard-card-header">
+            <i class="bi bi-calculator"></i>
+            <h3>Estadísticas</h3>
+          </div>
+          <div class="dashboard-card-content">
+            <div class="stat-grid">
+              <!-- Se llenará dinámicamente -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Estado del Sistema -->
+        <div class="dashboard-card system-status">
+          <div class="dashboard-card-header">
+            <i class="bi bi-wifi"></i>
+            <h3>Estado del Sistema</h3>
+          </div>
+          <div class="dashboard-card-content">
+            <div class="status-grid">
+              <!-- Se llenará dinámicamente -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Cultivos Activos -->
+        <div class="dashboard-card active-crops">
+          <div class="dashboard-card-header">
+            <i class="bi bi-flower1"></i>
+            <h3>Cultivos Activos</h3>
+          </div>
+          <div class="dashboard-card-content">
+            <ul class="crop-list">
+              <!-- Se llenará dinámicamente -->
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CALCULADORA -->
+    <div id="calculadora" style="display:none;">
+      <div class="container">
+        <h1>Calculadora de Nutrientes</h1>
+        <form id="nutrientForm">
+          <label for="option">Selecciona un compuesto:</label>
+          <select id="option">
+            <option value="1">TOMATE</option>
+            <option value="2">FRESAS</option>
+            <option value="3">LECHUGA</option>
+            <option value="4">GUATILA</option>
+            <option value="5">MORA</option>
+            <option value="6">ESPINACAS</option>
+            <option value="7">ROMERO</option>
+            <option value="8">PEREJIL</option>
+            <option value="9">CILANTRO</option>
+          </select>
+          <label for="liters">Litros:</label>
+          <input type="number" id="liters" step="any" required />
+          <button type="submit">Calcular</button>
+        </form>
+        <div id="result" class="result-container"></div>
+        <button id="guardarResultadoCalc" style="display:none;" onclick="guardarResultadoCalc()">Guardar este resultado</button>
+        <div id="resultadosGuardadosCalc"></div>
+        <div id="resultadosContainer"></div>
+      </div>
+    </div>
+
+    <!-- CALENDARIO -->
+    <div id="calendario" style="display:none;">
+      <div class="container">
+        <h1>Calendario de Etapas del Cultivo</h1>
+        <label for="options">Selecciona una planta:</label>
+        <select id="options">
+          <option value="1">TOMATE</option>
+          <option value="2">FRESAS</option>
+          <option value="3">LECHUGA</option>
+          <option value="4">GUATILA</option>
+          <option value="5">MORA</option>
+          <option value="6">ESPINACAS</option>
+          <option value="7">ROMERO</option>
+          <option value="8">PEREJIL</option>
+          <option value="9">CILANTRO</option>
+        </select>
+        <br><br>
+        <label for="fechaSiembra">Selecciona la fecha de siembra:</label>
+        <input type="date" id="fechaSiembra" />
+        <button onclick="calcularEtapas()">Calcular etapas</button>
+        <br><br>
+        <table id="tablaEtapas" border="1" style="display:none;">
+          <thead>
+            <tr><th>Etapa</th><th>Fecha inicio</th><th>Fecha fin</th></tr>
+          </thead>
+          <tbody id="tablaBody"></tbody>
+        </table>
+        <button id="guardarResultadoCalendario" style="display:none;" onclick="guardarResultadoCalendario()">Guardar este resultado</button>
+        <div id="resultadosGuardadosCalendario"></div>
+      </div>
+    </div>
+
+<!-- PARÁMETROS -->
+<div id="parametros" style="display:none;">
+  <div class="container">
+    <h1>pH, Conductividad Eléctrica y Condiciones de Cultivo</h1>
+    <h2>Verificación de Parámetros por Etapa</h2>
+
+    <label for="planta">Selecciona una planta:</label>
+    <select id="planta">
+      <option value="fresa">Fresa</option>
+      <option value="guatila">Guatila</option>
+      <option value="mora">Mora</option>
+      <option value="lechuga">Lechuga</option>
+      <option value="espinaca">Espinaca</option>
+      <option value="romero">Romero</option>
+      <option value="perejil">Perejil</option>
+      <option value="cilantro">Cilantro</option>
+      <option value="tomate">Tomate</option>
+    </select>
+
+    <label for="etapa">Selecciona la etapa:</label>
+    <select id="etapa">
+      <option value="germinacion">Germinación</option>
+      <option value="plantula">Plántula</option>
+      <option value="vegetativo">Desarrollo vegetativo</option>
+      <option value="floracion">Floración</option>
+      <option value="fructificacion">Fructificación</option>
+      <option value="cosecha">Cosecha</option>
+    </select>
+
+    <br><br>
+    <label>pH: <input type="number" id="ph" step="0.1"></label><br>
+    <label>CE: <input type="number" id="ce" step="0.1"></label><br>
+    <label>Temperatura (°C): <input type="number" id="temperatura"></label><br>
+    <label>Humedad (%): <input type="number" id="humedad"></label><br><br>
+
+    <button id="verificarParametrosBtn">Verificar</button>
+    <p id="resultado"></p>
+
+    <button id="guardarResultadoParametros" style="display:none;">Guardar este resultado</button>
+    <div id="resultadosGuardadosParametros"></div>
+  </div>
+</div>
+
+    <!-- HISTORIAL -->
+    <div id="historial" style="display:none;">
+      <div class="container">
+        <h1>Historial de Resultados Guardados</h1>
+        <div id="historialResultados"></div>
+        <button onclick="cargarHistorial()">Actualizar historial</button>
+      </div>
+    </div>
+
+    <!-- NOTAS -->
+    <div id="notas" style="display:none;">
+      <div class="container" id="notasOfflineContainer">
+        <h2>Notas de mi cultivo (Offline)</h2>
+        <textarea id="nota" placeholder="Escribe aquí tu nota" rows="4" cols="50"></textarea>
+        <br>
+        <button onclick="guardarNotaDexie()">Guardar nota</button>
+        <div id="notasGuardadas"></div>
+      </div>
+    </div>
+
+    <!-- NOTIFICACIONES -->
+    <div id="notificaciones" style="display:none;">
+      <div class="container">
+        <h1>Centro de Notificaciones</h1>
+        <div id="notificacionesList"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOGIN Y REGISTRO -->
+  <div class="wrapper">
+    <span class="icon-close"><ion-icon name="close-circle-outline"></ion-icon></span>
+
+    <div class="form-box login">
+      <h2>Iniciar sesión</h2>
+      <form>
+        <div class="input-box">
+          <span class="icon"><ion-icon name="mail-outline"></ion-icon></span>
+          <input type="email" name="email" required>
+          <label>Email</label>
+        </div>
+        <div class="input-box">
+          <span class="icon"><ion-icon name="lock-closed-outline"></ion-icon></span>
+          <input type="password" name="password" required>
+          <label>Contraseña</label>
+        </div>
+        <div class="recordar-contraseña">
+          <label><input type="checkbox" name="remember"> Recordar</label>
+          <a href="#">¿Olvidaste tu contraseña?</a>
+        </div>
+        <button type="submit" class="btn">Ingresar</button>
+        <div class="olvidar">
+          <p>¿No tienes una cuenta? <a href="#" class="register-link">Registrar</a></p>
+        </div>
+      </form>
+    </div>
+
+    <div class="form-box register">
+      <h2>Registrarse</h2>
+      <form>
+        <div class="input-box">
+          <span class="icon"><ion-icon name="person-outline"></ion-icon></span>
+          <input type="text" name="nombre" required>
+          <label>Nombre</label>
+        </div>
+        <div class="input-box">
+          <span class="icon"><ion-icon name="mail-outline"></ion-icon></span>
+          <input type="email" name="email" required>
+          <label>Email</label>
+        </div>
+        <div class="input-box">
+          <span class="icon"><ion-icon name="lock-closed-outline"></ion-icon></span>
+          <input type="password" name="password" required>
+          <label>Contraseña</label>
+        </div>
+        <div class="input-box">
+          <span class="icon"><ion-icon name="lock-closed-outline"></ion-icon></span>
+          <input type="password" name="confirm_password" required>
+          <label>Confirmar Contraseña</label>
+        </div>
+        <div class="recordar-contraseña">
+          <label><input type="checkbox" required> Acepto los términos y condiciones</label>
+        </div>
+        <button type="submit" class="btn">Registrar</button>
+        <div class="olvidar">
+          <p>¿Ya tienes una cuenta? <a href="#" class="login-link">Inicia sesión</a></p>
+        </div>
+      </form>
+    </div>
+
+    <!-- Recuperar Contraseña -->
+    <div class="form-box forgot-password" style="display:none;">
+      <h2>Recuperar Contraseña</h2>
+      <form>
+        <div class="input-box">
+          <span class="icon"><ion-icon name="mail-outline"></ion-icon></span>
+          <input type="email" name="email" required>
+          <label>Email</label>
+        </div>
+        <button type="submit" class="btn">Enviar enlace de recuperación</button>
+        <div class="olvidar">
+          <p>¿Recordaste tu contraseña? <a href="#" class="back-to-login">Volver a iniciar sesión</a></p>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- SCRIPTS -->
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+  <script>
+    // Mostrar contenido principal
+    function showContent(id) {
+      document.querySelectorAll('#main-content > div').forEach(div => div.style.display = 'none');
+      document.getElementById(id).style.display = 'block';
+    }
+
+    // Sidebar enlaces principales
+    document.querySelectorAll('.sidebar .menu-items-static > .menu-link').forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const text = this.textContent.toLowerCase();
+        if(text.includes('home')) showContent('home');
+        if(text.includes('dashboard')) showContent('dashboard');
+        if(text.includes('historial')) showContent('historial');
+        if(text.includes('notas')) showContent('notas');
+        if(text.includes('mi propia fórmula')) showContent('formula'); // opcional
+      });
+    });
+
+    // Plantas submenú desplegable al clic
+    document.querySelectorAll('.menu-items-dropdown > .menu-link').forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const subMenu = this.nextElementSibling;
+        if(subMenu.style.display === 'block') {
+          subMenu.style.display = 'none';
+        } else {
+          subMenu.style.display = 'block';
+        }
+      });
+    });
+
+    // Submenú de Plantas mostrar contenido
+    document.querySelectorAll('.menu-items-dropdown .sub_menu li a').forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const text = this.textContent.toLowerCase();
+        if(text.includes('calculadora')) showContent('calculadora');
+        if(text.includes('calendario')) showContent('calendario');
+        if(text.includes('parámetros')) showContent('parametros');
+      });
+    });
+  </script>
+
+
+ <!-- LIBRERÍAS -->
+  <script src="https://cdn.jsdelivr.net/npm/dexie@4.0.4/dist/dexie.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase.js"></script>
+  <script src="script.js"></script>
+
+  <!-- Ionicons -->
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
+</html>
+
+
+
+
