@@ -1124,19 +1124,25 @@ document.getElementById('guardarResultadoParametros').addEventListener('click', 
 
   // Guardar en Supabase si hay conexión
   if (navigator.onLine) {
-    try {
-      const { data, error } = await supabaseClient
-        .from('parametros')
-        .insert([{ planta, etapa, ph, ce, temperatura, humedad, texto, fecha }]);
-      if (error) throw error;
-      showToast("✅ Guardado en Supabase correctamente", "success", 3000);
-    } catch(err) {
-      console.error("Error guardando en Supabase:", err.message);
-      showToast("⚠️ No se pudo guardar en Supabase", "error", 3000);
+  try {
+    const { data, error } = await supabaseClient
+      .from('parametros')
+      .insert([{ planta, etapa, ph, ce, temperatura, humedad, texto, fecha }]);
+    
+    if (error) {
+      console.error("🟥 Error completo de Supabase:", error);
+      alert("Error Supabase: " + (error.message || JSON.stringify(error)));
+      return;
     }
-  } else {
-    showToast("⚠️ Estás offline, se guardó solo localmente", "warning", 3000);
+
+    console.log("✅ Guardado en Supabase:", data);
+    showToast("✅ Guardado en Supabase correctamente", "success", 3000);
+  } catch (err) {
+    console.error("⚠️ Error inesperado:", err);
+    alert("Error inesperado: " + err.message);
   }
+}
+
 
   // Mostrar todos los parámetros
   mostrarParametrosCompletos();
