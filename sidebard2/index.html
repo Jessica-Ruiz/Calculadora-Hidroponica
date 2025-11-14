@@ -12,7 +12,7 @@
 
   <!-- ENCABEZADO -->
   <header>
-    <button class="btnLogin-popup">Login</button>
+    <button class="btnLogin-popup"></button>
   </header>
 
   <!-- SIDEBAR -->
@@ -61,14 +61,6 @@
             <li><a href="#">Parámetros</a></li>
           </ul>
         </li>
-
-        <li class="menu-items menu-items-static">
-          <a href="#" class="menu-link">
-            <i class="bi bi-pencil-square"></i>
-            <span>Mi propia fórmula</span>
-          </a>
-        </li>
-
         <li class="menu-items menu-items-static">
           <a href="#" class="menu-link">
             <i class="bi bi-clock-history"></i>
@@ -150,7 +142,7 @@
         </div>
 
         <div class="tip-section">
-          <h2>💧 Consejo del día</h2>
+          <h2>Consejo del día</h2>
           <p id="consejo-texto">"Recuerda revisar la conductividad eléctrica cada tres días para evitar acumulación de sales."</p>
           <button id="nuevoConsejoBtn">Nuevo consejo</button>
         </div>
@@ -275,6 +267,7 @@
         <div id="resultadosGuardadosCalendario"></div>
       </div>
     </div>
+    
 
 <!-- PARÁMETROS -->
 <div id="parametros" style="display:none;">
@@ -319,6 +312,8 @@
   </div>
 </div>
 
+
+
     <!-- HISTORIAL -->
     <div id="historial" style="display:none;">
       <div class="container">
@@ -350,7 +345,7 @@
 
   <!-- LOGIN Y REGISTRO -->
   <div class="wrapper">
-    <span class="icon-close"><ion-icon name="close-circle-outline"></ion-icon></span>
+    <span class="icon-close"></span>
 
     <div class="form-box login">
       <h2>Iniciar sesión</h2>
@@ -369,7 +364,7 @@
           <label><input type="checkbox" name="remember"> Recordar</label>
           <a href="#">¿Olvidaste tu contraseña?</a>
         </div>
-        <button type="submit" class="btn">Ingresar</button>
+        <button type="submit" class="btn-auth">Ingresar</button>
         <div class="olvidar">
           <p>¿No tienes una cuenta? <a href="#" class="register-link">Registrar</a></p>
         </div>
@@ -402,7 +397,7 @@
         <div class="recordar-contraseña">
           <label><input type="checkbox" required> Acepto los términos y condiciones</label>
         </div>
-        <button type="submit" class="btn">Registrar</button>
+        <button type="submit" class="btn-auth">Registrar</button>
         <div class="olvidar">
           <p>¿Ya tienes una cuenta? <a href="#" class="login-link">Inicia sesión</a></p>
         </div>
@@ -418,7 +413,7 @@
           <input type="email" name="email" required>
           <label>Email</label>
         </div>
-        <button type="submit" class="btn">Enviar enlace de recuperación</button>
+        <button type="submit" class="btn-auth">Enviar enlace de recuperación</button>
         <div class="olvidar">
           <p>¿Recordaste tu contraseña? <a href="#" class="back-to-login">Volver a iniciar sesión</a></p>
         </div>

@@ -8,283 +8,153 @@
     box-sizing:border-box; 
     font-family:"Poppins",sans-serif; }
 html, body { width:100%; 
-            height:100%; }
+            height:100%;
+            background: linear-gradient(135deg, #2A9EB5, #1F7F95);
 
-#overlay-login {
-    position: fixed; top:0; left:0; width:100%; height:100%;
-    background: rgba(0,0,0,0.5);
-    display:flex; justify-content:center; align-items:center;
-    z-index:1000;
 }
 
 
-/* Estilo del título HIDROSOFT */
-.HIDROSOFT {
-    font-size: 2em; /* Tamaño grande */
-    color: white; /* Blanco */
-    user-select: none; /* No permite seleccionar el texto */
-}
-
-
-/* Estilos para los enlaces de navegación */
-.navigation a {
-    position: relative; /* Necesario para el pseudo-elemento ::after */
-    font-size: 1.1em;
-    color: white;
-    text-decoration: none; /* Quita subrayado */
-    font-weight: 500;
-    margin-left: 40px; /* Separación entre enlaces */
-}
-
-/* Línea animada debajo de cada enlace */
-.navigation a::after{
-    content:''; /* Crea un pseudo-elemento vacío */
-    position:absolute;
-    left: 0;
-    bottom: -6px; /* Justo debajo del texto */
-    width: 100%;
-    height: 3px;
-    background: white;
-    border-radius: 5px;
-    transform-origin: right; /* Punto inicial de animación */
-    transform: scaleX(0); /* Oculto */
-    transition: transform .5s; /* Animación */
-}
-
-/* Al pasar el mouse se anima la línea */
-.navigation a:hover::after{
-    transform-origin: left;
-    transform: scaleX(1); /* Se expande */
-}
-
-/* Botón de login en el header */
-.navigation .btnLogin-popup{
-    width: 130px;
-    height: 50px;
-    background: transparent; /* Transparente por defecto */
-    border: 2px solid white;
-    outline: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 1.1em;
-    color: white;
-    font-weight: 500;
-    margin-left: 40px;
-    transition: .5s; /* Animación al hover */
-}
-.btnLogin-popup {
-    display: none;
-}
-
-
-/* Al pasar el mouse cambia colores */
-.navigation .btnLogin-popup:hover{
-    background: white;
-    color: #0D89B6; /* Verde */
-}
-
-/* CONTENEDOR PRINCIPAL (wrapper) */
-.wrapper {
+.wrapper{
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 90%;
     max-width: 400px;
-    height: 440px;
-    background: transparent;
-    border: 2px solid rgba(255, 255, 255, 0.1);
-    border-radius: 20px;
-    backdrop-filter: blur(20px);
+    height: auto;                 /* Ajuste automático */
+    min-height: 440px;            /* Altura mínima para login */
+    background: linear-gradient(135deg, #2A9EB5, #BDEFF5);
+    border: 2px solid rgba(255, 255, 255, .5); /* ✔ Igual */
+    border-radius: 20px;          /* ✔ Igual */
+    backdrop-filter: blur(20px);  /* ✔ Efecto glass intacto */
     box-shadow: 0 0 30px rgba(0, 0, 0, .5);
-    padding: 40px 20px;
-    color: black;
-    overflow: hidden;
-    transition: height 0.3s ease;
-}
-
-
-/* Cuando se activa el registro el wrapper se hace más alto */
-.wrapper.active {
-    height: 520px; /* Más espacio para formulario registro */
-}
-
-/* FORMULARIOS LOGIN y REGISTRO */
-.form-box {
-    width: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    padding: 40px;
-    transition: transform .5s ease; /* Animación de desplazamiento */
-}
-
-/* Login visible por defecto */
-.form-box.login {
-    transform: translateX(0);
-}
-
-/* Registro oculto al inicio (se mueve a la derecha) */
-.form-box.register {
-    transform: translateX(100%);
-}
-
-/* Cuando se activa la clase "active" en wrapper se alternan los formularios */
-.wrapper.active .form-box.login {
-    transform: translateX(-100%);
-}
-.wrapper.active .form-box.register {
-    transform: translateX(0);
-}
-
-/* Títulos de formularios */
-.form-box h2{
-    font-size: 2em;
-    color: black;
-    text-align: center;
-}
-
-/* Botón de cerrar ventana */
-.wrapper .icon-close{
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 45px;
-    height: 45px;
-    background: transparent;
-    font-size: 2em;
-    color:black;
     display: flex;
     justify-content: center;
     align-items: center;
-    border-bottom-left-radius: 20px;
-    cursor: pointer;
-    z-index: 1; /* Encima del resto */
+    overflow: hidden;             
+    transition: .4s ease;
+    text-align: center;
+    
 }
 
-/* Caja de entrada de texto */
+.wrapper.active{
+    height: auto;
+    min-height: 620px;            /* Altura para que no se corte el registro */
+}
+
+.wrapper .form-box{
+    width: 100%;
+    padding: 40px;
+    position: absolute;
+    transition: transform .5s ease;
+}
+
+.wrapper .form-box.login{
+    transform: translateX(0);
+}
+
+.wrapper.active .form-box.login{
+    transform: translateX(-400px);
+}
+
+.wrapper .form-box.register{
+    transform: translateX(400px);
+}
+
+.wrapper.active .form-box.register{
+    transform: translateX(0);
+}
+
 .input-box{
     position: relative;
     width: 100%;
     height: 50px;
+    border-bottom: 2px solid white; /* ✔ Mantiene línea blanca */
     margin: 30px 0;
-    border-bottom: 2px solid black;
-    display: flex;
-    align-items: center;
 }
 
-/* Etiquetas dentro de input */
 .input-box label{
     position: absolute;
     top: 50%;
     left: 5px;
     transform: translateY(-50%);
     font-size: 1em;
-    color: black;
-    font-weight: 500;
-    pointer-events:none ; /* No clickeable */
-    transition: .5s;
+    color: white; /* ✔ Blanco igual */
+    pointer-events: none;
+    transition: .5s ease;
 }
 
-/* Cuando el input está enfocado o lleno, la etiqueta sube */
-.input-box input:focus~label,
-.input-box input:valid~label{
+.input-box input:focus ~ label,
+.input-box input:valid ~ label{
     top: -5px;
 }
 
-/* Estilos de los inputs */
 .input-box input{
     width: 100%;
     height: 100%;
-    background: transparent;
+    background: transparent; /* ✔ Igual */
     border: none;
     outline: none;
-    color: black;
     font-size: 1em;
-    font-weight: 600;
-    padding: 0 35px 0 5px; /* Espaciado interno */
+    color: white; /* ✔ Texto blanco */
+    padding: 0 5px;
 }
 
-/* Icono dentro de los inputs */
 .input-box .icon{
     position: absolute;
     right: 8px;
+    line-height: 50px;
+    color: white; /* ✔ Iconos blancos */
     font-size: 1.2em;
-    color: black;
-    line-height:57px;
 }
 
-/* Recordar contraseña */
-.recordar-contraseña {
+.remember-forgot{
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    font-size: 0.9em;
-    margin-bottom: 20px;
-    color: black;
+    color:white; /* ✔ Igual */
+    font-size: .9em;
+    margin: -15px 0 15px;
 }
 
-/* Estilo checkbox dentro de recordar */
-.recordar-contraseña label input{
-    accent-color: black; /* Color de check */
-    margin-right: 3px;
+.remember-forgot label input{
+    accent-color: WHITE; /* ✔ Checkbox blanco */
+    margin-right: 5px;
 }
 
-/* Estilo link dentro de recordar */
-.recordar-contraseña a{
-    color: black;
+.remember-forgot a{
+    color: white; /* ✔ Enlaces blancos */
     text-decoration: none;
 }
-.recordar-contraseña a:hover{
+
+.remember-forgot a:hover{
     text-decoration: underline;
 }
 
-/* Botones generales */
-.btn{
+.btn-auth {
     width: 100%;
     height: 45px;
-    background:#0D89B6; /* Verde */
-    border: none;
-    outline: none;
     border-radius: 6px;
+    background: linear-gradient(135deg, #2A9EB5, #7FD3E0);
+    border: white;
     cursor: pointer;
     font-size: 1em;
-    color: white;
-    font-weight: 500;
-}
-
-/* Texto debajo de botones (registro/login) */
-.olvidar{
-    font-size: .9em;
-    color: black;
-    text-align: center;
-    font-weight: 500;
-    margin:25px 0 10px;
-}
-
-/* Links dentro del texto */
-.olvidar p a{
-    color: black;
-    text-decoration: none;
     font-weight: 600;
 }
-.olvidar p a:hover{
-    text-decoration: underline;
-}
 
-/* Estilos para el formulario de recuperación de contraseña */
-.form-box.forgot-password {
-    position: absolute;
-    width: 100%;
-    padding: 40px;
-    display: none;
-}
-
-.form-box.forgot-password h2 {
-    font-size: 2em;
-    color: black;
+.login-register{
+    color: white;
+    margin-top: 20px;
     text-align: center;
-    margin-bottom: 30px;
+    font-size: .9em;
+}
+
+.login-register a{
+    color: black; /* ✔ Enlace blanco */
+    text-decoration: white;
+}
+
+.login-register a:hover{
+    text-decoration: underline;
 }
 
 :root {
@@ -306,7 +176,8 @@ html, body { width:100%;
   left: 0;                /* pegada al borde izquierdo */
   width: 15rem;
   height: 100vh;          /* ocupa todo el alto visible */
-  background: var(--color-surface);
+  background: linear-gradient(135deg, #2A9EB5, #E3FAFD);
+
   box-shadow: 1px 0px 10px rgba(0, 0, 0, 0.1);
   padding: 1.4rem 1rem 0 1rem;
   display: flex;
@@ -351,7 +222,7 @@ html, body { width:100%;
   width: 12rem;
   height: auto;
   padding: 0.5rem 0;
-  background: var(--color-surface);
+  background:linear-gradient(135deg, #2A9EB5, #E3FAFD);
   box-shadow: 0 0 5px rgba(0,0,0,0.1);
   display: none; /* oculto por defecto */
   z-index: 100;
@@ -442,7 +313,7 @@ html, body { width:100%;
   gap: 0.5rem;               /* espacio entre icono y texto */
   padding: 0.6rem 1rem;
   border-radius: 0.5rem;
-  color: var(--color-text-primary);
+  color: linear-gradient(135deg, #2A9EB5, #E3FAFD);
   text-decoration: none;
   cursor: pointer;
   transition: background 0.3s, color 0.3s;
@@ -484,7 +355,7 @@ html, body { width:100%;
   padding: 0.5rem 2.5rem;
   font-size: 0.75rem;
   font-weight: 500;
-  color: var(--color-text-secondary);
+  color: linear-gradient(135deg, #2A9EB5, #E3FAFD);
   text-decoration: none;
   border-radius: 0.3rem;
   transition: background 0.3s ease, color 0.3s ease;
@@ -573,7 +444,7 @@ html, body { width:100%;
 .navigation a {
   position: relative;
   font-size: 1.1em;
-  color: white;
+  color: rgba(255, 255, 255, .5);
   text-decoration: none;
   font-weight: 500;
   margin-left: 40px;
@@ -685,7 +556,7 @@ html, body { width:100%;
 /* ----- Historial principal (usa el div #historial en index.html) ----- */
 #historial { 
     padding: 20px; 
-    background: #fff; 
+    background: linear-gradient(135deg, #2A9EB5, #E3FAFD);
     border-radius: 10px; 
     box-shadow: 0 6px 18px rgba(0,0,0,0.06); 
 }
@@ -829,24 +700,11 @@ html, body { width:100%;
 
 
 
-
-
-#main-content {
-  flex: 1;
-  margin-left: 260px; /* espacio del sidebar */
-  padding: 30px;
-  background: linear-gradient(to bottom, #f5f6fa, #e8f0f2);
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-}
-
 /* Cada sección principal */
 #main-content > div {
   display: none;
   flex: 1;
-  background: #ffffff;
+  background:linear-gradient(135deg, #2A9EB5, #E3FAFD);
   border-radius: 25px;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
   padding: 50px;
@@ -862,13 +720,15 @@ html, body { width:100%;
   display: block;
 }
 
+
+
 /* Títulos */
 #main-content h1 {
   font-size: 2.5rem;
   font-weight: 800;
   text-align: center;
   margin-bottom: 25px;
-  background: linear-gradient(90deg, #56b68b, #4ba97f);
+  background: linear-gradient(90deg, #ffffff, #d9d9d9);
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -879,7 +739,7 @@ html, body { width:100%;
   text-align: center;
   font-weight: 700;
   margin-bottom: 20px;
-  color: #333;
+  color:linear-gradient(90deg, #ffffff, #d9d9d9);
 }
 
 /* Formularios y campos */
@@ -888,7 +748,7 @@ html, body { width:100%;
   display: block;
   font-weight: 500;
   margin-bottom: 6px;
-  color: #444;
+  color: linear-gradient(135deg, #2A9EB5, #E3FAFD);
 }
 
 #main-content input,
@@ -915,8 +775,8 @@ html, body { width:100%;
 
 /* Botones */
 #main-content button {
-  background-color: #56b68b;
-  color: #fff;
+  background-color:#2A9EB5;
+  color: black;
   font-weight: 600;
   border: none;
   border-radius: 12px;
@@ -928,7 +788,7 @@ html, body { width:100%;
 }
 
 #main-content button:hover {
-  background-color: #4ba97f;
+  background-color: linear-gradient(135deg, #2A9EB5, #1F7F95);
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(86,182,139,0.4);
 }
@@ -938,7 +798,7 @@ html, body { width:100%;
 #main-content #resultadosGuardados,
 #main-content #tablaEtapas,
 #main-content .almacenamiento {
-  background-color: #f0fff7;
+  background-color:linear-gradient(135deg, #2A9EB5, #1F7F95);
   border: 1px solid #cdeedd;
   padding: 20px;
   border-radius: 12px;
@@ -956,8 +816,8 @@ html, body { width:100%;
 }
 
 #main-content th {
-  background-color: #56b68b;
-  color: white;
+  background-color: linear-gradient(135deg, #2A9EB5, #1F7F95);
+  color: black;
   font-weight: 600;
   padding: 12px;
 }
@@ -965,7 +825,7 @@ html, body { width:100%;
 #main-content td {
   padding: 12px;
   border-bottom: 1px solid #e0e0e0;
-  color: #555;
+  color: linear-gradient(135deg, #2A9EB5, #1F7F95);
 }
 
 #main-content tr:nth-child(even) {
@@ -989,7 +849,7 @@ html, body { width:100%;
 }
 
 #main-content > div::-webkit-scrollbar-track {
-  background: #f0f0f0;
+  background: linear-gradient(135deg, #2A9EB5, #1F7F95);
 }
 
 /* === ESTILO DEL HISTORIAL (adaptado al diseño general) === */
@@ -1265,6 +1125,19 @@ html, body { width:100%;
   align-items: center;
   justify-content: center;
   margin-right: 10px;
+}
+
+
+
+/* MAIN CONTENT RESPONSIVE CON SIDEBAR */
+#main-content {
+  margin-left: 15rem; /* sidebar normal */
+  padding: 2rem;
+  transition: margin-left 0.4s ease;
+}
+/* Cuando el sidebar está colapsado */
+.sidebar.collapsed ~ #main-content {
+  margin-left: 5rem;
 }
 
 /* Responsividad */

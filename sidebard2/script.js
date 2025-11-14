@@ -307,6 +307,7 @@ document.addEventListener('DOMContentLoaded', function() {
   window.calcularEtapas = function() {
     const fechaInput = document.getElementById('fechaSiembra').value;
     if (!fechaInput) { alert('Por favor selecciona una fecha de siembra.'); return; }
+
     const fechaSiembra = new Date(fechaInput);
     if (isNaN(fechaSiembra.getTime())) { alert('Fecha inválida'); return; }
 
@@ -338,52 +339,59 @@ document.addEventListener('DOMContentLoaded', function() {
   };
 
   // ===========================
-  // Guardar calendario
+  // Guardar calendario asociado al usuario
   // ===========================
-  btnGuardar.addEventListener('click', function() {
-    if(!navigator.onLine) guardarEnDexieCalendario(resultadoTextoGlobal);
-    else guardarEnSupabaseCalendario(resultadoTextoGlobal);
-  });
+  btnGuardar.addEventListener('click', async function() {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    const userId = session?.user?.id;
 
-  function guardarEnDexieCalendario(texto){
-    const db = new Dexie("hidrosoftDB");
-    db.version(1).stores({ calendario: "++id, texto, fecha" });
-    db.calendario.add({ texto, fecha: new Date().toISOString() })
-      .then(() => {
-        alert('Calendario guardado (offline)');
-        mostrarResultadosCalendario();
-      })
-      .catch(err => alert('Error Dexie: ' + err));
-  }
+    if (!userId) {
+      alert('Debes iniciar sesión para guardar el calendario.');
+      return;
+    }
 
-  async function guardarEnSupabaseCalendario(texto){
     try {
       const { error } = await supabaseClient
         .from('calendario')
-        .insert([{ texto, fecha: new Date().toISOString() }]);
-      if(error) throw error;
+        .insert([{
+          texto: resultadoTextoGlobal,
+          fecha: new Date().toISOString(),
+          user_id: userId // vinculamos al usuario
+        }]);
+
+      if (error) throw error;
       alert('Calendario guardado en Supabase.');
       mostrarResultadosCalendario();
     } catch(err) {
       alert('Error Supabase: ' + err.message);
     }
-  }
+  });
 
   // ===========================
-  // Mostrar calendarios guardados en tabla con botón borrar
+  // Mostrar calendarios del usuario
   // ===========================
-  async function mostrarResultadosCalendario(){
+  async function mostrarResultadosCalendario() {
     try {
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      const userId = session?.user?.id;
+
+      if (!userId) {
+        document.getElementById('resultadosGuardadosCalendario').innerHTML = '<p>Debes iniciar sesión para ver tus calendarios.</p>';
+        return;
+      }
+
       const { data, error } = await supabaseClient
         .from('calendario')
         .select('*')
+        .eq('user_id', userId)
         .order('fecha', { ascending: false });
-      if(error) throw error;
+
+      if (error) throw error;
 
       const contenedor = document.getElementById('resultadosGuardadosCalendario');
-      if(!data || data.length === 0) { 
-        contenedor.innerHTML = '<p>No hay calendarios guardados.</p>'; 
-        return; 
+      if (!data || data.length === 0) {
+        contenedor.innerHTML = '<p>No hay calendarios guardados.</p>';
+        return;
       }
 
       let tabla = `<table border="1" style="border-collapse: collapse; width: 100%;">
@@ -410,15 +418,17 @@ document.addEventListener('DOMContentLoaded', function() {
       tabla += `</tbody></table>`;
       contenedor.innerHTML = tabla;
 
-      // Borrar registro
+      // Manejo de borrado
       document.querySelectorAll('.btnBorrar').forEach(btn => {
-        btn.addEventListener('click', async function(){
+        btn.addEventListener('click', async function() {
           const id = btn.getAttribute('data-id');
           try {
             const { error } = await supabaseClient.from('calendario').delete().eq('id', id);
-            if(error) throw error;
+            if (error) throw error;
             mostrarResultadosCalendario();
-          } catch(err){ alert('Error al borrar: ' + err.message); }
+          } catch(err) {
+            alert('Error al borrar: ' + err.message);
+          }
         });
       });
 
@@ -427,8 +437,10 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
+  // Llamada inicial para mostrar calendarios
   mostrarResultadosCalendario();
 });
+
 
 
 document.addEventListener('DOMContentLoaded', function() {
