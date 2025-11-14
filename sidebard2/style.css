@@ -9,7 +9,7 @@
     font-family:"Poppins",sans-serif; }
 html, body { width:100%; 
             height:100%;
-            background: linear-gradient(135deg, #2A9EB5, #1F7F95);
+  background:linear-gradient(135deg, #2A9EB5, #E3FAFD);
 
 }
 
@@ -23,7 +23,7 @@ html, body { width:100%;
     max-width: 400px;
     height: auto;                 /* Ajuste automático */
     min-height: 440px;            /* Altura mínima para login */
-    background: linear-gradient(135deg, #2A9EB5, #BDEFF5);
+    background: #FFFFFF;
     border: 2px solid rgba(255, 255, 255, .5); /* ✔ Igual */
     border-radius: 20px;          /* ✔ Igual */
     backdrop-filter: blur(20px);  /* ✔ Efecto glass intacto */
@@ -69,7 +69,7 @@ html, body { width:100%;
     position: relative;
     width: 100%;
     height: 50px;
-    border-bottom: 2px solid white; /* ✔ Mantiene línea blanca */
+    border-bottom: 2px solid black; /* ✔ Mantiene línea blanca */
     margin: 30px 0;
 }
 
@@ -79,7 +79,7 @@ html, body { width:100%;
     left: 5px;
     transform: translateY(-50%);
     font-size: 1em;
-    color: white; /* ✔ Blanco igual */
+    color: black; /* ✔ Blanco igual */
     pointer-events: none;
     transition: .5s ease;
 }
@@ -96,7 +96,7 @@ html, body { width:100%;
     border: none;
     outline: none;
     font-size: 1em;
-    color: white; /* ✔ Texto blanco */
+    color: black; /* ✔ Texto blanco */
     padding: 0 5px;
 }
 
@@ -111,18 +111,18 @@ html, body { width:100%;
 .remember-forgot{
     display: flex;
     justify-content: space-between;
-    color:white; /* ✔ Igual */
+    color:black; /* ✔ Igual */
     font-size: .9em;
     margin: -15px 0 15px;
 }
 
 .remember-forgot label input{
-    accent-color: WHITE; /* ✔ Checkbox blanco */
+    accent-color: black; /* ✔ Checkbox blanco */
     margin-right: 5px;
 }
 
 .remember-forgot a{
-    color: white; /* ✔ Enlaces blancos */
+    color:black; /* ✔ Enlaces blancos */
     text-decoration: none;
 }
 
@@ -142,7 +142,7 @@ html, body { width:100%;
 }
 
 .login-register{
-    color: white;
+    color: black;
     margin-top: 20px;
     text-align: center;
     font-size: .9em;
@@ -704,7 +704,7 @@ html, body { width:100%;
 #main-content > div {
   display: none;
   flex: 1;
-  background:linear-gradient(135deg, #2A9EB5, #E3FAFD);
+  background:#FFFFFF;
   border-radius: 25px;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
   padding: 50px;
@@ -728,7 +728,7 @@ html, body { width:100%;
   font-weight: 800;
   text-align: center;
   margin-bottom: 25px;
-  background: linear-gradient(90deg, #ffffff, #d9d9d9);
+  background:linear-gradient(135deg, #2A9EB5, #E3FAFD);
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -739,7 +739,6 @@ html, body { width:100%;
   text-align: center;
   font-weight: 700;
   margin-bottom: 20px;
-  color:linear-gradient(90deg, #ffffff, #d9d9d9);
 }
 
 /* Formularios y campos */
