@@ -7,11 +7,13 @@
     padding:0; 
     box-sizing:border-box; 
     font-family:"Poppins",sans-serif; }
-html, body { width:100%; 
-            height:100%;
-  background:linear-gradient(135deg, #2A9EB5, #E3FAFD);
-
+html, body {
+  width: 100%;
+  height: 100%;
+  background: url("") no-repeat center center fixed;
+  background-size: cover;
 }
+
 
 
 .wrapper{
@@ -1400,3 +1402,39 @@ html, body { width:100%;
     flex-direction: column;
   }
 }
+
+/* Overlay que cubre toda la pantalla */
+#overlay-login {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, #2A9EB5, #7FD3E0);
+  display: none;              /* lo manejas con JS: flex o none */
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+/* La tarjeta de login ya está centrada, solo le añadimos referencia */
+.wrapper {
+  position: absolute;         /* ya lo tienes, esto es compatible */
+  /* el resto de propiedades se quedan igual */
+}
+
+/* Icono de cerrar en la esquina superior derecha del formulario */
+.icon-close {
+  position: absolute;
+  top: 8px;        /* distancia desde arriba */
+  right: 8px;      /* distancia desde la derecha */
+  font-size: 1.8rem;
+  color: #2A9EB5;  /* o el color que prefieras */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.icon-close ion-icon {
+  pointer-events: none;  /* para que el click cuente sobre el span completo */
+}
+

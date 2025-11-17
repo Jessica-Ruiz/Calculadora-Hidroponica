@@ -1,17 +1,14 @@
-
-
-// URL del proyecto en Supabase
+// ===============================
+// SUPABASE
+// ===============================
 const supabaseUrl = "https://cerqtenlbhcigfmolavd.supabase.co";
-
-// Clave pública (anon key) generada por Supabase
 const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNlcnF0ZW5sYmhjaWdmbW9sYXZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcwNzY1NjUsImV4cCI6MjA3MjY1MjU2NX0.a4A-ua5xAKZx6ewc_t60ZHoD0AsoOA9CG6O4EzzcPWE";
 
-// Cliente de Supabase (permite usar autenticación y base de datos)
 const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
-
-
-// Elementos
+// ===============================
+// ELEMENTOS
+// ===============================
 const wrapper = document.querySelector(".wrapper");
 const loginLink = document.querySelector(".login-link");
 const registerLink = document.querySelector(".register-link");
@@ -20,181 +17,181 @@ const iconClose = document.querySelector(".icon-close");
 const forgotPasswordLink = document.querySelector(".recordar-contraseña a");
 const backToLoginLink = document.querySelector(".back-to-login");
 
-// Mostrar overlay al presionar botón login
-btnPopup.addEventListener("click", () => { document.getElementById("overlay-login").style.display="flex"; });
+const sidebar = document.querySelector(".sidebar");
+const mainContent = document.getElementById("main-content");
 
-// Cambiar entre formularios
-registerLink.addEventListener("click", e=>{ 
-  e.preventDefault(); 
-  wrapper.classList.add("active");
-  document.querySelector(".form-box.forgot-password").style.display = "none";
-  document.querySelector(".form-box.register").style.display = "block";
+// ===============================
+// ESTADO INICIAL AL CARGAR
+// ===============================
+window.addEventListener("DOMContentLoaded", () => {
+  // Siempre mostramos el login al inicio
+  if (wrapper) wrapper.style.display = "block";
+
+  // Ocultamos el contenido de la app hasta que cierre el login o inicie sesión
+  if (sidebar) sidebar.style.display = "none";
+  if (mainContent) mainContent.style.display = "none";
 });
 
-loginLink.addEventListener("click", e=>{ 
-  e.preventDefault(); 
-  wrapper.classList.remove("active");
-  document.querySelector(".form-box.forgot-password").style.display = "none";
-  document.querySelector(".form-box.login").style.display = "block";
-});
+// ===============================
+// BOTÓN DEL HEADER PARA ABRIR LOGIN
+// ===============================
+if (btnPopup) {
+  btnPopup.addEventListener("click", () => {
+    if (wrapper) wrapper.style.display = "block";
+  });
+}
 
-// Manejo de recuperación de contraseña
-forgotPasswordLink.addEventListener("click", e => {
-  e.preventDefault();
-  document.querySelector(".form-box.login").style.display = "none";
-  document.querySelector(".form-box.register").style.display = "none";
-  document.querySelector(".form-box.forgot-password").style.display = "block";
-});
+// ===============================
+// CAMBIO ENTRE FORMULARIOS (login / register / forgot)
+// ===============================
+if (registerLink) {
+  registerLink.addEventListener("click", (e) => {
+    e.preventDefault();
+    wrapper.classList.add("active");
+    document.querySelector(".form-box.login").style.display = "none";
+    document.querySelector(".form-box.register").style.display = "block";
+    document.querySelector(".form-box.forgot-password").style.display = "none";
+  });
+}
 
-backToLoginLink.addEventListener("click", e => {
-  e.preventDefault();
-  document.querySelector(".form-box.forgot-password").style.display = "none";
-  document.querySelector(".form-box.login").style.display = "block";
-});
+if (loginLink) {
+  loginLink.addEventListener("click", (e) => {
+    e.preventDefault();
+    wrapper.classList.remove("active");
+    document.querySelector(".form-box.login").style.display = "block";
+    document.querySelector(".form-box.register").style.display = "none";
+    document.querySelector(".form-box.forgot-password").style.display = "none";
+  });
+}
 
-// Formulario de recuperación de contraseña
-document.querySelector(".form-box.forgot-password form").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const email = e.target.email.value;
-  
-  try {
+// ===============================
+// RECUPERACIÓN DE CONTRASEÑA
+// ===============================
+if (forgotPasswordLink) {
+  forgotPasswordLink.addEventListener("click", (e) => {
+    e.preventDefault();
+    document.querySelector(".form-box.login").style.display = "none";
+    document.querySelector(".form-box.register").style.display = "none";
+    document.querySelector(".form-box.forgot-password").style.display = "block";
+  });
+}
+
+if (backToLoginLink) {
+  backToLoginLink.addEventListener("click", (e) => {
+    e.preventDefault();
+    document.querySelector(".form-box.login").style.display = "block";
+    document.querySelector(".form-box.register").style.display = "none";
+    document.querySelector(".form-box.forgot-password").style.display = "none";
+  });
+}
+
+// FORMULARIO RECUPERAR CONTRASEÑA
+const forgotForm = document.querySelector(".form-box.forgot-password form");
+if (forgotForm) {
+  forgotForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const email = e.target.email.value;
+
     const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
-      redirectTo: window.location.origin + '/reset-password'
+      redirectTo: window.location.origin + "/reset-password",
     });
-    
+
     if (error) {
-      showToast("Error: " + error.message, "error");
+      alert("❌ " + error.message);
     } else {
-      showToast("Se ha enviado un enlace de recuperación a tu email", "success");
-      // Volver al formulario de login
+      alert("📩 Se envió un correo para restablecer contraseña");
       document.querySelector(".form-box.forgot-password").style.display = "none";
       document.querySelector(".form-box.login").style.display = "block";
     }
-  } catch (err) {
-    showToast("Error al enviar el email de recuperación", "error");
-  }
-});
+  });
+}
 
-// Cerrar overlay
-iconClose.addEventListener("click", ()=>{ document.getElementById("overlay-login").style.display="none"; });
+// ===============================
+// CERRAR LOGIN CON LA X
+// ===============================
+if (iconClose) {
+  iconClose.addEventListener("click", () => {
+    if (wrapper) wrapper.style.display = "none";
+    // Al cerrar, mostramos la app
+    if (sidebar) sidebar.style.display = "flex";
+    if (mainContent) mainContent.style.display = "block";
+  });
+}
 
-// Validar sesión al cargar
-window.addEventListener("DOMContentLoaded", async () => {
-    const { data: { session } } = await supabaseClient.auth.getSession();
-    if (session) {
-        document.getElementById("overlay-login").style.display = "none";
-        document.querySelector(".sidebar").style.display = "flex";
-        document.querySelector(".content").style.display = "block";
-    } else {
-        document.getElementById("overlay-login").style.display = "flex";
-        document.querySelector(".sidebar").style.display = "none";
-        document.querySelector(".content").style.display = "none";
-    }
-});
-
+// ===============================
 // LOGIN
-document.querySelector(".form-box.login form").addEventListener("submit", async (e)=>{
+// ===============================
+const loginForm = document.querySelector(".form-box.login form");
+if (loginForm) {
+  loginForm.addEventListener("submit", async (e) => {
     e.preventDefault();
+
     const email = e.target.email.value;
     const password = e.target.password.value;
-    const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-    if(error){ alert("❌ "+error.message); }
-    else{
-        alert("👋 Bienvenido " + email);
-        document.getElementById("overlay-login").style.display="none";
-        document.querySelector(".sidebar").style.display="flex";
-        document.querySelector(".content").style.display="block";
+
+    const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+
+    if (error) {
+      alert("❌ " + error.message);
+    } else {
+      alert("👋 Bienvenido " + email);
+      if (wrapper) wrapper.style.display = "none";
+      if (sidebar) sidebar.style.display = "flex";
+      if (mainContent) mainContent.style.display = "block";
     }
-});
+  });
+}
 
+// ===============================
 // REGISTRO
+// ===============================
+const registerForm = document.querySelector(".form-box.register form");
+if (registerForm) {
+  registerForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-
-// REGISTRO DE USUARIOS
-
-
-document
-.querySelector(".form-box.register form") // Seleccionamos el formulario de registro
-.addEventListener("submit", async (e) => {
-    e.preventDefault(); // Evita recargar la página al enviar
-
-    // Obtenemos valores ingresados
     const nombre = e.target.nombre.value;
     const email = e.target.email.value;
     const password = e.target.password.value;
     const confirmPassword = e.target.confirm_password.value;
 
-    // Verifica que las contraseñas coincidan
     if (password !== confirmPassword) {
-        alert("Las contraseñas no coinciden");
-        return;
+      alert("⚠ Las contraseñas no coinciden");
+      return;
     }
 
-    //  Uso de Supabase para registrar un nuevo usuario
-    const { data, error } = await supabaseClient.auth.signUp({
-        email,
-        password,
-        options: {
-            data: { nombre }, // Guardamos el nombre como "metadata(informacion que describe los datos)" en Supabase
-        },
+    const { error } = await supabaseClient.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { nombre },
+      },
     });
 
-    // Manejo de la respuesta
     if (error) {
-        alert("Error al registrar: " + error.message);
+      alert("❌ " + error.message);
     } else {
-        alert("✅ Registro exitoso. Revisa tu correo para confirmar la cuenta.");
-        wrapper.classList.remove("active"); // Volvemos a login después del registro
+      alert("✔ Registro exitoso. Revisa tu correo.");
+      wrapper.classList.remove("active");
+      document.querySelector(".form-box.register").style.display = "none";
+      document.querySelector(".form-box.login").style.display = "block";
     }
-});
+  });
+}
 
-
-
-// INICIO DE SESIÓN
-
-
-document
-.querySelector(".form-box.login form") // Seleccionamos el formulario de login
-.addEventListener("submit", async (e) => {
-    e.preventDefault(); // Evita recargar la página
-
-    //  Obtiene valores ingresados
-    const email = e.target.email.value;
-    const password = e.target.password.value;
-
-    //  Uso Supabase para autenticar al usuario
-    const { data, error } = await supabaseClient.auth.signInWithPassword({
-        email,
-        password,
-    });
-
-    // Manejo de la respuesta
-    if (error) {
-        alert("❌ Error al iniciar sesión: " + error.message);
-    } else {
-        alert("👋 Bienvenido " + email);
-        wrapper.style.display = "none"; // Ocultamos el formulario al iniciar sesión
-    }
-});
-
-window.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("overlay-login").style.display = "flex"; // muestra overlay
-    wrapper.style.display = "block"; // muestra formulario
-});
-
-
+// ===============================
+// SIDEBAR MENÚ DESPLEGABLE
+// ===============================
 document.addEventListener("DOMContentLoaded", () => {
   const dropdownItems = document.querySelectorAll(".menu-items-dropdown > .menu-link");
   const sidebar = document.querySelector(".sidebar");
   const toggleBtn = document.querySelector(".menu-btn");
 
-  // Toggle sidebar
   toggleBtn.addEventListener("click", () => {
     sidebar.classList.toggle("collapsed");
 
-    // cerrar todos los submenús cuando se colapsa
     if (sidebar.classList.contains("collapsed")) {
-      document.querySelectorAll(".sub_menu").forEach(sm => {
+      document.querySelectorAll(".sub_menu").forEach((sm) => {
         sm.style.height = "0";
         sm.style.padding = "0";
         sm.parentElement.classList.remove("open");
@@ -202,10 +199,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Manejo de submenús
-  dropdownItems.forEach(link => {
-    link.addEventListener("click", e => {
+  dropdownItems.forEach((link) => {
+    link.addEventListener("click", (e) => {
       e.preventDefault();
+
       const parent = link.parentElement;
       const subMenu = parent.querySelector(":scope > .sub_menu");
       if (!subMenu) return;
@@ -222,9 +219,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Recalcular alturas al redimensionar
   window.addEventListener("resize", () => {
-    document.querySelectorAll(".menu-items-dropdown.open > .sub_menu").forEach(sm => {
+    document.querySelectorAll(".menu-items-dropdown.open > .sub_menu").forEach((sm) => {
       sm.style.height = sm.scrollHeight + "px";
     });
   });
