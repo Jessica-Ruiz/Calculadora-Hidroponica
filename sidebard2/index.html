@@ -41,6 +41,7 @@
             <span>Home</span>
           </a>
         </li>
+
         <li class="menu-items menu-items-static">
           <a href="#" class="menu-link">
             <i class="bi bi-clipboard-data"></i>
@@ -48,19 +49,15 @@
           </a>
         </li>
 
-        <!-- PLANTAS -->
-        <li class="menu-items menu-items-dropdown">
-          <a href="#" class="menu-link">
+        <!-- PLANTA: ABRE PANEL A LA DERECHA -->
+        <li class="menu-items menu-items-static">
+          <a href="#" class="menu-link" id="linkPlanta">
             <i class="bi bi-flower1"></i>
-            <span>Plantas</span>
-            <i class="bi bi-caret-down-fill"></i>
+            <span>Planta</span>
           </a>
-          <ul class="sub_menu" style="display:none;">
-            <li><a href="#">Calculadora</a></li>
-            <li><a href="#">Calendario</a></li>
-            <li><a href="#">Parámetros</a></li>
-          </ul>
         </li>
+
+
         <li class="menu-items menu-items-static">
           <a href="#" class="menu-link">
             <i class="bi bi-clock-history"></i>
@@ -117,29 +114,142 @@
         <div class="welcome-section">
           <h1>Bienvenido a <span>Hidrosoft</span></h1>
           <p>Tu asistente digital para el cultivo hidropónico inteligente. Gestiona tus nutrientes, etapas de crecimiento y parámetros ambientales en un solo lugar.</p>
-          <img src="ChatGPT Image 29 oct 2025, 10_03_53 p.m..png" alt="Sistema hidropónico" class="home-image">
+
+        </div>
+              <!-- MANUAL DE USUARIO INTERACTIVO -->
+      <section id="manual-usuario" class="card-manual">
+        <h2>Manual de usuario</h2>
+
+        <!-- Indicador de paso -->
+        <p id="manual-paso-indicador">Paso <span id="manual-paso-numero">1</span> de 5</p>
+
+        <!-- Contenedor de pasos -->
+        <div id="manual-pasos-container">
+
+          <!-- PASO 1 -->
+          <div class="manual-paso" data-paso="1">
+            <h3>1. Navegar por el menú lateral 🌱</h3>
+            <p>
+              En el lado izquierdo verás el menú principal. Desde ahí puedes entrar a:
+            </p>
+            <div class="manual-icon-row">
+              <span class="manual-tag">🏠 Home</span>
+              <span class="manual-tag">🌱 Planta</span>
+              <span class="manual-tag">🧮 Calculadora</span>
+              <span class="manual-tag">📅 Calendario</span>
+              <span class="manual-tag">📊 Parámetros</span>
+              <span class="manual-tag">📓 Notas</span>
+            </div>
+            <p>
+              Haz clic en <span class="manual-pill">🌱 Planta</span> para comenzar a trabajar con un cultivo.
+            </p>
+          </div>
+
+          <!-- PASO 2 -->
+          <div class="manual-paso" data-paso="2" style="display:none;">
+            <h3>2. Elegir una planta 🌿</h3>
+            <p>
+              Cuando entres a <span class="manual-pill">🌱 Planta</span>, verás un desplegable como este:
+            </p>
+            <div class="manual-fake-screenshot">
+              <label>Selecciona una planta:</label>
+              <select disabled>
+                <option>Tomate 🍅</option>
+                <option>Fresa 🍓</option>
+                <option>Lechuga 🥬</option>
+              </select>
+            </div>
+            <p>
+              Selecciona la planta con la que vas a trabajar.  
+              Esa misma selección se usará en la calculadora, el calendario y los parámetros.
+            </p>
+          </div>
+
+          <!-- PASO 3 -->
+          <div class="manual-paso" data-paso="3" style="display:none;">
+            <h3>3. Usar la calculadora de nutrientes 🧮</h3>
+            <p>
+              Desde la sección <span class="manual-pill">🌱 Planta</span>, haz clic en la tarjeta 
+              <span class="manual-pill">🧮 Calculadora</span>.
+            </p>
+            <div class="manual-fake-screenshot">
+              <div class="fake-card-row">
+                <div class="fake-card active">🧮 Calculadora</div>
+                <div class="fake-card">📅 Calendario</div>
+                <div class="fake-card">📊 Parámetros</div>
+              </div>
+            </div>
+            <p>
+              Luego:
+            </p>
+            <ul>
+              <li>Elige el cultivo en el desplegable.</li>
+              <li>Ingresa los <strong>litros</strong> de solución nutritiva.</li>
+              <li>Presiona <strong>Calcular</strong> para ver las cantidades recomendadas.</li>
+              <li>Si quieres guardar el resultado, usa <strong>"Guardar este resultado"</strong>.</li>
+            </ul>
+          </div>
+
+          <!-- PASO 4 -->
+          <div class="manual-paso" data-paso="4" style="display:none;">
+            <h3>4. Revisar calendario y parámetros 📅📊</h3>
+            <p>
+              Desde <span class="manual-pill">🌱 Planta</span> puedes ir también a:
+            </p>
+            <ul>
+              <li><span class="manual-pill">📅 Calendario</span>: calcula las etapas del cultivo desde la fecha de siembra.</li>
+              <li><span class="manual-pill">📊 Parámetros</span>: verifica pH, CE, temperatura y humedad según la etapa.</li>
+            </ul>
+            <div class="manual-fake-screenshot">
+              <p><strong>Ejemplo:</strong></p>
+              <ul>
+                <li>pH recomendado: 5.5 - 6.5</li>
+                <li>CE recomendada: 1.5 - 2.0 mS/cm</li>
+                <li>Temperatura ideal: 20 - 24 °C</li>
+              </ul>
+            </div>
+            <p>
+              Usa los botones de impresión 🖨 para generar reportes rápidos.
+            </p>
+          </div>
+
+          <!-- PASO 5 -->
+          <div class="manual-paso" data-paso="5" style="display:none;">
+            <h3>5. Historial y notas del cultivo 📂📓</h3>
+            <p>
+              Para cerrar el ciclo:
+            </p>
+            <ul>
+              <li>
+                En <span class="manual-pill">Historial</span> puedes ver resultados que hayas guardado 
+                (cálculos, calendarios, parámetros).
+              </li>
+              <li>
+                En <span class="manual-pill">📓 Notas</span> puedes escribir observaciones sobre tu cultivo, 
+                por ejemplo: “Aumentar ventilación en la tarde”.
+              </li>
+            </ul>
+            <div class="manual-fake-screenshot">
+              <ul>
+                <li>✅ Nutrientes calculados para Tomate – 20 L.</li>
+                <li>✅ Parámetros OK para Lechuga – etapa vegetativa.</li>
+                <li>📝 Nota guardada: "Revisar raíces el viernes".</li>
+              </ul>
+            </div>
+            <p>
+              ¡Listo! Ya conoces el flujo básico de uso de Hidrosoft. 🌱
+            </p>
+          </div>
+
         </div>
 
-        <div class="quick-access">
-          <h2>Accesos rápidos</h2>
-          <div class="cards">
-            <div class="card" onclick="showContent('calculadora')">
-              <i class="bi bi-calculator"></i>
-              <h3>Calculadora de Nutrientes</h3>
-              <p>Calcula las dosis exactas para cada cultivo.</p>
-            </div>
-            <div class="card" onclick="showContent('calendario')">
-              <i class="bi bi-calendar-event"></i>
-              <h3>Calendario de Cultivo</h3>
-              <p>Organiza tus siembras y cosechas fácilmente.</p>
-            </div>
-            <div class="card" onclick="showContent('parametros')">
-              <i class="bi bi-bar-chart-line"></i>
-              <h3>Verificación de Parámetros</h3>
-              <p>Controla pH, CE y condiciones del ambiente.</p>
-            </div>
-          </div>
+        <!-- CONTROLES DE NAVEGACIÓN -->
+        <div class="manual-controles">
+          <button id="manual-prev" disabled>⏮ Anterior</button>
+          <button id="manual-next">Siguiente ⏭</button>
         </div>
+      </section>
+
 
         <div class="tip-section">
           <h2>Consejo del día</h2>
@@ -208,6 +318,54 @@
       </div>
     </div>
 
+    <!-- PLANTA: DESPLEGABLE + TRES DIV A LA DERECHA -->
+    <div id="plantaPanel" style="display:none;">
+      <div class="container planta-panel">
+        <h1>Sección de Planta</h1>
+
+        <!-- Desplegable de selección de planta -->
+        <div class="planta-select-row">
+          <label for="plantaSeleccion" class="planta-label">Selecciona una planta:</label>
+          <select id="plantaSeleccion" class="planta-select">
+            <option value="">-- Elige una opción --</option>
+            <option value="tomate">Tomate</option>
+            <option value="fresa">Fresa</option>
+            <option value="lechuga">Lechuga</option>
+            <option value="guatila">Guatila</option>
+            <option value="mora">Mora</option>
+            <option value="espinaca">Espinaca</option>
+            <option value="romero">Romero</option>
+            <option value="perejil">Perejil</option>
+            <option value="cilantro">Cilantro</option>
+          </select>
+        </div>
+
+        <!-- Info de planta seleccionada -->
+        <p id="plantaInfo" class="planta-info">
+          Selecciona una planta para trabajar con ella en calculadora, calendario y parámetros.
+        </p>
+
+        <div class="planta-grid">
+          <div class="planta-card" onclick="showContent('calculadora')">
+            <i class="bi bi-calculator"></i>
+            <h3>Calculadora</h3>
+            <p>Accede a la calculadora de nutrientes.</p>
+          </div>
+          <div class="planta-card" onclick="showContent('calendario')">
+            <i class="bi bi-calendar-event"></i>
+            <h3>Calendario</h3>
+            <p>Consulta las etapas del cultivo.</p>
+          </div>
+          <div class="planta-card" onclick="showContent('parametros')">
+            <i class="bi bi-bar-chart-line"></i>
+            <h3>Parámetros</h3>
+            <p>Verifica pH, CE y condiciones.</p>
+          
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- CALCULADORA -->
     <div id="calculadora" style="display:none;">
       <div class="container">
@@ -229,16 +387,25 @@
           <input type="number" id="liters" step="any" required />
           <button type="submit">Calcular</button>
         </form>
+        <!-- Botón para imprimir SOLO el resultado de la calculadora -->
+    <button class="btn-imprimir" onclick="imprimirElemento('result')">
+      🖨 Imprimir resultado
+    </button>
         <div id="result" class="result-container"></div>
         <button id="guardarResultadoCalc" style="display:none;" onclick="guardarResultadoCalc()">Guardar este resultado</button>
         <div id="resultadosGuardadosCalc"></div>
         <div id="resultadosContainer"></div>
+        <!-- Botón para regresar a PLANTA -->
+        <button class="btn-volver-planta" onclick="showContent('plantaPanel')">
+          ← Volver a Planta
+        </button>
       </div>
     </div>
 
     <!-- CALENDARIO -->
     <div id="calendario" style="display:none;">
       <div class="container">
+
         <h1>Calendario de Etapas del Cultivo</h1>
         <label for="options">Selecciona una planta:</label>
         <select id="options">
@@ -263,56 +430,66 @@
           </thead>
           <tbody id="tablaBody"></tbody>
         </table>
+        <button class="btn-imprimir" onclick="imprimirElemento('tablaEtapas')">
+      🖨 Imprimir calendario
+    </button>
         <button id="guardarResultadoCalendario" style="display:none;" onclick="guardarResultadoCalendario()">Guardar este resultado</button>
         <div id="resultadosGuardadosCalendario"></div>
+        <!-- Botón para regresar a PLANTA -->
+        <button class="btn-volver-planta" onclick="showContent('plantaPanel')">
+          ← Volver a Planta
+        </button>
       </div>
     </div>
     
+    <!-- PARÁMETROS -->
+    <div id="parametros" style="display:none;">
+      <div class="container">
+        <!-- Botón para regresar a PLANTA -->
+        <h1>pH, Conductividad Eléctrica y Condiciones de Cultivo</h1>
+        <h2>Verificación de Parámetros por Etapa</h2>
 
-<!-- PARÁMETROS -->
-<div id="parametros" style="display:none;">
-  <div class="container">
-    <h1>pH, Conductividad Eléctrica y Condiciones de Cultivo</h1>
-    <h2>Verificación de Parámetros por Etapa</h2>
+        <label for="planta">Selecciona una planta:</label>
+        <select id="planta">
+          <option value="fresa">Fresa</option>
+          <option value="guatila">Guatila</option>
+          <option value="mora">Mora</option>
+          <option value="lechuga">Lechuga</option>
+          <option value="espinaca">Espinaca</option>
+          <option value="romero">Romero</option>
+          <option value="perejil">Perejil</option>
+          <option value="cilantro">Cilantro</option>
+          <option value="tomate">Tomate</option>
+        </select>
 
-    <label for="planta">Selecciona una planta:</label>
-    <select id="planta">
-      <option value="fresa">Fresa</option>
-      <option value="guatila">Guatila</option>
-      <option value="mora">Mora</option>
-      <option value="lechuga">Lechuga</option>
-      <option value="espinaca">Espinaca</option>
-      <option value="romero">Romero</option>
-      <option value="perejil">Perejil</option>
-      <option value="cilantro">Cilantro</option>
-      <option value="tomate">Tomate</option>
-    </select>
+        <label for="etapa">Selecciona la etapa:</label>
+        <select id="etapa">
+          <option value="germinacion">Germinación</option>
+          <option value="plantula">Plántula</option>
+          <option value="vegetativo">Desarrollo vegetativo</option>
+          <option value="floracion">Floración</option>
+          <option value="fructificacion">Fructificación</option>
+          <option value="cosecha">Cosecha</option>
+        </select>
 
-    <label for="etapa">Selecciona la etapa:</label>
-    <select id="etapa">
-      <option value="germinacion">Germinación</option>
-      <option value="plantula">Plántula</option>
-      <option value="vegetativo">Desarrollo vegetativo</option>
-      <option value="floracion">Floración</option>
-      <option value="fructificacion">Fructificación</option>
-      <option value="cosecha">Cosecha</option>
-    </select>
+        <br><br>
+        <label>pH: <input type="number" id="ph" step="0.1"></label><br>
+        <label>CE: <input type="number" id="ce" step="0.1"></label><br>
+        <label>Temperatura (°C): <input type="number" id="temperatura"></label><br>
+        <label>Humedad (%): <input type="number" id="humedad"></label><br><br>
 
-    <br><br>
-    <label>pH: <input type="number" id="ph" step="0.1"></label><br>
-    <label>CE: <input type="number" id="ce" step="0.1"></label><br>
-    <label>Temperatura (°C): <input type="number" id="temperatura"></label><br>
-    <label>Humedad (%): <input type="number" id="humedad"></label><br><br>
-
-    <button id="verificarParametrosBtn">Verificar</button>
-    <p id="resultado"></p>
-
-    <button id="guardarResultadoParametros" style="display:none;">Guardar este resultado</button>
-    <div id="resultadosGuardadosParametros"></div>
-  </div>
-</div>
-
-
+        <button id="verificarParametrosBtn">Verificar</button>
+        <p id="resultado"></p>
+        <button class="btn-imprimir" onclick="imprimirElemento('resultado')">
+      🖨 Imprimir parámetros
+    </button>
+        <button id="guardarResultadoParametros" style="display:none;">Guardar este resultado</button>
+        <div id="resultadosGuardadosParametros"></div>
+        <button class="btn-volver-planta" onclick="showContent('plantaPanel')">
+          ← Volver a Planta
+        </button>
+      </div>
+    </div>
 
     <!-- HISTORIAL -->
     <div id="historial" style="display:none;">
@@ -421,7 +598,7 @@
     </div>
   </div>
 
-  <!-- SCRIPTS -->
+  <!-- SCRIPTS BÁSICOS -->
   <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
@@ -429,7 +606,8 @@
     // Mostrar contenido principal
     function showContent(id) {
       document.querySelectorAll('#main-content > div').forEach(div => div.style.display = 'none');
-      document.getElementById(id).style.display = 'block';
+      const target = document.getElementById(id);
+      if (target) target.style.display = 'block';
     }
 
     // Sidebar enlaces principales
@@ -437,23 +615,21 @@
       link.addEventListener('click', function(e) {
         e.preventDefault();
         const text = this.textContent.toLowerCase();
-        if(text.includes('home')) showContent('home');
-        if(text.includes('dashboard')) showContent('dashboard');
-        if(text.includes('historial')) showContent('historial');
-        if(text.includes('notas')) showContent('notas');
-        if(text.includes('mi propia fórmula')) showContent('formula'); // opcional
+        if (text.includes('home')) showContent('home');
+        if (text.includes('dashboard')) showContent('dashboard');
+        if (text.includes('historial')) showContent('historial');
+        if (text.includes('notas')) showContent('notas');
+        if (text.includes('planta')) showContent('plantaPanel');   // PLANTA MUESTRA EL PANEL
       });
     });
 
-    // Plantas submenú desplegable al clic
+    // Plantas submenú desplegable
     document.querySelectorAll('.menu-items-dropdown > .menu-link').forEach(link => {
       link.addEventListener('click', function(e) {
         e.preventDefault();
         const subMenu = this.nextElementSibling;
-        if(subMenu.style.display === 'block') {
-          subMenu.style.display = 'none';
-        } else {
-          subMenu.style.display = 'block';
+        if (subMenu && subMenu.style) {
+          subMenu.style.display = subMenu.style.display === 'block' ? 'none' : 'block';
         }
       });
     });
@@ -463,26 +639,18 @@
       link.addEventListener('click', function(e) {
         e.preventDefault();
         const text = this.textContent.toLowerCase();
-        if(text.includes('calculadora')) showContent('calculadora');
-        if(text.includes('calendario')) showContent('calendario');
-        if(text.includes('parámetros')) showContent('parametros');
+        if (text.includes('calculadora')) showContent('calculadora');
+        if (text.includes('calendario')) showContent('calendario');
+        if (text.includes('parámetros') || text.includes('parametros')) showContent('parametros');
       });
     });
   </script>
 
-
- <!-- LIBRERÍAS -->
+  <!-- LIBRERÍAS -->
   <script src="https://cdn.jsdelivr.net/npm/dexie@4.0.4/dist/dexie.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase.js"></script>
   <script src="script.js"></script>
 
-  <!-- Ionicons -->
-  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </body>
 </html>
-
-
-
-

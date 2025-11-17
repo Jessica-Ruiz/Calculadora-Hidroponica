@@ -984,11 +984,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 });
 
-
-
-
-
-
+// =======================
+// RANGOS DE CULTIVOS
+// =======================
 const rangosCultivos = {
   fresa: {
     germinacion: { ph: [5.5, 6.0], ce: [1.0, 1.4], temperatura: [20, 25], humedad: [70, 80] },
@@ -1062,6 +1060,9 @@ const rangosCultivos = {
   }
 };
 
+// =======================
+// VERIFICAR PARÁMETROS
+// =======================
 document.getElementById('verificarParametrosBtn').addEventListener('click', function() {
   const planta = document.getElementById('planta').value;
   const etapa = document.getElementById('etapa').value;
@@ -1070,45 +1071,79 @@ document.getElementById('verificarParametrosBtn').addEventListener('click', func
   const temperatura = parseFloat(document.getElementById('temperatura').value);
   const humedad = parseFloat(document.getElementById('humedad').value);
   const resultado = document.getElementById('resultado');
-  
 
+  // Validar que todos los campos tengan número
   if (isNaN(ph) || isNaN(ce) || isNaN(temperatura) || isNaN(humedad)) {
-    resultado.textContent = "Por favor, ingresa todos los valores correctamente.";
+    resultado.innerHTML = "⚠️ Por favor, ingresa todos los valores correctamente.";
     resultado.style.color = "red";
     document.getElementById('guardarResultadoParametros').style.display = 'none';
     return;
   }
 
+  // Buscar rangos para esa planta y etapa
   const rango = rangosCultivos?.[planta]?.[etapa];
+
   if (!rango) {
-    resultado.textContent = "No hay datos para la planta o la etapa seleccionada.";
+    resultado.innerHTML = `
+      ⚠️ No hay datos configurados para:<br>
+      <b>Planta:</b> ${planta}<br>
+      <b>Etapa:</b> ${etapa}
+    `;
     resultado.style.color = "red";
     document.getElementById('guardarResultadoParametros').style.display = 'none';
     return;
   }
 
+  // Comparaciones
   const dentroPH = ph >= rango.ph[0] && ph <= rango.ph[1];
   const dentroCE = ce >= rango.ce[0] && ce <= rango.ce[1];
   const dentroTemp = temperatura >= rango.temperatura[0] && temperatura <= rango.temperatura[1];
   const dentroHumedad = humedad >= rango.humedad[0] && humedad <= rango.humedad[1];
 
+  // Armamos un mensaje de "cumple / no cumple"
+  let evaluacion = "";
+
   if (dentroPH && dentroCE && dentroTemp && dentroHumedad) {
-    resultado.innerHTML = "Todos los parámetros están dentro del rango recomendado.";
-    resultado.style.color = "green";
+    evaluacion = `<b>✅ Todos los parámetros están dentro del rango recomendado.</b>`;
   } else {
-    let mensaje = "Parámetros fuera del rango recomendado:<br>";
-    if (!dentroPH) mensaje += `- pH: entre ${rango.ph[0]} y ${rango.ph[1]}<br>`;
-    if (!dentroCE) mensaje += `- CE: entre ${rango.ce[0]} y ${rango.ce[1]} mS/cm<br>`;
-    if (!dentroTemp) mensaje += `- Temperatura: entre ${rango.temperatura[0]} y ${rango.temperatura[1]} °C<br>`;
-    if (!dentroHumedad) mensaje += `- Humedad: entre ${rango.humedad[0]}% y ${rango.humedad[1]}%<br>`;
-    resultado.innerHTML = mensaje;
-    resultado.style.color = "red";
+    evaluacion = `<b>❌ No se cumplen todos los rangos recomendados:</b><br>`;
+    if (!dentroPH) {
+      evaluacion += `• pH fuera de rango (debe estar entre ${rango.ph[0]} y ${rango.ph[1]}).<br>`;
+    }
+    if (!dentroCE) {
+      evaluacion += `• CE fuera de rango (debe estar entre ${rango.ce[0]} y ${rango.ce[1]} mS/cm).<br>`;
+    }
+    if (!dentroTemp) {
+      evaluacion += `• Temperatura fuera de rango (debe estar entre ${rango.temperatura[0]} y ${rango.temperatura[1]} °C).<br>`;
+    }
+    if (!dentroHumedad) {
+      evaluacion += `• Humedad fuera de rango (debe estar entre ${rango.humedad[0]}% y ${rango.humedad[1]}%).<br>`;
+    }
   }
 
+  // Mostrar todo el resumen + la evaluación
+  resultado.innerHTML = `
+    <b>Planta:</b> ${planta.toUpperCase()}<br>
+    <b>Etapa:</b> ${etapa}<br><br>
+
+    <b>pH ingresado:</b> ${ph}<br>
+    <b>CE ingresada:</b> ${ce}<br>
+    <b>Temperatura:</b> ${temperatura} °C<br>
+    <b>Humedad:</b> ${humedad} %<br><br>
+
+    ${evaluacion}
+  `;
+
+  // Color general según cumpla todo o no
+  resultado.style.color = (dentroPH && dentroCE && dentroTemp && dentroHumedad) ? "green" : "red";
+
+  // Mostrar botón de guardar si ya verificó
   document.getElementById('guardarResultadoParametros').style.display = 'inline-block';
 });
 
-
+// ===============================
+// GUARDAR RESULTADO PARÁMETROS
+// ===============================
 document.getElementById('guardarResultadoParametros').addEventListener('click', async function() {
   const planta = document.getElementById('planta').value;
   const etapa = document.getElementById('etapa').value;
@@ -1136,25 +1171,24 @@ document.getElementById('guardarResultadoParametros').addEventListener('click', 
 
   // Guardar en Supabase si hay conexión
   if (navigator.onLine) {
-  try {
-    const { data, error } = await supabaseClient
-      .from('parametros')
-      .insert([{ planta, etapa, ph, ce, temperatura, humedad, texto, fecha }]);
-    
-    if (error) {
-      console.error("🟥 Error completo de Supabase:", error);
-      alert("Error Supabase: " + (error.message || JSON.stringify(error)));
-      return;
+    try {
+      const { data, error } = await supabaseClient
+        .from('parametros')
+        .insert([{ planta, etapa, ph, ce, temperatura, humedad, texto, fecha }]);
+      
+      if (error) {
+        console.error("🟥 Error completo de Supabase:", error);
+        alert("Error Supabase: " + (error.message || JSON.stringify(error)));
+        return;
+      }
+
+      console.log("✅ Guardado en Supabase:", data);
+      showToast("✅ Guardado en Supabase correctamente", "success", 3000);
+    } catch (err) {
+      console.error("⚠️ Error inesperado:", err);
+      alert("Error inesperado: " + err.message);
     }
-
-    console.log("✅ Guardado en Supabase:", data);
-    showToast("✅ Guardado en Supabase correctamente", "success", 3000);
-  } catch (err) {
-    console.error("⚠️ Error inesperado:", err);
-    alert("Error inesperado: " + err.message);
   }
-}
-
 
   // Mostrar todos los parámetros
   mostrarParametrosCompletos();
@@ -1162,6 +1196,7 @@ document.getElementById('guardarResultadoParametros').addEventListener('click', 
 
 // ===============================
 // Mostrar parámetros guardados (Dexie + Supabase)
+// ===============================
 async function mostrarParametrosCompletos() {
   const cont = document.getElementById("resultadosGuardadosParametros");
   cont.innerHTML = "<h3>Parámetros guardados:</h3>";
@@ -1196,7 +1231,8 @@ async function mostrarParametrosCompletos() {
           <th>Planta / Etapa</th>
           <th>pH</th>
           <th>CE</th>
-          <th>Temperatura (°C)</th>
+          <th>Temperatura (°
+C)</th>
           <th>Humedad (%)</th>
           <th>Acción</th>
         </tr>
@@ -1240,6 +1276,7 @@ async function mostrarParametrosCompletos() {
 
 // ===============================
 // Borrar parámetros locales
+// ===============================
 async function borrarParametro(id) {
   if (!confirm("¿Deseas borrar este registro?")) return;
   try {
@@ -1306,9 +1343,7 @@ async function borrarNotaDexie(id) {
   showToast("Nota eliminada", "info", 1500);
 }
 
-// ===============================
-// 📊 2. Funciones: Resultados
-// ===============================
+//  Funciones: Resultados
 async function guardarResultadoDexie(resultadoTexto) {
   await db.resultados.add({ texto: resultadoTexto, fecha: new Date().toLocaleString() });
   mostrarResultadosDexie();
@@ -2233,3 +2268,301 @@ async function actualizarDashboard() {
     showToast('Error al actualizar dashboard', 'error');
   }
 }
+
+// =============================
+// SINCRONIZACIÓN DE PLANTA
+// =============================
+
+// Variable global: planta seleccionada en la sección PLANTA
+let plantaSeleccionada = "";
+
+// Mapa entre valores de planta y opciones de cada sección
+const plantaToOptionMap = {
+  tomate: 1,
+  fresa: 2,
+  lechuga: 3,
+  guatila: 4,
+  mora: 5,
+  espinaca: 6,
+  romero: 7,
+  perejil: 8,
+  cilantro: 9
+};
+
+// Cuando cambie el desplegable de planta en la sección PLANTA
+document.addEventListener("DOMContentLoaded", () => {
+  const plantaSelect = document.getElementById("plantaSeleccion");
+  const plantaInfo = document.getElementById("plantaInfo");
+
+  const calcSelect = document.getElementById("option");   // calculadora
+  const calenSelect = document.getElementById("options"); // calendario
+  const paramPlanta = document.getElementById("planta");  // parámetros
+
+  if (plantaSelect) {
+    plantaSelect.addEventListener("change", () => {
+      plantaSeleccionada = plantaSelect.value;
+
+      if (!plantaSeleccionada) {
+        plantaInfo.textContent =
+          "Selecciona una planta para trabajar con ella en calculadora, calendario y parámetros.";
+        return;
+      }
+
+      // Texto de info
+      plantaInfo.textContent = `Estás trabajando con: ${plantaSeleccionada.toUpperCase()}. 
+Se ha sincronizado con Calculadora, Calendario y Parámetros.`;
+
+      // 1) Sincronizar CALCULADORA (select por número 1..9)
+      if (calcSelect && plantaToOptionMap[plantaSeleccionada]) {
+        calcSelect.value = String(plantaToOptionMap[plantaSeleccionada]);
+      }
+
+      // 2) Sincronizar CALENDARIO (select por número 1..9)
+      if (calenSelect && plantaToOptionMap[plantaSeleccionada]) {
+        calenSelect.value = String(plantaToOptionMap[plantaSeleccionada]);
+      }
+
+      // 3) Sincronizar PARÁMETROS (select por nombre texto)
+      if (paramPlanta) {
+        paramPlanta.value = plantaSeleccionada;
+      }
+    });
+  }
+
+  // =============================
+  // CIUDADO AL ENTRAR POR PLANTA
+  // =============================
+  // Cuando entres a Calculadora, Calendario o Parámetros desde las tarjetas de PLANTA,
+  // verificamos si ya escogiste planta; si no, pedimos que la selecciones primero.
+
+  const cardCalc = document.querySelector("#plantaPanel .planta-card:nth-child(1)");
+  const cardCalen = document.querySelector("#plantaPanel .planta-card:nth-child(2)");
+  const cardParams = document.querySelector("#plantaPanel .planta-card:nth-child(3)");
+
+  function irACalculadora() {
+    if (!plantaSeleccionada) {
+      alert("Primero selecciona una planta en el desplegable de la sección PLANTA.");
+      return;
+    }
+    // ya está sincronizado el select, solo mostramos la seccion
+    showContent("calculadora");
+  }
+
+  function irACalendario() {
+    if (!plantaSeleccionada) {
+      alert("Primero selecciona una planta en el desplegable de la sección PLANTA.");
+      return;
+    }
+    showContent("calendario");
+  }
+
+  function irAParametros() {
+    if (!plantaSeleccionada) {
+      alert("Primero selecciona una planta en el desplegable de la sección PLANTA.");
+      return;
+    }
+    showContent("parametros");
+  }
+
+  if (cardCalc) cardCalc.addEventListener("click", irACalculadora);
+  if (cardCalen) cardCalen.addEventListener("click", irACendario);
+  if (cardParams) cardParams.addEventListener("click", irAParametros);
+});
+
+
+// =====================================================
+// LÓGICA DE CALCULADORA, CALENDARIO Y PARÁMETROS
+// (ejemplo básico; adapta si ya tenías funciones propias)
+// =====================================================
+
+// ---------- CALCULADORA DE NUTRIENTES ----------
+const nutrientForm = document.getElementById("nutrientForm");
+const resultDiv = document.getElementById("result");
+const btnGuardarCalc = document.getElementById("guardarResultadoCalc");
+
+if (nutrientForm) {
+  nutrientForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const opcion = document.getElementById("option").value;
+    const litros = parseFloat(document.getElementById("liters").value);
+
+    if (isNaN(litros) || litros <= 0) {
+      alert("Ingresa un valor de litros válido.");
+      return;
+    }
+
+    // Aquí pones tu fórmula real para cada planta
+    let textoPlanta = "";
+    for (const [planta, num] of Object.entries(plantaToOptionMap)) {
+      if (String(num) === String(opcion)) {
+        textoPlanta = planta.toUpperCase();
+        break;
+      }
+    }
+
+    resultDiv.innerHTML = `
+      <h3>Resultado de Nutrientes</h3>
+      <p><strong>Planta:</strong> ${textoPlanta}</p>
+      <p><strong>Litros:</strong> ${litros}</p>
+      <p>Aquí iría el detalle de la cantidad de cada nutriente...</p>
+    `;
+
+    btnGuardarCalc.style.display = "inline-block";
+  });
+}
+
+function guardarResultadoCalc() {
+  const contenedor = document.getElementById("resultadosGuardadosCalc");
+  if (!contenedor || !resultDiv) return;
+  const bloque = document.createElement("div");
+  bloque.className = "resultado-guardado";
+  bloque.innerHTML = resultDiv.innerHTML;
+  contenedor.appendChild(bloque);
+  alert("Resultado de la calculadora guardado.");
+}
+
+
+// ---------- CALENDARIO ----------
+function calcularEtapas() {
+  const plantaOption = document.getElementById("options").value;
+  const fechaSiembraStr = document.getElementById("fechaSiembra").value;
+  const tabla = document.getElementById("tablaEtapas");
+  const tbody = document.getElementById("tablaBody");
+  const btnGuardarCalendario = document.getElementById("guardarResultadoCalendario");
+
+  if (!fechaSiembraStr) {
+    alert("Selecciona una fecha de siembra.");
+    return;
+  }
+
+  const fechaSiembra = new Date(fechaSiembraStr);
+
+  // Ejemplo de etapas (puedes ajustar por plantaOption si quieres)
+  const etapas = [
+    { nombre: "Germinación", dias: 7 },
+    { nombre: "Plántula", dias: 14 },
+    { nombre: "Desarrollo vegetativo", dias: 25 },
+    { nombre: "Floración", dias: 20 },
+    { nombre: "Fructificación", dias: 30 },
+    { nombre: "Cosecha", dias: 10 }
+  ];
+
+  tbody.innerHTML = "";
+  let inicio = new Date(fechaSiembra);
+
+  etapas.forEach(etapa => {
+    const fin = new Date(inicio);
+    fin.setDate(fin.getDate() + etapa.dias);
+
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${etapa.nombre}</td>
+      <td>${inicio.toISOString().slice(0,10)}</td>
+      <td>${fin.toISOString().slice(0,10)}</td>
+    `;
+    tbody.appendChild(tr);
+
+    inicio = new Date(fin);
+    inicio.setDate(inicio.getDate() + 1);
+  });
+
+  tabla.style.display = "table";
+  btnGuardarCalendario.style.display = "inline-block";
+}
+
+function guardarResultadoCalendario() {
+  const tabla = document.getElementById("tablaEtapas");
+  const contenedor = document.getElementById("resultadosGuardadosCalendario");
+  if (!tabla || !contenedor) return;
+
+  const copia = tabla.cloneNode(true);
+  copia.id = "";
+  const bloque = document.createElement("div");
+  bloque.className = "resultado-guardado";
+  bloque.appendChild(copia);
+
+  contenedor.appendChild(bloque);
+  alert("Resultado del calendario guardado.");
+}
+
+
+
+
+showContent('plantaPanel');
+
+function imprimirElemento(idElemento) {
+  const elem = document.getElementById(idElemento);
+  if (!elem) {
+    alert("No se encontró el elemento a imprimir.");
+    return;
+  }
+
+  const htmlOriginal = document.body.innerHTML;
+
+  const contenidoImprimir = `
+    <html>
+      <head>
+        <title>Imprimir</title>
+        <link rel="stylesheet" href="style.css">
+      </head>
+      <body>
+        ${elem.outerHTML}
+      </body>
+    </html>
+  `;
+
+  document.body.innerHTML = contenidoImprimir;
+  window.print();
+  document.body.innerHTML = htmlOriginal;
+  location.reload();
+}
+
+
+ // =========================
+    // MANUAL INTERACTIVO
+    // =========================
+    document.addEventListener('DOMContentLoaded', () => {
+      const pasos = Array.from(document.querySelectorAll('.manual-paso'));
+      const indicador = document.getElementById('manual-paso-numero');
+      const btnPrev = document.getElementById('manual-prev');
+      const btnNext = document.getElementById('manual-next');
+
+      if (!pasos.length || !btnPrev || !btnNext || !indicador) return;
+
+      let pasoActual = 1;
+      const totalPasos = pasos.length;
+
+      function mostrarPaso(nuevoPaso) {
+        // Limites
+        if (nuevoPaso < 1) nuevoPaso = 1;
+        if (nuevoPaso > totalPasos) nuevoPaso = totalPasos;
+
+        pasoActual = nuevoPaso;
+
+        // Mostrar / ocultar pasos
+        pasos.forEach(paso => {
+          const num = parseInt(paso.getAttribute('data-paso'), 10);
+          paso.style.display = (num === pasoActual) ? 'block' : 'none';
+        });
+
+        // Actualizar indicador
+        indicador.textContent = pasoActual;
+
+        // Habilitar / deshabilitar botones
+        btnPrev.disabled = (pasoActual === 1);
+        btnNext.disabled = (pasoActual === totalPasos);
+      }
+
+      // Eventos
+      btnPrev.addEventListener('click', () => {
+        mostrarPaso(pasoActual - 1);
+      });
+
+      btnNext.addEventListener('click', () => {
+        mostrarPaso(pasoActual + 1);
+      });
+
+      // Mostrar primer paso al inicio
+      mostrarPaso(1);
+    });
