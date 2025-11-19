@@ -2562,3 +2562,52 @@ function imprimirElemento(idElemento) {
       // Mostrar primer paso al inicio
       mostrarPaso(1);
     });
+
+
+  // ======================
+  // LOGOUT: cerrar sesión
+  // ======================
+  (function(){
+    document.addEventListener('DOMContentLoaded', function(){
+      const logoutEl = document.querySelector('.user-icon');
+      if (!logoutEl) return;
+      logoutEl.style.cursor = 'pointer';
+      logoutEl.addEventListener('click', async function(e){
+        e.preventDefault();
+        const ok = confirm('¿Deseas cerrar sesión?');
+        if (!ok) return;
+
+        try {
+          // Intentar cerrar sesión en Supabase si está disponible
+          if (window.supabaseClient && supabaseClient.auth) {
+            try {
+              await supabaseClient.auth.signOut();
+            } catch (er) {
+              console.warn('supabase signOut error:', er?.message || er);
+            }
+          }
+
+          // Mostrar login y ocultar la app
+          const wrapper = document.querySelector('.wrapper');
+          const sidebar = document.querySelector('.sidebar');
+          const mainContent = document.getElementById('main-content');
+          if (wrapper) wrapper.style.display = 'block';
+          if (sidebar) sidebar.style.display = 'none';
+          if (mainContent) mainContent.style.display = 'none';
+
+          // Restaurar vista de usuario a valores por defecto
+          const nameEl = document.querySelector('.usuario .datos_usuario .name');
+          const mailEl = document.querySelector('.usuario .datos_usuario .gmail');
+          const imgEl = document.querySelector('.usuario .usuario-img img');
+          if (nameEl) nameEl.textContent = 'Admin';
+          if (mailEl) mailEl.textContent = 'admin@gmail.com';
+          if (imgEl && imgEl.getAttribute('data-original')) imgEl.src = imgEl.getAttribute('data-original');
+
+          if (window.showToast) window.showToast('Sesión cerrada', 'info', 1400);
+        } catch (err) {
+          console.error('Error durante logout:', err);
+          alert('Error cerrando sesión');
+        }
+      });
+    });
+  })();
